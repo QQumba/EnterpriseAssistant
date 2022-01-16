@@ -3,9 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseAssistant.API", "EnterpriseAssistant.API\EnterpriseAssistant.API.csproj", "{9A9BF109-14A6-4B06-B4EB-B44AE6192404}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{6947C409-39CD-4216-A157-C822815E3868}"
-ProjectSection(SolutionItems) = preProject
-	.gitignore = .gitignore
-EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

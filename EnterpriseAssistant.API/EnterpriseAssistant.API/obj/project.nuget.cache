@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "2AWe2+o5nvfWKOI3eMuSEEJk3Sm/kxbcqNm4PYjTzn5XhN/ZVY3xfA4EYg42KH9IfQavOaSyPXTc005pe//EFw==",
+  "success": true,
+  "projectFilePath": "C:\\study\\4.2\\diplom\\EnterpriseAssistant\\EnterpriseAssistant.API\\EnterpriseAssistant.API\\EnterpriseAssistant.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\nikita\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\nikita\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\nikita\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "C:\\Users\\nikita\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "C:\\Users\\nikita\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "C:\\Users\\nikita\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+  ],
+  "logs": []
+}

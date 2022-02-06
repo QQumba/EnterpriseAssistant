@@ -247,4 +247,4 @@ _Pvt_Extensions
 /dataSources/
 /dataSources.local.xml
 
-*/appsetings.*.json
+*/appsettings.*.json

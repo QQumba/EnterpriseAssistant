@@ -1,2 +1,0 @@
-# EnterpriseAssistant
- University final project

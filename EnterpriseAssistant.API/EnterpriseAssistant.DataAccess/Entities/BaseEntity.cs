@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ResourceBasedAuthenticationTest.Models
+﻿namespace EnterpriseAssistant.DataAccess.Entities
 {
     public abstract class BaseEntity
     {

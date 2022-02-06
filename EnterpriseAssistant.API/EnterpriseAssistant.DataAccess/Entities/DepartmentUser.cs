@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ResourceBasedAuthenticationTest.Models
+namespace EnterpriseAssistant.DataAccess.Entities
 {
     public class DepartmentUser : BaseEntity
     {

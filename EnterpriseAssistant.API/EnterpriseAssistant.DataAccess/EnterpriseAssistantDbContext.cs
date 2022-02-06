@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ResourceBasedAuthenticationTest.Models;
+﻿using EnterpriseAssistant.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnterpriseAssistant.DataAccess;
 

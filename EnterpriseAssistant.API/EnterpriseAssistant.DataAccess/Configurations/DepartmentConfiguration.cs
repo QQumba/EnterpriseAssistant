@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EnterpriseAssistant.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResourceBasedAuthenticationTest.Models;
 
 namespace ResourceBasedAuthenticationTest.Configurations
 {

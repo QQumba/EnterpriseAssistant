@@ -8,6 +8,7 @@ namespace EnterpriseAssistant.Application.Features.DepartmentFeatures;
 
 [ApiController]
 [Route("api/department/create")]
+[ApiExplorerSettings(GroupName = "department")]
 public class CreateDepartmentController : ControllerBase
 {
     private readonly EnterpriseAssistantDbContext _db;
@@ -20,7 +21,7 @@ public class CreateDepartmentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<DepartmentViewModel>> CreateDepartment([FromBody] DepartmentCreateViewModel model)
     {
-        var department = _db.Add(model.Adapt<Department>()).Entity;
+        var department = _db.Departments.Add(model.Adapt<Department>()).Entity;
         await _db.SaveChangesAsync();
         return CreatedAtAction(nameof(CreateDepartment), department.Adapt<DepartmentViewModel>());
     }

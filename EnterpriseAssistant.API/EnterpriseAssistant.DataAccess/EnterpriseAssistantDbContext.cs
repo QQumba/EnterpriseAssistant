@@ -9,6 +9,12 @@ public class EnterpriseAssistantDbContext : DbContext
     {
     }
 
+    public DbSet<Department> Departments { get; set; }
+
+    public DbSet<DepartmentUser> DepartmentUsers { get; set; }
+
+    public DbSet<User> Users { get; set; }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker
@@ -18,7 +24,7 @@ public class EnterpriseAssistantDbContext : DbContext
 
         foreach (var entry in entries)
         {
-            var entity = (BaseEntity)entry.Entity;
+            var entity = (BaseEntity) entry.Entity;
             entity.UpdatedAt = DateTime.UtcNow;
 
             if (entry.State == EntityState.Added)

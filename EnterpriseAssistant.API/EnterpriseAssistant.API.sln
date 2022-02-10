@@ -11,6 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{D336EBAD-D228-4D89-B5CB-9B1F3AD5E131}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseAssistant.Identity", "EnterpriseAssistant.Identity\EnterpriseAssistant.Identity.csproj", "{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA}"

@@ -1,3 +1,8 @@
+## How to run API
+
+Configure both `EnterpriseAssistant.Web` and `EnterpriseAssistant.Identity`
+to run at one time
+
 ## Swagger issues
 
 Swagger UI may look weired when application is run on port `5001`

@@ -1,6 +1,6 @@
 ﻿namespace EnterpriseAssistant.DataAccess.Entities
 {
-    public class Permission : BaseEntity
+    public class Permission : BaseEntity.WithId
     {
     }
 }

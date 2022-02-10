@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ResourceBasedAuthenticationTest.Configurations
+namespace EnterpriseAssistant.DataAccess.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {

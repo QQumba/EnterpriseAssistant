@@ -1,4 +1,5 @@
-﻿using EnterpriseAssistant.DataAccess.Entities;
+﻿using EnterpriseAssistant.DataAccess.Configurations;
+using EnterpriseAssistant.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,7 +10,7 @@ namespace ResourceBasedAuthenticationTest.Configurations
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.ToTable("department");
-            builder.ConfigureBaseEntity();
+            builder.ConfigureBaseEntity().ConfigureId();
 
             builder.Property(d => d.Name)
                 .HasColumnName("name")

@@ -1,6 +1,6 @@
 ﻿namespace EnterpriseAssistant.DataAccess.Entities
 {
-    public class Department : BaseEntity
+    public class Department : BaseEntity.WithId
     {
         public string Name { get; set; }
 

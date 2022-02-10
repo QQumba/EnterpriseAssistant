@@ -13,6 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{D336EB
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseAssistant.Identity", "EnterpriseAssistant.Identity\EnterpriseAssistant.Identity.csproj", "{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseAssistant.Identity.DataAccess", "EnterpriseAssistant.Identity.DataAccess\EnterpriseAssistant.Identity.DataAccess.csproj", "{90107EAE-3271-4BAF-BC80-9D20CCADEF93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{B1D2BB8D-0700-4D8B-80DF-713EFD34ED9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,10 +37,21 @@ Global
 		{6044777B-B8C5-4741-8FE8-B24CFB0C3785}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6044777B-B8C5-4741-8FE8-B24CFB0C3785}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6044777B-B8C5-4741-8FE8-B24CFB0C3785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90107EAE-3271-4BAF-BC80-9D20CCADEF93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90107EAE-3271-4BAF-BC80-9D20CCADEF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90107EAE-3271-4BAF-BC80-9D20CCADEF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90107EAE-3271-4BAF-BC80-9D20CCADEF93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{82B31DAA-1A6A-4A6A-83C8-8DAA2E2DFF78} = {1B0E506B-5C5D-4543-844B-29567704E24B}
 		{3ECA6521-1A85-402B-B3EA-B5530D12F416} = {1B0E506B-5C5D-4543-844B-29567704E24B}
 		{6044777B-B8C5-4741-8FE8-B24CFB0C3785} = {1B0E506B-5C5D-4543-844B-29567704E24B}
+		{B1D2BB8D-0700-4D8B-80DF-713EFD34ED9C} = {1B0E506B-5C5D-4543-844B-29567704E24B}
+		{8B5B4CB2-9730-41C6-B36A-54B94DCE25BA} = {B1D2BB8D-0700-4D8B-80DF-713EFD34ED9C}
+		{90107EAE-3271-4BAF-BC80-9D20CCADEF93} = {B1D2BB8D-0700-4D8B-80DF-713EFD34ED9C}
 	EndGlobalSection
 EndGlobal

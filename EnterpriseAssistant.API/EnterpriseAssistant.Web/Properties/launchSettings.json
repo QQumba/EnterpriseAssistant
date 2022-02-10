@@ -10,18 +10,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    },
-    "EnterpriseAssistant.Web.Https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:5002;http://localhost:5003",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_Kestrel__Certificates__Default__Path": "C:/Users/knysh.m/.aspnet/https/aspnetapp.pfx",
-        "ASPNETCORE_Kestrel__Certificates__Default__Password": "root"
-      }
     }
   }
 }

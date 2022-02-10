@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IO.Compression;
+using System.Security.Cryptography.X509Certificates;
 using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
 using EnterpriseAssistant.DataAccess;
 using Microsoft.AspNetCore.Mvc;
@@ -43,5 +45,33 @@ public class GetDepartmentController : ControllerBase
     public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetUserSubordinateDepartments()
     {
         throw new NotImplementedException();
+    }
+
+    [HttpGet("test/recursive")]
+    public async Task<ActionResult<DepartmentViewModel>> GetRecursiveDepartments(
+        [Range(0, int.MaxValue), FromQuery] int nestingLevel)
+    {
+        var root = new DepartmentViewModel()
+        {
+            Id = 0,
+            Name = "root"
+        };
+
+        var lastChild = root;
+        for (var i = 1; i < nestingLevel + 1; i++)
+        {
+            var department = new DepartmentViewModel()
+            {
+                Id = i,
+                Name = $"name {i}",
+                ParentDepartmentId = lastChild.Id
+            };
+
+            lastChild.ChildDepartments.Add(department);
+            
+            lastChild = department;
+        }
+
+        return Ok(root);
     }
 }

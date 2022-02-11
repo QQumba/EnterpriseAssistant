@@ -12,6 +12,6 @@
 
 		public string Password { get; set; }
 
-		public bool IsSoftDeleted { get; set; } = false;
+		public bool IsSoftDeleted { get; set; }
 	}
 }

@@ -16,24 +16,25 @@ namespace EnterpriseAssistant.Identity
 
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
-            new ("ea")
+            new("ea", "Enterprise Assistant")
         };
 
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
-            new ("ea")
+            new("ea")
         };
 
         public static IEnumerable<Client> Clients => new Client[]
         {
-            new ()
+            new()
             {
                 ClientId = "ea.api",
                 ClientName = "Enterprise Assistant",
                 ClientSecrets = {new Secret("ea.secret".Sha256())},
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = false,
-                RedirectUris = {$"{ApiUrl}/signin-oidc", $"{ApiUrl}"},
+                RedirectUris = {$"{ApiUrl}/signin-oidc"},
+                PostLogoutRedirectUris = {$"{ApiUrl}/signout-callback-oidc"},
                 AllowedCorsOrigins = {$"{ApiUrl}"},
                 AllowOfflineAccess = true,
 
@@ -41,6 +42,7 @@ namespace EnterpriseAssistant.Identity
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
+                    "ea",
                 },
             }
         };

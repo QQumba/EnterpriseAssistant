@@ -5,7 +5,7 @@ using EnterpriseAssistant.Identity.DataAccess.Entities;
 
 namespace EnterpriseAssistant.Identity.DataAccess
 {
-    public class UserRepository
+    internal class UserRepository : IUserRepository
     {
         private readonly IDbConnection _connection;
 
@@ -19,6 +19,7 @@ namespace EnterpriseAssistant.Identity.DataAccess
             throw new NotImplementedException();
         }
 
+        // todo: replace by valid logic
         public async Task<User> GetUserByLogin(string login)
         {
             throw new NotImplementedException();

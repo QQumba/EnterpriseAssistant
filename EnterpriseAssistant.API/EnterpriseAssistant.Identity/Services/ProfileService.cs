@@ -37,7 +37,7 @@ namespace EnterpriseAssistant.Identity.Services
 				return;
 			}
 
-			context.IsActive = user.IsActive;
+			context.IsActive = !user.IsSoftDeleted;
 		}
 	}
 }

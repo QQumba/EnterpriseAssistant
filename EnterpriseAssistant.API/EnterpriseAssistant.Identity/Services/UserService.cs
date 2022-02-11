@@ -11,12 +11,12 @@ namespace EnterpriseAssistant.Identity.Services
 {
 	public class UserService
 	{
-		private readonly UserRepository _repository;
+		private readonly IUserRepository _repository;
 		private readonly IMapper _mapper;
 		private readonly IHttpClientFactory _factory;
 		private readonly IConfiguration _configuration;
 
-		public UserService(UserRepository repository, IMapper mapper, IHttpClientFactory factory, IConfiguration configuration)
+		public UserService(IUserRepository repository, IMapper mapper, IHttpClientFactory factory, IConfiguration configuration)
 		{
 			_repository = repository;
 			_mapper = mapper;

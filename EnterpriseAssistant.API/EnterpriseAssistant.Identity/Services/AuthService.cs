@@ -7,9 +7,9 @@ namespace EnterpriseAssistant.Identity.Services
 {
 	public class AuthService
 	{
-		private readonly UserRepository _repository;
+		private readonly IUserRepository _repository;
 
-		public AuthService(UserRepository repository)
+		public AuthService(IUserRepository repository)
 		{
 			_repository = repository;
 		}

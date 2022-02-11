@@ -45,6 +45,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
             o.ClaimActions.MapUniqueJsonKey("login", "login");
             o.Scope.Add("openid");
             o.Scope.Add("profile");
+            o.Scope.Add("ea");
         });
 
     services.AddSwaggerGen(c =>
@@ -54,12 +55,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         {
             if (api.GroupName != null)
             {
-                return new[] { api.GroupName };
+                return new[] {api.GroupName};
             }
 
             if (api.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
             {
-                return new[] { controllerActionDescriptor.ControllerName };
+                return new[] {controllerActionDescriptor.ControllerName};
             }
 
             throw new InvalidOperationException("Unable to determine tag for endpoint.");
@@ -82,7 +83,7 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
     app.UseCors(b => b.WithOrigins("https://localhost:5004").AllowAnyHeader().AllowAnyMethod());
     app.UseHttpsRedirection();
     app.UseRouting();
-    
+
     app.UseAuthentication();
     app.UseAuthorization();
 }

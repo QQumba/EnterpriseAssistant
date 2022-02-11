@@ -1,0 +1,30 @@
+$header-height: 3em;
+
+header {
+  height: $header-height;
+  position: -webkit-sticky;
+  position: sticky;
+
+  top: 0;
+}
+
+main {
+  display: flex;
+  height: calc(100% - $header-height);
+
+  position: relative;
+}
+
+.sidebar-wrapper{
+    position: -webkit-sticky;
+    position: sticky;
+
+    height: calc(100vh - $header-height);
+    align-self: baseline;
+    top: $header-height;
+}
+
+.vert-spacer{
+    height: 300vh;
+}
+

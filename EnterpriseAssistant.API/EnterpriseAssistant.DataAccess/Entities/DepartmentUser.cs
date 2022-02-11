@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ResourceBasedAuthenticationTest.Models
+namespace EnterpriseAssistant.DataAccess.Entities
 {
-    public class DepartmentUser : BaseEntity
+    public class DepartmentUser : BaseEntity.WithId
     {
         [Column("department_id")]
         public long DepartmentId { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace ResourceBasedAuthenticationTest.Models
+﻿namespace EnterpriseAssistant.DataAccess.Entities
 {
     public class User : BaseEntity
     {

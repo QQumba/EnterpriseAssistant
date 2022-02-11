@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ResourceBasedAuthenticationTest.Models;
+﻿using EnterpriseAssistant.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnterpriseAssistant.DataAccess;
 
@@ -8,6 +8,12 @@ public class EnterpriseAssistantDbContext : DbContext
     public EnterpriseAssistantDbContext(DbContextOptions options) : base(options)
     {
     }
+
+    public DbSet<Department> Departments { get; set; }
+
+    public DbSet<DepartmentUser> DepartmentUsers { get; set; }
+
+    public DbSet<User> Users { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -18,7 +24,7 @@ public class EnterpriseAssistantDbContext : DbContext
 
         foreach (var entry in entries)
         {
-            var entity = (BaseEntity)entry.Entity;
+            var entity = (BaseEntity) entry.Entity;
             entity.UpdatedAt = DateTime.UtcNow;
 
             if (entry.State == EntityState.Added)

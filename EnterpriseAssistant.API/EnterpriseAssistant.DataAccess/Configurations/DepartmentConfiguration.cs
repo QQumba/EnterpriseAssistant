@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EnterpriseAssistant.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResourceBasedAuthenticationTest.Models;
 
-namespace ResourceBasedAuthenticationTest.Configurations
+namespace EnterpriseAssistant.DataAccess.Configurations
 {
     public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.ToTable("department");
-            builder.ConfigureBaseEntity();
+            builder.ConfigureBaseEntity().ConfigureId();
 
             builder.Property(d => d.Name)
                 .HasColumnName("name")
@@ -24,7 +24,7 @@ namespace ResourceBasedAuthenticationTest.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany<Department>()
+            builder.HasMany(d => d.ChildDepartments)
                 .WithOne(d => d.ParentDepartment)
                 .HasForeignKey(d => d.ParentDepartmentId)
                 .IsRequired(false)

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ResourceBasedAuthenticationTest.Models
+namespace EnterpriseAssistant.DataAccess.Entities
 {
-    public class Task : BaseEntity
+    public class Task : BaseEntity.WithId
     {
         [Column("title")]
         public string Title { get; set; }

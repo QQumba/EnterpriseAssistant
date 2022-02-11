@@ -1,4 +1,8 @@
+using EnterpriseAssistant.Application;
 using EnterpriseAssistant.DataAccess;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +23,53 @@ void ConfigureConfiguration(IConfigurationBuilder configuration)
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
-    services.AddControllers();
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
+
+    // todo: move auth values to config
+    services.AddAuthentication(o =>
+        {
+            o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            o.DefaultChallengeScheme = "oidc";
+        })
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddOpenIdConnect("oidc", o =>
+        {
+            o.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            o.Authority = "https://localhost:5004";
+            o.ClientId = "ea.api";
+            o.ClientSecret = "ea.secret";
+            o.ResponseType = "code";
+
+            o.SaveTokens = true;
+            o.GetClaimsFromUserInfoEndpoint = true;
+            o.ClaimActions.MapUniqueJsonKey("login", "login");
+            o.Scope.Add("openid");
+            o.Scope.Add("profile");
+            o.Scope.Add("ea");
+        });
+
+    services.AddSwaggerGen(c =>
+    {
+        c.EnableAnnotations();
+        c.TagActionsBy(api =>
+        {
+            if (api.GroupName != null)
+            {
+                return new[] {api.GroupName};
+            }
+
+            if (api.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+            {
+                return new[] {controllerActionDescriptor.ControllerName};
+            }
+
+            throw new InvalidOperationException("Unable to determine tag for endpoint.");
+        });
+        c.DocInclusionPredicate((name, api) => true);
+    });
 
     services.AddDataAccess(configuration);
+    services.AddApplication();
 }
 
 void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
@@ -34,8 +80,11 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
         app.UseSwaggerUI();
     }
 
+    app.UseCors(b => b.WithOrigins("https://localhost:5004").AllowAnyHeader().AllowAnyMethod());
     app.UseHttpsRedirection();
     app.UseRouting();
+
+    app.UseAuthentication();
     app.UseAuthorization();
 }
 

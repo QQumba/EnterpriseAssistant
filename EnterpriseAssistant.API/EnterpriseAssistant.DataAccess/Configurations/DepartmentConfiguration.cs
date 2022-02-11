@@ -2,8 +2,9 @@
 using EnterpriseAssistant.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ResourceBasedAuthenticationTest.Configurations;
 
-namespace ResourceBasedAuthenticationTest.Configurations
+namespace EnterpriseAssistant.DataAccess.Configurations
 {
     public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     {
@@ -25,7 +26,7 @@ namespace ResourceBasedAuthenticationTest.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany<Department>()
+            builder.HasMany(d => d.ChildDepartments)
                 .WithOne(d => d.ParentDepartment)
                 .HasForeignKey(d => d.ParentDepartmentId)
                 .IsRequired(false)

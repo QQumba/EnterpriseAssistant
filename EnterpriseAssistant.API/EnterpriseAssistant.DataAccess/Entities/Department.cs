@@ -7,5 +7,7 @@
         public long? ParentDepartmentId { get; set; }
         
         public Department ParentDepartment { get; set; }
+
+        public ICollection<Department> ChildDepartments { get; set; }
     }
 }

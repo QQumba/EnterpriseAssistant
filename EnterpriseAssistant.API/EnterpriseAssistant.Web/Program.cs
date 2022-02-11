@@ -1,5 +1,7 @@
 using EnterpriseAssistant.Application;
 using EnterpriseAssistant.DataAccess;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,13 +19,34 @@ app.Run();
 void ConfigureConfiguration(IConfigurationBuilder configuration)
 {
     configuration.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
-    configuration.AddJsonFile($"launchSettings.{Environment.MachineName}.json", true);
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
-    // services.AddControllers().AddApplicationPart(typeof(IApplicationAssemblyMarker).Assembly);
     services.AddEndpointsApiExplorer();
+
+    // todo: move auth values to config
+    services.AddAuthentication(o =>
+        {
+            o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            o.DefaultChallengeScheme = "oidc";
+        })
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddOpenIdConnect("oidc", o =>
+        {
+            o.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            o.Authority = "https://localhost:5004";
+            o.ClientId = "ea.api";
+            o.ClientSecret = "ea.secret";
+            o.ResponseType = "code";
+
+            o.SaveTokens = true;
+            o.GetClaimsFromUserInfoEndpoint = true;
+            o.ClaimActions.MapUniqueJsonKey("login", "login");
+            o.Scope.Add("openid");
+            o.Scope.Add("profile");
+        });
+
     services.AddSwaggerGen(c =>
     {
         c.EnableAnnotations();
@@ -56,8 +79,11 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
         app.UseSwaggerUI();
     }
 
+    app.UseCors(b => b.WithOrigins("https://localhost:5004").AllowAnyHeader().AllowAnyMethod());
     app.UseHttpsRedirection();
     app.UseRouting();
+    
+    app.UseAuthentication();
     app.UseAuthorization();
 }
 

@@ -31,4 +31,11 @@ public class TestController : ControllerBase
             })
             .ToArray();
     }
+
+    [HttpGet("claims")]
+    public ActionResult<IEnumerable<Tuple<string, string>>> GetClaims()
+    {
+        var claims = User.Claims.Select(c => new Tuple<string, string>(c.Type, c.Value));
+        return Ok(claims);
+    }
 }

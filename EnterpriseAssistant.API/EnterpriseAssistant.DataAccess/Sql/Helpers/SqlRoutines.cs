@@ -1,4 +1,4 @@
-﻿namespace EnterpriseAssistant.DataAccess.Sql;
+﻿namespace EnterpriseAssistant.DataAccess.Sql.Helpers;
 
 [Flags]
 public enum SqlRoutines

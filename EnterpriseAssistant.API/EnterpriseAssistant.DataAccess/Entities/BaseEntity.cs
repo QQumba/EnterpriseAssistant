@@ -8,9 +8,9 @@
 
         public bool IsSoftDeleted { get; set; }
 
-        public abstract class WithId : BaseEntity
+        public abstract class WithId<T> : BaseEntity
         {
-            public long Id { get; set; }
+            public T Id { get; set; }
         }
     }
 }

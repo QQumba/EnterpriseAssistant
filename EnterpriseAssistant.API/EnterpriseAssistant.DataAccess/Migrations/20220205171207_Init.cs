@@ -1,5 +1,6 @@
 ﻿using System;
 using EnterpriseAssistant.DataAccess.Sql;
+using EnterpriseAssistant.DataAccess.Sql.Helpers;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -102,7 +103,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 column: "login",
                 unique: true);
 
-            migrationBuilder.RunSqlFromAssembly(GetType().Assembly, SqlRoutines.Function);
+            migrationBuilder.CreateSqlRoutinesFromAssembly(GetType().Assembly, SqlRoutines.Function);
         } 
         
         protected override void Down(MigrationBuilder migrationBuilder)

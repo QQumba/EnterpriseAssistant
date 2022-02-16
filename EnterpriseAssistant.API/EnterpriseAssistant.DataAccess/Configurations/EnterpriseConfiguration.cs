@@ -12,5 +12,6 @@ public class EnterpriseConfiguration : IEntityTypeConfiguration<Enterprise>
         builder.ConfigureBaseEntity().ConfigureId<Enterprise, Guid>();
 
         builder.Property(e => e.Name).HasColumnName("name").IsRequired();
+        builder.Ignore(e => e.RootDepartment);
     }
 }

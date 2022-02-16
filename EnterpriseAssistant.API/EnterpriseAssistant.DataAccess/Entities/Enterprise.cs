@@ -5,4 +5,6 @@ public class Enterprise : BaseEntity.WithId<Guid>
     public string Name { get; set; }
 
     public ICollection<Department> Departments { get; set; }
+    
+    public Department RootDepartment => Departments.FirstOrDefault();
 }

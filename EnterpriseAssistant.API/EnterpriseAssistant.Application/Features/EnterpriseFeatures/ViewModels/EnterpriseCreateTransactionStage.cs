@@ -1,6 +1,6 @@
 ﻿namespace EnterpriseAssistant.Application.Features.EnterpriseFeatures.ViewModels;
 
-public enum EnterpriseCreateTransactionStep
+public enum EnterpriseCreateTransactionStage
 {
     CreateUser,
     CreateEnterprise,

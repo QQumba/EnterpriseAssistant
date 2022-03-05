@@ -28,7 +28,7 @@ public class EnterpriseController : ControllerBase
         return result.Match(Ok);
     }
 
-    [HttpPost("transaction")]
+    [HttpPost("transaction/init")]
     public async Task<ActionResult<IEnterpriseCreateTransaction>> InitiateEnterpriseCreateTransaction()
     {
         var result = await _mediator.Send(new InitiateEnterpriseCreateTransaction());

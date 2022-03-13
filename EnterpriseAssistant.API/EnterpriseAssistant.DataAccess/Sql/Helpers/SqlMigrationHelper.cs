@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EnterpriseAssistant.DataAccess.Sql;
+namespace EnterpriseAssistant.DataAccess.Sql.Helpers;
 
 public static class SqlMigrationHelper
 {
-    public static void RunSqlFromAssembly(this MigrationBuilder builder,
+    public static void CreateSqlRoutinesFromAssembly(this MigrationBuilder builder,
         Assembly assembly, SqlRoutines sqlRoutines)
     {
         var scripts = GetSqlFromAssembly(assembly, sqlRoutines);
@@ -15,7 +15,7 @@ public static class SqlMigrationHelper
         }
     }
 
-    public static IEnumerable<string> GetSqlFromAssembly(Assembly assembly, SqlRoutines sqlRoutines)
+    private static IEnumerable<string> GetSqlFromAssembly(Assembly assembly, SqlRoutines sqlRoutines)
     {
         var scripts = new List<string>();
         var names = assembly.GetManifestResourceNames();

@@ -9,12 +9,13 @@ namespace EnterpriseAssistant.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<DepartmentUser> builder)
         {
             builder.ToTable("department_user");
-            builder.ConfigureBaseEntity().ConfigureId();
+            builder.ConfigureBaseEntity().ConfigureGeneratedId();
 
             builder.Property(du => du.DepartmentId).HasColumnName("department_id").IsRequired();
-            builder.Property(du => du.UserId).HasColumnName("user_id").IsRequired();
+            builder.Property(du => du.UserLogin).HasColumnName("user_login").IsRequired();
+            builder.Property(du => du.DepartmentUserType).HasColumnName("department_user_type").IsRequired();
             
-            builder.HasIndex(du => new { du.DepartmentId, du.UserId }).IsUnique();
+            builder.HasIndex(du => new { du.DepartmentId, UserId = du.UserLogin }).IsUnique();
         }
     }
 }

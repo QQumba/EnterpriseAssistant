@@ -1,22 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.IO.Compression;
-using System.Security.Cryptography.X509Certificates;
+using EnterpriseAssistant.Application.Features.DepartmentFeatures.Commands;
 using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
-using EnterpriseAssistant.DataAccess;
+using EnterpriseAssistant.Application.Features.UserFeatures.ViewModels;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EnterpriseAssistant.Application.Features.DepartmentFeatures;
 
+[Authorize]
 [ApiController]
-[Route("api/department/")]
+[Route("api/department")]
 [ApiExplorerSettings(GroupName = "department")]
-public class GetDepartmentController : ControllerBase
+public class DepartmentController : ControllerBase
 {
-    private readonly EnterpriseAssistantDbContext _db;
+    private readonly IMediator _mediator;
 
-    public GetDepartmentController(EnterpriseAssistantDbContext db)
+    public DepartmentController(IMediator mediator)
     {
-        _db = db;
+        _mediator = mediator;
     }
 
     [HttpGet("{departmentId:long}")]
@@ -24,9 +27,12 @@ public class GetDepartmentController : ControllerBase
         [Range(1, long.MaxValue), FromRoute] long departmentId,
         [FromQuery] bool includeChild = false)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(new GetDepartmentById(departmentId, includeChild));
+
+        return result.Match<ActionResult>(Ok, x => NotFound());
     }
 
+    // doesn't seem useful as a user can be part of multiple departments
     [HttpGet("my")]
     public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetUserDepartments(
         [FromQuery] bool includeChild = false)
@@ -68,10 +74,34 @@ public class GetDepartmentController : ControllerBase
             };
 
             lastChild.ChildDepartments.Add(department);
-            
+
             lastChild = department;
         }
 
         return Ok(root);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<DepartmentViewModel>> CreateDepartment([FromBody] DepartmentCreateViewModel model)
+    {
+        var result = await _mediator.Send(new CreateDepartment(model));
+        return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
+    }
+
+    [HttpGet("users/{departmentId:long}")]
+    public async Task<ActionResult<IEnumerable<UserViewModel>>> GetDepartmentUsers(
+        [Range(1, long.MaxValue), FromRoute] long departmentId)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("{departmentId:long}/add/user")]
+    [SwaggerResponse(204, "User added to department")]
+    [SwaggerResponse(404, "Department or user not found")]
+    [SwaggerOperation(Summary = "Add user to department")]
+    public async Task<ActionResult> AddUser([Range(1, long.MaxValue), FromRoute] long departmentId,
+        [Range(1, long.MaxValue), FromBody] long userId)
+    {
+        throw new NotImplementedException();
     }
 }

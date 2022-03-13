@@ -1,3 +1,9 @@
-﻿namespace EnterpriseAssistant.Application.Features.EnterpriseFeatures.ViewModels;
+﻿using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+using EnterpriseAssistant.Application.Features.UserFeatures.ViewModels;
 
-public record EnterpriseCreateViewModel(string Name);
+namespace EnterpriseAssistant.Application.Features.EnterpriseFeatures.ViewModels;
+
+public record EnterpriseCreateViewModel
+(
+    string Name
+);

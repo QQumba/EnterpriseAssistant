@@ -28,29 +28,9 @@ public class EnterpriseController : ControllerBase
         return result.Match(Ok);
     }
 
-    [HttpPost("transaction/init")]
-    public async Task<ActionResult<IEnterpriseCreateTransaction>> InitiateEnterpriseCreateTransaction()
+    [HttpPost("create")]
+    public async Task<ActionResult<EnterpriseViewModel>> InitiateEnterpriseCreateTransaction()
     {
-        var result = await _mediator.Send(new InitiateEnterpriseCreateTransaction());
-
-        return result.Match(Ok);
-    }
-
-    [HttpPost("transaction/{transactionId:guid}/user")]
-    public async Task<ActionResult<EnterpriseCreateTransaction>> AddUserToTransaction(
-        [FromRoute] Guid transactionId, [FromBody] UserCreateViewModel model)
-    {
-        var result = await _mediator.Send(new CreateUser(model));
-
-        return result.Match(Ok);
-    }
-
-    [HttpPost("transaction/{transactionId:guid}/department")]
-    public async Task<ActionResult<EnterpriseCreateTransaction>> AddDepartmentToTransaction(
-        [FromBody] DepartmentCreateViewModel model)
-    {
-        var result = await _mediator.Send(new CreateDepartment(model));
-
-        return result.Match(Ok);
+        return Ok();
     }
 }

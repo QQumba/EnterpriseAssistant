@@ -3,7 +3,6 @@ using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OneOf;
 using UserService.Contract.ViewModels;
 
 namespace EnterpriseService.API;

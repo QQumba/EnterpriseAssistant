@@ -246,3 +246,5 @@ _Pvt_Extensions
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+*/appsettings.*.json

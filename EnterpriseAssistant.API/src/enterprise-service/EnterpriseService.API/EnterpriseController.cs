@@ -26,8 +26,8 @@ public class EnterpriseController : ControllerBase
         return result.Match(Ok);
     }
 
-    [HttpPost("{enterpriseId:guid}/user")]
-    public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] Guid enterpriseId,
+    [HttpPost("{enterpriseId}/user")]
+    public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] [StringLength(50)] string enterpriseId,
         [FromBody] UserCreateViewModel model)
     {
         var result = await _mediator.Send(new CreateUser(model));

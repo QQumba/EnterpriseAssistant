@@ -7,9 +7,9 @@ using OneOf;
 
 namespace EnterpriseService.API.Commands;
 
-public class InitializeEnterprise : IRequest<OneOf<EnterpriseViewModel>>
+public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel>>
 {
-    public InitializeEnterprise(EnterpriseCreateViewModel model)
+    public CreateEnterprise(EnterpriseCreateViewModel model)
     {
         Model = model;
     }
@@ -17,16 +17,16 @@ public class InitializeEnterprise : IRequest<OneOf<EnterpriseViewModel>>
     public EnterpriseCreateViewModel Model { get; }
 }
 
-public class InitializeEnterpriseHandler : IRequestHandler<InitializeEnterprise, OneOf<EnterpriseViewModel>>
+public class CreateEnterpriseHandler : IRequestHandler<CreateEnterprise, OneOf<EnterpriseViewModel>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
-    public InitializeEnterpriseHandler(EnterpriseAssistantDbContext db)
+    public CreateEnterpriseHandler(EnterpriseAssistantDbContext db)
     {
         _db = db;
     }
 
-    public async Task<OneOf<EnterpriseViewModel>> Handle(InitializeEnterprise request,
+    public async Task<OneOf<EnterpriseViewModel>> Handle(CreateEnterprise request,
         CancellationToken cancellationToken)
     {
         _db.Users.Add(request.Model.UserCreate.Adapt<User>());

@@ -1,6 +1,6 @@
 ﻿using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
-using EnterpriseService.Contranct.ViewModels;
+using EnterpriseService.Contract.ViewModels;
 using Mapster;
 using MediatR;
 using OneOf;

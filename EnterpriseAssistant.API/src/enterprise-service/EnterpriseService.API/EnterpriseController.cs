@@ -1,5 +1,5 @@
 ﻿using EnterpriseService.API.Commands;
-using EnterpriseService.Contranct.ViewModels;
+using EnterpriseService.Contract.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Contract.ViewModels;

@@ -1,4 +1,4 @@
-using EnterpriseService.Contranct.ViewModels;
+using EnterpriseService.Contract.ViewModels;
 using FluentValidation;
 
 namespace EnterpriseService.API.Validators;

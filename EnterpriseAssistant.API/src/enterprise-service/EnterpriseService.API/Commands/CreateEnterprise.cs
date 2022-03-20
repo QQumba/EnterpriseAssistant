@@ -29,10 +29,16 @@ public class CreateEnterpriseHandler : IRequestHandler<CreateEnterprise, OneOf<E
     public async Task<OneOf<EnterpriseViewModel>> Handle(CreateEnterprise request,
         CancellationToken cancellationToken)
     {
-        _db.Users.Add(request.EnterpriseCreate.UserCreate.Adapt<User>());
-        _db.Departments.Add(request.EnterpriseCreate.DepartmentCreate.Adapt<Department>());
-
         var enterprise = _db.Enterprises.Add(request.EnterpriseCreate.Adapt<Enterprise>()).Entity;
+
+        var userToCreate = request.EnterpriseCreate.UserCreate.Adapt<User>();
+        userToCreate.Enterprise = enterprise;
+        _db.Users.Add(userToCreate);
+
+        var departmentToCreate = request.EnterpriseCreate.DepartmentCreate.Adapt<Department>();
+        departmentToCreate.Enterprise = enterprise;
+        _db.Departments.Add(departmentToCreate);
+
         await _db.SaveChangesAsync(cancellationToken);
         return enterprise.Adapt<EnterpriseViewModel>();
     }

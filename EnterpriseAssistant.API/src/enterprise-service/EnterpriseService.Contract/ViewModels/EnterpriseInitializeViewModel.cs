@@ -1,7 +1,7 @@
 using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
 using UserService.Contract.ViewModels;
 
-namespace EnterpriseService.API.ViewModels;
+namespace EnterpriseService.Contranct.ViewModels;
 
 public record EnterpriseInitializeViewModel
 (

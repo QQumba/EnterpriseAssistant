@@ -1,4 +1,4 @@
-﻿namespace EnterpriseService.API.ViewModels;
+﻿namespace EnterpriseService.Contranct.ViewModels;
 
 public record EnterpriseCreateViewModel
 (

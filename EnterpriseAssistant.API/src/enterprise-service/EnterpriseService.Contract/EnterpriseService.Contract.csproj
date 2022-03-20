@@ -7,4 +7,9 @@
         <RootNamespace>EnterpriseService.Contranct</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\department-service\DepartmentService.Contract\DepartmentService.Contract.csproj" />
+      <ProjectReference Include="..\..\user-service\UserService.Contract\UserService.Contract.csproj" />
+    </ItemGroup>
+
 </Project>

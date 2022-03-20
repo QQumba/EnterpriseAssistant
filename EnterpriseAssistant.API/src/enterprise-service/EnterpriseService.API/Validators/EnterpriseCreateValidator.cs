@@ -3,10 +3,11 @@ using FluentValidation;
 
 namespace EnterpriseService.API.Validators;
 
-public class EnterpriseInitializeValidator :  AbstractValidator<EnterpriseCreateViewModel>
+public class EnterpriseCreateValidator :  AbstractValidator<EnterpriseCreateViewModel>
 {
-    public EnterpriseInitializeValidator()
+    public EnterpriseCreateValidator()
     {
+        
         RuleFor(e => e.UserCreate).InjectValidator();
         RuleFor(e => e.DepartmentCreate).InjectValidator();
     }

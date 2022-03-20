@@ -1,6 +1,4 @@
-﻿using EnterpriseAssistant.Application.Features.DepartmentFeatures.Commands;
-using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
-using EnterpriseAssistant.Application.Features.EnterpriseFeatures.Commands;
+﻿using EnterpriseAssistant.Application.Features.EnterpriseFeatures.Commands;
 using EnterpriseAssistant.Application.Features.EnterpriseFeatures.ViewModels;
 using EnterpriseAssistant.Application.Features.UserFeatures.ViewModels;
 using MediatR;
@@ -19,6 +17,14 @@ public class EnterpriseController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpPost("create")]
+    public async Task<ActionResult<EnterpriseViewModel>> InitiateEnterpriseCreateTransaction(
+        [FromBody] EnterpriseInitializeViewModel model)
+    {
+        var result = await _mediator.Send(new InitializeEnterprise(model));
+        return result.Match(Ok);
+    }
+
     [HttpPost("{enterpriseId:guid}/user")]
     public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] Guid enterpriseId,
         [FromBody] UserCreateViewModel model)
@@ -26,11 +32,5 @@ public class EnterpriseController : ControllerBase
         var result = await _mediator.Send(new CreateUser(model));
 
         return result.Match(Ok);
-    }
-
-    [HttpPost("create")]
-    public async Task<ActionResult<EnterpriseViewModel>> InitiateEnterpriseCreateTransaction()
-    {
-        return Ok();
     }
 }

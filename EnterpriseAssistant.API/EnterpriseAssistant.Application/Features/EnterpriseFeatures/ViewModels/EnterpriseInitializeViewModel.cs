@@ -6,5 +6,6 @@ namespace EnterpriseAssistant.Application.Features.EnterpriseFeatures.ViewModels
 public record EnterpriseInitializeViewModel
 (
     UserCreateViewModel UserCreate,
+    EnterpriseCreateViewModel EnterpriseCreate,
     DepartmentCreateViewModel DepartmentCreate
 );

@@ -7,6 +7,8 @@ public class EnterpriseInitializeValidator :  AbstractValidator<EnterpriseInitia
 {
     public EnterpriseInitializeValidator()
     {
-        RuleFor(e => e.UserCreate);
+        RuleFor(e => e.UserCreate).InjectValidator();
+        RuleFor(e => e.EnterpriseCreate).InjectValidator();
+        RuleFor(e => e.DepartmentCreate).InjectValidator();
     }
 }

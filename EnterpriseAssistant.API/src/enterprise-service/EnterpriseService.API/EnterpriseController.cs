@@ -23,7 +23,7 @@ public class EnterpriseController : ControllerBase
         [FromBody] EnterpriseCreateViewModel model)
     {
         var result = await _mediator.Send(new CreateEnterprise(model));
-        return result.Match(Ok);
+        return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }
 
     [HttpPost("{enterpriseId}/user")]

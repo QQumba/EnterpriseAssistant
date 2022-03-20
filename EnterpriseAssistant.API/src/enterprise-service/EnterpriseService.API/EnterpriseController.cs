@@ -36,7 +36,7 @@ public class EnterpriseController : ControllerBase
     }
 
     [HttpGet("idAvailability/{id}")]
-    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromQuery] [StringLength(50)] string id)
+    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromRoute] [StringLength(50)] string id)
     {
         var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));
         return Ok(result);

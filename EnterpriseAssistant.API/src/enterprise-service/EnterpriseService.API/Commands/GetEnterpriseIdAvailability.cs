@@ -25,6 +25,6 @@ public class GetEnterpriseIdAvailabilityHandler : IRequestHandler<GetEnterpriseI
 
     public async Task<bool> Handle(GetEnterpriseIdAvailability request, CancellationToken cancellationToken)
     {
-        return await _db.Enterprises.AnyAsync(e => e.Id.Equals(request.Name), cancellationToken);
+        return !await _db.Enterprises.AnyAsync(e => e.Id.Equals(request.Name), cancellationToken);
     }
 }

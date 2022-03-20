@@ -1,7 +1,9 @@
-﻿using EnterpriseService.API.Commands;
+﻿using System.ComponentModel.DataAnnotations;
+using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OneOf;
 using UserService.Contract.ViewModels;
 
 namespace EnterpriseService.API;
@@ -32,5 +34,12 @@ public class EnterpriseController : ControllerBase
         var result = await _mediator.Send(new CreateUser(model));
 
         return result.Match(Ok);
+    }
+
+    [HttpGet("nameAvailability/{name}")]
+    public async Task<ActionResult<bool>> GetEnterpriseNameAvailability([FromQuery] [StringLength(50)] string name)
+    {
+        var result = await _mediator.Send(new GetEnterpriseNameAvailability(name));
+        return Ok(result);
     }
 }

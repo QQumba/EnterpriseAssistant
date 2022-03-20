@@ -24,7 +24,12 @@ namespace EnterpriseAssistant.DataAccess.Configurations
                 .HasForeignKey(du => du.UserLogin)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-
+            
+            builder
+                .HasOne(u => u.Enterprise)
+                .WithMany(e => e.Users)
+                .HasForeignKey(u => u.EnterpriseId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

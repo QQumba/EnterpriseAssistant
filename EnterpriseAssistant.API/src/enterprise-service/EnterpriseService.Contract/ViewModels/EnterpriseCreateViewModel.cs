@@ -5,7 +5,8 @@ namespace EnterpriseService.Contract.ViewModels;
 
 public record EnterpriseCreateViewModel
 (
-    string Name,
+    string Id,
+    string DisplayedName,
     UserCreateViewModel UserCreate,
     DepartmentCreateViewModel DepartmentCreate
 );

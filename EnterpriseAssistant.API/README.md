@@ -15,7 +15,7 @@ To connect to database create new
 ```json
 {
   "ConnectionStrings": {
-    "Npgsql": "Server=localhost;Port=5432;Database=enterprise_assistant_rba;User Id=user id;Password=password;"
+    "Npgsql": "Server=localhost;Port=5432;Database=enterprise_assistant;User Id=postgres;Password=password;"
   }
 }
 ```

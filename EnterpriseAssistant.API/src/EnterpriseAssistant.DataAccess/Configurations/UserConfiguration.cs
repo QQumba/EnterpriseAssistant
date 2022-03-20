@@ -16,6 +16,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations
             builder.Property(u => u.Role).HasColumnName("role").IsRequired();
             builder.Property(u => u.Password).HasColumnName("password").IsRequired();
             builder.Property(u => u.Salt).HasColumnName("salt").IsRequired();
+            builder.Property(u => u.EnterpriseId).HasColumnName("enterprise_id").IsRequired(false);
 
             builder
                 .HasMany<DepartmentUser>()

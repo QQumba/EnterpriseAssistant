@@ -13,5 +13,11 @@ public class EnterpriseConfiguration : IEntityTypeConfiguration<Enterprise>
 
         builder.Property(e => e.DisplayedName).HasColumnName("name").IsRequired();
         builder.Ignore(e => e.RootDepartment);
+
+        builder
+            .HasMany<User>()
+            .WithOne(u => u.Enterprise)
+            .HasForeignKey(u => u.EnterpriseId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

@@ -15,4 +15,8 @@ public class User : BaseEntity
     public string Password { get; set; }
 
     public string Salt { get; set; }
+
+    public string EnterpriseId { get; set; }
+
+    public Enterprise Enterprise { get; set; }
 }

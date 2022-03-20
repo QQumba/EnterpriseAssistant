@@ -19,7 +19,7 @@ public class EnterpriseController : ControllerBase
 
     [HttpPost("create")]
     public async Task<ActionResult<EnterpriseViewModel>> InitiateEnterpriseCreateTransaction(
-        [FromBody] EnterpriseInitializeViewModel model)
+        [FromBody] EnterpriseCreateViewModel model)
     {
         var result = await _mediator.Send(new InitializeEnterprise(model));
         return result.Match(Ok);

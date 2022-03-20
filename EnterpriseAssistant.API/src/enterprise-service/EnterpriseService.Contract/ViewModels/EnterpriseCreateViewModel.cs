@@ -1,6 +1,11 @@
-﻿namespace EnterpriseService.Contract.ViewModels;
+using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+using UserService.Contract.ViewModels;
+
+namespace EnterpriseService.Contract.ViewModels;
 
 public record EnterpriseCreateViewModel
 (
-    string Name
+    string Name,
+    UserCreateViewModel UserCreate,
+    DepartmentCreateViewModel DepartmentCreate
 );

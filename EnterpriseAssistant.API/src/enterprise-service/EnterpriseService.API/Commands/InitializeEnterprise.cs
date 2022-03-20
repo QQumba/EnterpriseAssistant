@@ -9,12 +9,12 @@ namespace EnterpriseService.API.Commands;
 
 public class InitializeEnterprise : IRequest<OneOf<EnterpriseViewModel>>
 {
-    public InitializeEnterprise(EnterpriseInitializeViewModel model)
+    public InitializeEnterprise(EnterpriseCreateViewModel model)
     {
         Model = model;
     }
 
-    public EnterpriseInitializeViewModel Model { get; }
+    public EnterpriseCreateViewModel Model { get; }
 }
 
 public class InitializeEnterpriseHandler : IRequestHandler<InitializeEnterprise, OneOf<EnterpriseViewModel>>

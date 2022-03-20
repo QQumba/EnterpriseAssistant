@@ -9,12 +9,12 @@ namespace EnterpriseService.API.Commands;
 
 public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel>>
 {
-    public CreateEnterprise(EnterpriseCreateViewModel model)
+    public CreateEnterprise(EnterpriseCreateViewModel enterpriseCreate)
     {
-        Model = model;
+        EnterpriseCreate = enterpriseCreate;
     }
 
-    public EnterpriseCreateViewModel Model { get; }
+    public EnterpriseCreateViewModel EnterpriseCreate { get; }
 }
 
 public class CreateEnterpriseHandler : IRequestHandler<CreateEnterprise, OneOf<EnterpriseViewModel>>
@@ -29,10 +29,10 @@ public class CreateEnterpriseHandler : IRequestHandler<CreateEnterprise, OneOf<E
     public async Task<OneOf<EnterpriseViewModel>> Handle(CreateEnterprise request,
         CancellationToken cancellationToken)
     {
-        _db.Users.Add(request.Model.UserCreate.Adapt<User>());
-        _db.Departments.Add(request.Model.DepartmentCreate.Adapt<Department>());
+        _db.Users.Add(request.EnterpriseCreate.UserCreate.Adapt<User>());
+        _db.Departments.Add(request.EnterpriseCreate.DepartmentCreate.Adapt<Department>());
 
-        var enterprise = _db.Enterprises.Add(request.Model.Adapt<Enterprise>()).Entity;
+        var enterprise = _db.Enterprises.Add(request.EnterpriseCreate.Adapt<Enterprise>()).Entity;
         await _db.SaveChangesAsync(cancellationToken);
         return enterprise.Adapt<EnterpriseViewModel>();
     }

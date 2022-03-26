@@ -6,12 +6,12 @@ namespace EnterpriseService.API.Commands;
 
 public class GetEnterpriseIdAvailability : IRequest<bool>
 {
-    public GetEnterpriseIdAvailability(string name)
+    public GetEnterpriseIdAvailability(string id)
     {
-        Name = name;
+        Id = id;
     }
 
-    public string Name { get; }
+    public string Id { get; }
 }
 
 public class GetEnterpriseIdAvailabilityHandler : IRequestHandler<GetEnterpriseIdAvailability, bool>
@@ -25,6 +25,6 @@ public class GetEnterpriseIdAvailabilityHandler : IRequestHandler<GetEnterpriseI
 
     public async Task<bool> Handle(GetEnterpriseIdAvailability request, CancellationToken cancellationToken)
     {
-        return !await _db.Enterprises.AnyAsync(e => e.Id.Equals(request.Name), cancellationToken);
+        return !await _db.Enterprises.AnyAsync(e => e.Id.Equals(request.Id), cancellationToken);
     }
 }

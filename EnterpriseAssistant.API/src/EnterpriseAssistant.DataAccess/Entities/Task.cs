@@ -10,4 +10,6 @@ public class Task : BaseEntity.WithId<long>
     public string UserLogin { get; set; }
 
     public User User { get; set; }
+
+    public string EnterpriseId { get; set; }
 }

@@ -14,8 +14,11 @@ namespace EnterpriseAssistant.DataAccess.Configurations
             builder.Property(du => du.DepartmentId).HasColumnName("department_id").IsRequired();
             builder.Property(du => du.UserLogin).HasColumnName("user_login").IsRequired();
             builder.Property(du => du.DepartmentUserType).HasColumnName("department_user_type").IsRequired();
+            builder.Property(du => du.EnterpriseId).HasColumnName("enterprise_id").IsRequired();
             
             builder.HasIndex(du => new { du.DepartmentId, UserId = du.UserLogin }).IsUnique();
+            
+            builder.HasOne<Enterprise>().WithMany().HasForeignKey(du => du.EnterpriseId);
         }
     }
 }

@@ -13,4 +13,6 @@ public class DepartmentUser : BaseEntity.WithId<long>
     public User User { get; set; }
 
     public DepartmentUserType DepartmentUserType { get; set; } = DepartmentUserType.User;
+
+    public string EnterpriseId { get; set; }
 }

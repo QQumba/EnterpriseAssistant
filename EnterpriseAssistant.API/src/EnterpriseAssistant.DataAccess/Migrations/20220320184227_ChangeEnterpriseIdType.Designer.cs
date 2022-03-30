@@ -3,6 +3,7 @@ using System;
 using EnterpriseAssistant.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
     [DbContext(typeof(EnterpriseAssistantDbContext))]
-    partial class EnterpriseAssistantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220320184227_ChangeEnterpriseIdType")]
+    partial class ChangeEnterpriseIdType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,10 +157,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("EnterpriseId")
-                        .HasColumnType("text")
-                        .HasColumnName("enterprise_id");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -191,8 +189,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Login");
-
-                    b.HasIndex("EnterpriseId");
 
                     b.HasIndex("Login")
                         .IsUnique();
@@ -238,17 +234,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
-                {
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
-                        .WithMany("Users")
-                        .HasForeignKey("EnterpriseId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.Navigation("Enterprise");
-                });
-
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
                 {
                     b.Navigation("ChildDepartments");
@@ -257,8 +242,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
                 {
                     b.Navigation("Departments");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

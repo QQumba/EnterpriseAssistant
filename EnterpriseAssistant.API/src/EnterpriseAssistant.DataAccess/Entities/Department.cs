@@ -14,7 +14,7 @@ public class Department : BaseEntity.WithId<long>
 
     public DepartmentType DepartmentType { get; set; } = DepartmentType.Default;
 
-    public Guid EnterpriseId { get; set; }
+    public string EnterpriseId { get; set; }
 
     public Enterprise Enterprise { get; set; }
 }

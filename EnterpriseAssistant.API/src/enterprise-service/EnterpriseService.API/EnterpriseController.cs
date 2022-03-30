@@ -1,5 +1,6 @@
-﻿using EnterpriseService.API.Commands;
-using EnterpriseService.API.ViewModels;
+﻿using System.ComponentModel.DataAnnotations;
+using EnterpriseService.API.Commands;
+using EnterpriseService.Contract.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Contract.ViewModels;
@@ -18,19 +19,26 @@ public class EnterpriseController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<ActionResult<EnterpriseViewModel>> InitiateEnterpriseCreateTransaction(
-        [FromBody] EnterpriseInitializeViewModel model)
+    public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise(
+        [FromBody] EnterpriseCreateViewModel model)
     {
-        var result = await _mediator.Send(new InitializeEnterprise(model));
-        return result.Match(Ok);
+        var result = await _mediator.Send(new CreateEnterprise(model));
+        return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }
 
-    [HttpPost("{enterpriseId:guid}/user")]
-    public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] Guid enterpriseId,
+    [HttpPost("{enterpriseId}/user")]
+    public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] [StringLength(50)] string enterpriseId,
         [FromBody] UserCreateViewModel model)
     {
         var result = await _mediator.Send(new CreateUser(model));
 
         return result.Match(Ok);
+    }
+
+    [HttpGet("idAvailability/{id}")]
+    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromRoute] [StringLength(50)] string id)
+    {
+        var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));
+        return Ok(result);
     }
 }

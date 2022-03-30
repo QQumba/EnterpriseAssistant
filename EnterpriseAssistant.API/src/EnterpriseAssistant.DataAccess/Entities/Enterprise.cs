@@ -1,10 +1,12 @@
 ﻿namespace EnterpriseAssistant.DataAccess.Entities;
 
-public class Enterprise : BaseEntity.WithId<Guid>
+public class Enterprise : BaseEntity.WithId<string>
 {
-    public string Name { get; set; }
+    public string DisplayedName { get; set; }
 
     public ICollection<Department> Departments { get; set; }
+
+    public ICollection<User> Users { get; set; }
     
     public Department RootDepartment => Departments.FirstOrDefault();
 }

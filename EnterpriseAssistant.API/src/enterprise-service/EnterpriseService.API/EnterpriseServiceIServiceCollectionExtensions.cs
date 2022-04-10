@@ -1,4 +1,6 @@
+using EnterpriseAssistant.Application.Shared;
 using FluentValidation.AspNetCore;
+using FluentValidation.Validators;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +12,9 @@ public static class EnterpriseServiceIServiceCollectionExtensions
     {
         services.AddControllers()
             .AddFluentValidation(fv =>
-                fv.RegisterValidatorsFromAssemblyContaining(typeof(EnterpriseServiceIServiceCollectionExtensions)));
+                fv.RegisterValidatorsFromAssemblyContaining(typeof(EnterpriseServiceIServiceCollectionExtensions),
+                    filter => true
+                ));
 
         services.AddMediatR(typeof(EnterpriseServiceIServiceCollectionExtensions));
     }

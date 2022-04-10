@@ -19,8 +19,8 @@ public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel, EnterpriseId
     public EnterpriseCreateViewModel EnterpriseCreate { get; }
 }
 
-public class
-    CreateEnterpriseHandler : IRequestHandler<CreateEnterprise, OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
+public class CreateEnterpriseHandler :
+    IRequestHandler<CreateEnterprise, OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -33,17 +33,17 @@ public class
         CancellationToken cancellationToken)
     {
         var enterpriseToCreate = request.EnterpriseCreate.Adapt<Enterprise>();
-        var enterprise = _db.Enterprises.Add(enterpriseToCreate).Entity;
         var isEnterpriseIdTaken =
             await _db.Enterprises.AnyAsync(e => e.Id.Equals(enterpriseToCreate.Id), cancellationToken);
-
         if (isEnterpriseIdTaken)
         {
-            return new EnterpriseIdAlreadyTakenError();
+            return new EnterpriseIdAlreadyTakenError(enterpriseToCreate.Id);
         }
 
+        var enterprise = _db.Enterprises.Add(enterpriseToCreate).Entity;
+
         var userToCreate = request.EnterpriseCreate.UserCreate.Adapt<User>();
-        userToCreate.Enterprise = enterpriseToCreate;
+        userToCreate.Enterprise = enterprise;
         _db.Users.Add(userToCreate);
 
         var departmentToCreate = request.EnterpriseCreate.DepartmentCreate.Adapt<Department>();

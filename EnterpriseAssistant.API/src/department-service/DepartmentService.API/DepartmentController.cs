@@ -12,7 +12,6 @@ namespace DepartmentService.API;
 [Authorize]
 [ApiController]
 [Route("api/department")]
-[ApiExplorerSettings(GroupName = "department")]
 public class DepartmentController : ControllerBase
 {
     private readonly IMediator _mediator;

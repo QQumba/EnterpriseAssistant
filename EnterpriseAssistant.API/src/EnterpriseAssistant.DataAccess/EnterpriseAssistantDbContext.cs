@@ -17,6 +17,8 @@ public class EnterpriseAssistantDbContext : DbContext
 
     public DbSet<DepartmentUser> DepartmentUsers { get; set; }
 
+    public DbSet<ManagedUser> ManagedUsers { get; set; }
+
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

@@ -9,27 +9,28 @@ namespace EnterpriseAssistant.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("user");
-            builder.ConfigureBaseEntity().ConfigureKey(u => u.Login, "login");
-
+            builder.ConfigureBaseEntity().ConfigureId<User,long>();
+            
             builder.Property(u => u.FirstName).HasColumnName("first_name").IsRequired();
             builder.Property(u => u.LastName).HasColumnName("last_name").IsRequired(false);
             builder.Property(u => u.Role).HasColumnName("role").IsRequired();
             builder.Property(u => u.Password).HasColumnName("password").IsRequired();
             builder.Property(u => u.Salt).HasColumnName("salt").IsRequired();
-            builder.Property(u => u.EnterpriseId).HasColumnName("enterprise_id").IsRequired(false);
 
             builder
                 .HasMany<DepartmentUser>()
                 .WithOne(du => du.User)
-                .HasForeignKey(du => du.UserLogin)
+                .HasForeignKey(du => du.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             builder
                 .HasOne(u => u.Enterprise)
                 .WithMany(e => e.Users)
                 .HasForeignKey(u => u.EnterpriseId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasIndex(u => new { u.Login,u.EnterpriseId }).IsUnique();
         }
     }
 }

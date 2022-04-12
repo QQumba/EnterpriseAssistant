@@ -1,4 +1,5 @@
-﻿using EnterpriseAssistant.DataAccess.Entities.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using EnterpriseAssistant.DataAccess.Entities.Enums;
 
 namespace EnterpriseAssistant.DataAccess.Entities;
 
@@ -8,7 +9,8 @@ public class DepartmentUser : BaseEntity.WithId<long>
 
     public Department Department { get; set; }
 
-    public string UserLogin { get; set; }
+    [Column("user_id")]
+    public long UserId { get; set; }
 
     public User User { get; set; }
 

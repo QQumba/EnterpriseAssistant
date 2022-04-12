@@ -9,7 +9,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("user");
-            builder.ConfigureBaseEntity().ConfigureId<User,long>();
+            builder.ConfigureId<User,long>();
             
             builder.Property(u => u.FirstName).HasColumnName("first_name").IsRequired();
             builder.Property(u => u.LastName).HasColumnName("last_name").IsRequired(false);

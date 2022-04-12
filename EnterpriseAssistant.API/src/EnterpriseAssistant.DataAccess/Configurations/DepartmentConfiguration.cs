@@ -9,7 +9,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     public void Configure(EntityTypeBuilder<Department> builder)
     {
         builder.ToTable("department");
-        builder.ConfigureBaseEntity().ConfigureGeneratedId();
+        builder.ConfigureGeneratedId();
         
         builder.Property(d => d.Name).HasColumnName("name").IsRequired();
         builder.Property(d => d.ParentDepartmentId).HasColumnName("parent_department_id").IsRequired(false);

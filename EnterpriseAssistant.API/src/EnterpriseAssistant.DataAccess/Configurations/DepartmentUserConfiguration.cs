@@ -9,7 +9,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations
         public void Configure(EntityTypeBuilder<DepartmentUser> builder)
         {
             builder.ToTable("department_user");
-            builder.ConfigureBaseEntity().ConfigureGeneratedId();
+            builder.ConfigureGeneratedId();
 
             builder.Property(du => du.DepartmentId).HasColumnName("department_id").IsRequired();
             builder.Property(du => du.DepartmentUserType).HasColumnName("department_user_type").IsRequired();

@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\department-service\DepartmentService.Contract\DepartmentService.Contract.csproj" />
+      <ProjectReference Include="..\..\EnterpriseAssistant.Application\EnterpriseAssistant.Application.csproj" />
       <ProjectReference Include="..\..\EnterpriseAssistant.DataAccess\EnterpriseAssistant.DataAccess.csproj" />
       <ProjectReference Include="..\..\user-service\UserService.Contract\UserService.Contract.csproj" />
       <ProjectReference Include="..\EnterpriseService.Contract\EnterpriseService.Contract.csproj" />

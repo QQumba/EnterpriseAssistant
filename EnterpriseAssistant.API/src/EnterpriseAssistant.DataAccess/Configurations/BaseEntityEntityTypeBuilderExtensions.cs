@@ -7,7 +7,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations;
 
 public static class BaseEntityEntityTypeBuilderExtensions
 {
-    public static void ConfigureId<T, TId>(this EntityTypeBuilder<T> builder) where T : BaseEntity.WithId<TId>
+    public static void ConfigureId<TEntity, TId>(this EntityTypeBuilder<TEntity> builder) where TEntity : BaseEntity.WithId<TId>
     {
         builder.ConfigureKey(e => e.Id);
     }

@@ -102,5 +102,5 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
 
 void ConfigureEndpoints(IEndpointRouteBuilder app)
 {
-    app.MapControllers();
+    app.MapControllers().RequireAuthorization();
 }

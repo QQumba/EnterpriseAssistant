@@ -1,5 +1,10 @@
-﻿using MediatR;
+﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using UserService.API.Commands;
+using UserService.Contract.ViewModels;
 
 namespace UserService.API;
 
@@ -14,6 +19,25 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
-    
-    
+    [HttpPost]
+    public async Task<ActionResult<ManagedUserViewModel>> CreateUser([FromBody] ManagedUserCreateViewModel model)
+    {
+        var result = await _mediator.Send(new CreateManagedUserCommand(model));
+        return result.Match<ActionResult>(Ok,e => BadRequest($"Email already taken, email: {e.Email}"));
+    }
+
+    [HttpGet("emailAvailability")]
+    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Check if email is available")]
+    public async Task<ActionResult<bool>> GetManagedUserEmailAvailability([FromQuery] string email)
+    {
+        if (email.Contains('@') == false)
+        {
+            // TODO: wrap error in a generic response
+            return BadRequest("Email is not valid");
+        }
+
+        var result = await _mediator.Send(new GetManagedUserEmailAvailability(email));
+        return Ok(result);
+    }
 }

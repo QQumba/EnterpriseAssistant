@@ -1,4 +1,6 @@
-﻿using EnterpriseAssistant.DataAccess;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using EnterpriseService.API.OneOfResponses;
 using EnterpriseService.Contract.ViewModels;
@@ -9,7 +11,7 @@ using OneOf;
 
 namespace EnterpriseService.API.Commands;
 
-public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
+public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel,EnterpriseIdAlreadyTakenError>>
 {
     public CreateEnterprise(EnterpriseCreateViewModel enterpriseCreate)
     {
@@ -19,8 +21,8 @@ public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel, EnterpriseId
     public EnterpriseCreateViewModel EnterpriseCreate { get; }
 }
 
-public class
-    CreateEnterpriseHandler : IRequestHandler<CreateEnterprise, OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
+public class CreateEnterpriseHandler
+    : IRequestHandler<CreateEnterprise,OneOf<EnterpriseViewModel,EnterpriseIdAlreadyTakenError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -29,13 +31,13 @@ public class
         _db = db;
     }
 
-    public async Task<OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>> Handle(CreateEnterprise request,
+    public async Task<OneOf<EnterpriseViewModel,EnterpriseIdAlreadyTakenError>> Handle(CreateEnterprise request,
         CancellationToken cancellationToken)
     {
         var enterpriseToCreate = request.EnterpriseCreate.Adapt<Enterprise>();
         var enterprise = _db.Enterprises.Add(enterpriseToCreate).Entity;
         var isEnterpriseIdTaken =
-            await _db.Enterprises.AnyAsync(e => e.Id.Equals(enterpriseToCreate.Id), cancellationToken);
+            await _db.Enterprises.AnyAsync(e => e.Id.Equals(enterpriseToCreate.Id),cancellationToken);
 
         if (isEnterpriseIdTaken)
         {

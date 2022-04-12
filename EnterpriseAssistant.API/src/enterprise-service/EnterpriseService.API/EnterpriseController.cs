@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using UserService.Contract.ViewModels;
 
 namespace EnterpriseService.API;
@@ -27,6 +29,7 @@ public class EnterpriseController : ControllerBase
     }
 
     [HttpPost("{enterpriseId}/user")]
+    [SwaggerOperation(Summary = "Create user for enterprise")]
     public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] [StringLength(50)] string enterpriseId,
         [FromBody] UserCreateViewModel model)
     {

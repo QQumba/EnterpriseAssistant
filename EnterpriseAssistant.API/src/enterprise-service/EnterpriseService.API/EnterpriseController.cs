@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserService.Contract.ViewModels;
 
 namespace EnterpriseService.API;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/enterprise")]
 public class EnterpriseController : ControllerBase
@@ -24,7 +26,9 @@ public class EnterpriseController : ControllerBase
     public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise(
         [FromBody] EnterpriseCreateViewModel model)
     {
-        var result = await _mediator.Send(new CreateEnterprise(model));
+        // todo: get email from auth context
+        var email = "dummy@e.mail";
+        var result = await _mediator.Send(new CreateEnterprise(model, email));
         return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }
 

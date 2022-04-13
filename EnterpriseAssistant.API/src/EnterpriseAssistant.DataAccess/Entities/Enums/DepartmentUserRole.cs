@@ -1,6 +1,6 @@
 ﻿namespace EnterpriseAssistant.DataAccess.Entities.Enums;
 
-public enum DepartmentUserType
+public enum DepartmentUserRole
 {
     User,
     Chief,

@@ -7,6 +7,5 @@ public record EnterpriseCreateViewModel
 (
     string Id,
     string DisplayedName,
-    UserCreateViewModel UserCreate,
-    DepartmentCreateViewModel DepartmentCreate
+    DepartmentCreateViewModel? DepartmentCreate
 );

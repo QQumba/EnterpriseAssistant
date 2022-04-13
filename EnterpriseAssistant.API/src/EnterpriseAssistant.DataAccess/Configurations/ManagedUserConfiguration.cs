@@ -16,5 +16,12 @@ public class ManagedUserConfiguration : IEntityTypeConfiguration<ManagedUser>
             .HasForeignKey(u => u.ManagedUserEmail)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasMany(mu => mu.Enterprises)
+            .WithOne(e => e.Owner)
+            .HasForeignKey(u => u.OwnerEmail)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

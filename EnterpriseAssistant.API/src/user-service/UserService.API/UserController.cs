@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,6 +19,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<ManagedUserViewModel>> CreateUser([FromBody] ManagedUserCreateViewModel model)
     {
         var result = await _mediator.Send(new CreateManagedUserCommand(model));
@@ -38,6 +38,14 @@ public class UserController : ControllerBase
         }
 
         var result = await _mediator.Send(new GetManagedUserEmailAvailability(email));
+        return Ok(result);
+    }
+    
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult<IEnumerable<ManagedUserViewModel>>> GetAllUsers()
+    {
+        var result = await _mediator.Send(new GetAllManagedUsersCommand());
         return Ok(result);
     }
 }

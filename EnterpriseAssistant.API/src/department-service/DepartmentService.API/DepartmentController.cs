@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DepartmentService.API.Commands;
+using DepartmentService.Contract.ViewModels;
 using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

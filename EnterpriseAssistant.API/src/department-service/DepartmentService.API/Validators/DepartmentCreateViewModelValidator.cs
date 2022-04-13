@@ -1,4 +1,5 @@
-﻿using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿using DepartmentService.Contract.ViewModels;
+using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
 using FluentValidation;
 
 namespace DepartmentService.API.Validators;

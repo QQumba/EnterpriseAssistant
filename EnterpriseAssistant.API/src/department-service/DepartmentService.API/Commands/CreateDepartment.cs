@@ -1,4 +1,5 @@
-﻿using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿using DepartmentService.Contract.ViewModels;
+using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using Mapster;

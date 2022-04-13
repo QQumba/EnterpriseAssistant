@@ -38,7 +38,7 @@ public class CreateManagedUserCommandHandler
         }
 
         var userToCreate = request.Model.Adapt<ManagedUser>();
-        var createdUser = _db.ManagedUsers.Add(userToCreate);
+        var createdUser = _db.ManagedUsers.Add(userToCreate).Entity;
         await _db.SaveChangesAsync(cancellationToken);
         
         // TODO: trigger email verification process

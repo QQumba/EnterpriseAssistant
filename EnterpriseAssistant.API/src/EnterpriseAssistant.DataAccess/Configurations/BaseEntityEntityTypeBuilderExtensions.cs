@@ -23,14 +23,6 @@ public static class BaseEntityEntityTypeBuilderExtensions
     public static void ConfigureGeneratedId<T>(this EntityTypeBuilder<T> builder) where T : BaseEntity.WithId<long>
     {
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
-    }
-
-    public static EntityTypeBuilder<T> ConfigureBaseEntity<T>(this EntityTypeBuilder<T> builder) where T : BaseEntity
-    {
-        builder.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
-        builder.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
-        builder.Property(e => e.IsSoftDeleted).HasColumnName("is_soft_deleted").IsRequired();
-        return builder;
+        builder.Property(e => e.Id).ValueGeneratedOnAdd();
     }
 }

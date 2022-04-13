@@ -3,8 +3,10 @@ using EnterpriseAssistant.DataAccess.Entities.Enums;
 
 namespace EnterpriseAssistant.DataAccess.Entities;
 
+[Table("department_user")]
 public class DepartmentUser : BaseEntity.WithId<long>
 {
+    [Column("department_id")]
     public long DepartmentId { get; set; }
 
     public Department Department { get; set; }
@@ -14,7 +16,9 @@ public class DepartmentUser : BaseEntity.WithId<long>
 
     public User User { get; set; }
 
-    public DepartmentUserType DepartmentUserType { get; set; } = DepartmentUserType.User;
+    [Column("department_user_role")]
+    public DepartmentUserRole DepartmentUserRole { get; set; } = DepartmentUserRole.User;
 
+    [Column("enterprise_id")]
     public string EnterpriseId { get; set; }
 }

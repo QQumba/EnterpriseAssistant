@@ -1,15 +1,23 @@
-﻿namespace EnterpriseAssistant.DataAccess.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EnterpriseAssistant.DataAccess.Entities;
 
 // todo: add configuration
+// todo: might should be renamed
+[Table("task")]
 public class Task : BaseEntity.WithId<long>
 {
-    public string Title { get; set; }
+    [Column("title")]
+    public string Title { get; set; } = null!;
 
-    public string Description { get; set; }
+    [Column("description")]
+    public string? Description { get; set; }
 
-    public string UserLogin { get; set; }
+    [Column("user_id")]
+    public long UserId { get; set; }
 
-    public User User { get; set; }
+    public User? User { get; set; }
 
-    public string EnterpriseId { get; set; }
+    [Column("enterprise_id")]
+    public string EnterpriseId { get; set; } = null!;
 }

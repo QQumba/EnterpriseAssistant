@@ -8,14 +8,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("user");
-            builder.ConfigureBaseEntity().ConfigureId<User,long>();
-            
-            builder.Property(u => u.FirstName).HasColumnName("first_name").IsRequired();
-            builder.Property(u => u.LastName).HasColumnName("last_name").IsRequired(false);
-            builder.Property(u => u.Role).HasColumnName("role").IsRequired();
-            builder.Property(u => u.Password).HasColumnName("password").IsRequired();
-            builder.Property(u => u.Salt).HasColumnName("salt").IsRequired();
+            builder.ConfigureGeneratedId();
 
             builder
                 .HasMany<DepartmentUser>()

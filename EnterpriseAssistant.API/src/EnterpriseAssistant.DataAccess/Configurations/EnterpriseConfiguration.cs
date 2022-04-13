@@ -8,10 +8,6 @@ public class EnterpriseConfiguration : IEntityTypeConfiguration<Enterprise>
 {
     public void Configure(EntityTypeBuilder<Enterprise> builder)
     {
-        builder.ToTable("enterprise");
-        builder.ConfigureBaseEntity().ConfigureId<Enterprise, string>();
-
-        builder.Property(e => e.DisplayedName).HasColumnName("name").IsRequired();
-        builder.Ignore(e => e.RootDepartment);
+        builder.ConfigureId<Enterprise, string>();
     }
 }

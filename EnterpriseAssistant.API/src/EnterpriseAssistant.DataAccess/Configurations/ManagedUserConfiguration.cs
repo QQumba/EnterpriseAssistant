@@ -8,7 +8,7 @@ public class ManagedUserConfiguration : IEntityTypeConfiguration<ManagedUser>
 {
     public void Configure(EntityTypeBuilder<ManagedUser> builder)
     {
-        builder.ConfigureBaseEntity().ConfigureKey(mu => mu.Email, "email");
+        builder.ConfigureKey(mu => mu.Email, "email");
 
         builder
             .HasMany(mu => mu.Users)

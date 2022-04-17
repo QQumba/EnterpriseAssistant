@@ -44,7 +44,7 @@ public class EnterpriseController : ControllerBase
         return result.Match(Ok);
     }
 
-    [HttpGet("idAvailability/{id}")]
+    [HttpGet("{id}/idAvailability")]
     public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromRoute] [StringLength(50)] string id)
     {
         var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));

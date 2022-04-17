@@ -19,4 +19,6 @@ public class ManagedUser : BaseEntity
     public string Salt { get; set; } = "";
 
     public ICollection<User>? Users { get; set; }
+
+    public ICollection<Enterprise>? Enterprises { get; set; }
 }

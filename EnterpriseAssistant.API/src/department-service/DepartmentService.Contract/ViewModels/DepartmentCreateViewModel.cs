@@ -1,4 +1,4 @@
-﻿namespace EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿namespace DepartmentService.Contract.ViewModels;
 
 public class DepartmentCreateViewModel
 {

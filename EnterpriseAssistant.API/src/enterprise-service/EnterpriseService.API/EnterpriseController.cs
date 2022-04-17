@@ -23,7 +23,7 @@ public class EnterpriseController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     [SwaggerOperation(Summary = "Create an enterprise",
         Description = "Create an enterprise with root department and admin user")]
     public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise(
@@ -34,20 +34,30 @@ public class EnterpriseController : ControllerBase
         return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }
 
-    [HttpPost("{enterpriseId}/user")]
+    [HttpPost("user")]
     [SwaggerOperation(Summary = "Create user for enterprise")]
-    public async Task<ActionResult<UserViewModel>> CreateUser([FromRoute] [StringLength(50)] string enterpriseId,
-        [FromBody] UserCreateViewModel model)
+    public async Task<ActionResult<UserViewModel>> CreateUser([FromBody] UserCreateViewModel model)
     {
-        var result = await _mediator.Send(new CreateUser(model));
+        var enterpriseId = User.GetEnterpriseId();
+        var result = await _mediator.Send(new CreateEnterpriseUser(model, enterpriseId));
 
-        return result.Match(Ok);
+        return result.Match<ActionResult>(Ok,
+            e => NotFound($"Enterprise with id: {e.EnterpriseId} not found"),
+            e => BadRequest($"User login: {e.UserLogin} has taken already for enterprise with id: {e.EnterpriseId}"));
     }
 
-    [HttpGet("idAvailability/{id}")]
-    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromRoute] [StringLength(50)] string id)
+    [HttpGet("isIdAvailable")]
+    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromQuery] [StringLength(50)] string id)
     {
         var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));
+        return Ok(result);
+    }
+
+    [HttpGet("user/exists")]
+    public async Task<ActionResult<bool>> IsUserExists([Required] [FromQuery] string login)
+    {
+        var enterpriseId = User.GetEnterpriseId();
+        var result = await _mediator.Send(new GetEnterpriseUserExistence(enterpriseId, login));
         return Ok(result);
     }
 }

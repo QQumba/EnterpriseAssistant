@@ -10,4 +10,11 @@ public static class ClaimPrincipalExtensions
         // todo: use when auth is done
         return principal.FindFirst("email")!.Value;
     }
+    
+    public static string GetEnterpriseId(this ClaimsPrincipal principal)
+    {
+        return "test";
+        // todo: use when auth is done
+        return principal.FindFirst("enterprise_id")!.Value;
+    }
 }

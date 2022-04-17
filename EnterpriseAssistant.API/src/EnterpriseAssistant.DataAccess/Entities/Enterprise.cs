@@ -19,5 +19,5 @@ public class Enterprise : BaseEntity.WithId<string>
     public ManagedUser? Owner { get; set; }
 
     [NotMapped]
-    public Department? RootDepartment => Departments.FirstOrDefault(d => d.DepartmentType == DepartmentType.Root);
+    public Department? RootDepartment => Departments?.FirstOrDefault(d => d.DepartmentType == DepartmentType.Root);
 }

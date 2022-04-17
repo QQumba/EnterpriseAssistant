@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using EnterpriseAssistant.Application.Shared;
 using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
 using MediatR;
@@ -23,11 +24,12 @@ public class EnterpriseController : ControllerBase
     }
 
     [HttpPost("create")]
+    [SwaggerOperation(Summary = "Create an enterprise",
+        Description = "Create an enterprise with root department and admin user")]
     public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise(
         [FromBody] EnterpriseCreateViewModel model)
     {
-        // todo: get email from auth context
-        var email = "dummy@e.mail";
+        var email = User.GetEmail();
         var result = await _mediator.Send(new CreateEnterprise(model, email));
         return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }

@@ -23,7 +23,7 @@ public class EnterpriseController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     [SwaggerOperation(Summary = "Create an enterprise",
         Description = "Create an enterprise with root department and admin user")]
     public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise(

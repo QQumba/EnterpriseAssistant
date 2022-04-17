@@ -21,6 +21,7 @@ public class User : BaseEntity.WithId<long>
     [Column("last_name")]
     public string? LastName { get; set; }
 
+    // todo: do we need this?
     [Column("role")]
     public Role Role { get; set; } = Role.User;
 

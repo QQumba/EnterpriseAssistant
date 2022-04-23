@@ -1,7 +1,7 @@
 ﻿<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="EA" type="CompoundRunConfigurationType">
+  <configuration default="false" name="EnterpriseAssitant.Application" type="CompoundRunConfigurationType">
+    <toRun name="EnterpriseAssistant.API" type="LaunchSettings" />
     <toRun name="EnterpriseAssistant.Identity" type="LaunchSettings" />
-    <toRun name="EnterpriseAssistant.Web" type="LaunchSettings" />
     <method v="2" />
   </configuration>
 </component>

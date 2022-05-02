@@ -1,4 +1,4 @@
-<form action="post" [formGroup]="createUserForm">
+<form action="post" [formGroup]="createUserForm" (ngSubmit)="createUser()">
   <div formGroupName="user" class="form-segment mb-4">
     <div>Add new user</div>
     <div class="from-group mb-2">
@@ -49,5 +49,16 @@
         This field is required
       </small>
     </div>
+    <div class="from-group mb-2">
+      <button type="submit" class="btn btn-primary btn-sm">Create</button>
+    </div>
   </div>
 </form>
+<ngb-toast
+  *ngIf="true"
+  header="Autohide can be cancelled"
+  [animation]="true"
+  [autohide]="false"
+>
+  simple toast
+</ngb-toast>

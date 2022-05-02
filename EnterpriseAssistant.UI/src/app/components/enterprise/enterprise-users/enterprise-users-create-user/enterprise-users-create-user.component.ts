@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { first } from 'rxjs';
+import { UserCreate } from 'src/app/models/user-create.model';
+import { User } from 'src/app/models/user.model';
 import { EnterpriseService } from 'src/app/services/enterprise.service';
 import { EnterpriseUserLoginValidator } from 'src/app/validators/enterprise-user-login.validator';
 
@@ -12,11 +15,7 @@ import { EnterpriseUserLoginValidator } from 'src/app/validators/enterprise-user
 export class EnterpriseUsersCreateUserComponent {
   // icons
   warning = faCircleExclamation;
-
-  constructor(
-    private service: EnterpriseService,
-    private enterpriseUserLoginValidator: EnterpriseUserLoginValidator
-  ) {}
+  isSubmited = false;
 
   userFormGroup = new FormGroup({
     login: new FormControl(
@@ -29,17 +28,17 @@ export class EnterpriseUsersCreateUserComponent {
       ]
     ),
     firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', []),
-    password: new FormControl('', [Validators.required])
+    lastName: new FormControl('', [])
   });
 
   createUserForm = new FormGroup({
     user: this.userFormGroup
   });
 
-  ngOnInit(): void {
-    return;
-  }
+  constructor(
+    private service: EnterpriseService,
+    private enterpriseUserLoginValidator: EnterpriseUserLoginValidator
+  ) {}
 
   isValid(name: string): boolean | undefined {
     const control = this.createUserForm.get(name);
@@ -55,12 +54,29 @@ export class EnterpriseUsersCreateUserComponent {
       return false;
     }
     return (
-      (control.touched && control.invalid) || (control.dirty && control.invalid)
+      (control.touched && control.invalid) ||
+      (control.dirty && control.invalid) ||
+      (this.isSubmited && control.invalid)
     );
   }
 
   getValidationError(controlName: string, errorType: string): string | null {
     const control = this.createUserForm.get(controlName);
     return control?.errors?.[errorType] as string;
+  }
+
+  createUser(): void {
+    this.isSubmited = true;
+    if (this.userFormGroup.valid) {
+      const userCreate = this.userFormGroup.value as UserCreate;
+      userCreate.password = 'qwe';
+      this.service
+        .addUser(userCreate)
+        .pipe(first())
+        .subscribe((user: User) => {
+          console.log(user);
+          this.userFormGroup.reset();
+        });
+    }
   }
 }

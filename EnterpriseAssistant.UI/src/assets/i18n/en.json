@@ -1,0 +1,17 @@
+{
+  "navbar":{
+    "menu": "menu"
+  },
+  "enterprise":{
+    "sidebar":{
+      "title": "Enterprise",
+      "departments": "Departments",
+      "projects": "Projects",
+      "users": "Users",
+      "billings": "Billings",
+      "enterprise-picker":{
+        "add-enterprise": "Create enterprise"
+      }
+    }
+  }
+}

@@ -22,6 +22,8 @@ import { FormSegmentComponent } from './components/utilities/form-segment/form-s
 import { FormInputComponent } from './components/utilities/form-input/form-input.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -43,7 +45,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     EnterpriseUsersComponent,
     EnterpriseUsersCreateUserComponent,
     FormSegmentComponent,
-    FormInputComponent
+    FormInputComponent,
+    ToastContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    NgbToastModule
   ],
   providers: [],
   bootstrap: [AppComponent]

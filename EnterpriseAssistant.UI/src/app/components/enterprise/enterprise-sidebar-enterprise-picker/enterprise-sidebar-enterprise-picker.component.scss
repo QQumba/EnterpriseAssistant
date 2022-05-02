@@ -1,0 +1,37 @@
+.enterprise-picker {
+  padding: 1em;
+  border-top: 1px solid rgb(207, 207, 207);
+  display: flex;
+
+  .picker-arrow {
+    align-self: center;
+  }
+
+  .expanded {
+    transform: rotate(180deg);
+    transition: transform 0.1s ease-out;
+  }
+
+  .folded {
+    transform: rotate(0deg);
+    transition: transform 0.1s ease-out;
+  }
+
+  &:hover {
+    background-color: #ededed;
+    cursor: pointer;
+  }
+
+  position: relative;
+
+  .picker-content {
+    position: absolute;
+    background-color: yellowgreen;
+    width: 100%;
+    left: 0;
+    bottom: calc(100% + 1px);
+    overflow-y: auto;
+    max-height: 5em;
+    padding: 1em;
+  }
+}

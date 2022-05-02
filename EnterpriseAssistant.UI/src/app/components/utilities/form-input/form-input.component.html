@@ -1,0 +1,20 @@
+<div [formGroup]="parentForm" class="from-group mb-2">
+  <label class="required">{{ toSentenseCase(label) }}</label>
+  <input
+    type="text"
+    class="form-control form-control-sm"
+    [ngClass]="{ 'is-invalid': hasError() }"
+    placeholder="{{ placeholder }}"
+    [formControlName]="controlName"
+  />
+  <small *ngIf="hasError()">
+    <div *ngIf="getValidationError('exists') as error">
+      <fa-icon [icon]="warning"></fa-icon>
+      {{ error }}
+    </div>
+    <div *ngIf="getValidationError('required') as error">
+      <fa-icon [icon]="warning"></fa-icon>
+      This field is required
+    </div>
+  </small>
+</div>

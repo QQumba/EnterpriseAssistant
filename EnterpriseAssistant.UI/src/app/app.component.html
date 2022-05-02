@@ -1,11 +1,14 @@
-<header><app-navbar></app-navbar></header>
+<!-- <app-managed-user-create></app-managed-user-create> -->
+<!-- <app-login></app-login> -->
+<header>
+  <app-navbar></app-navbar>
+</header>
 <main>
   <div class="sidebar-wrapper">
-    <app-sidebar class="sidebar-wrapper"></app-sidebar>
+    <app-sidebar></app-sidebar>
   </div>
-  <div class="wrapper">
-    main
-    <div class="vert-spacer">a</div>
-    <router-outlet></router-outlet>
+  <div class="content">
+    <!-- <app-enterprise-create-enterprise></app-enterprise-create-enterprise> -->
+    <app-enterprise-users></app-enterprise-users>
   </div>
 </main>

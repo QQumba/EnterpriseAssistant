@@ -1,0 +1,54 @@
+@import '../../../../variables.scss';
+$helper-color: rgb(108, 108, 108);
+
+form {
+  padding: 2em;
+  width: 100%;
+}
+
+label {
+  font-size: 0.8em;
+  color: $helper-color;
+  font-weight: 500;
+}
+
+.required {
+  &::after {
+    margin-left: 2pt;
+    content: '*';
+    color: $danger;
+  }
+}
+
+small {
+  font-size: 0.8em;
+  color: $helper-color;
+  font-weight: 400;
+  // color: rgb(255, 63, 63);
+  color: $danger;
+}
+
+.form-segment {
+  padding: 1em;
+  border-radius: 0.5em;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.inactive {
+  user-select: none;
+  position: relative;
+}
+
+.loader-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: inherit;
+  backdrop-filter: blur(1px);
+}

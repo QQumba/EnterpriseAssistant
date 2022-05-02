@@ -1,0 +1,71 @@
+$bg: #ffffff;
+
+input {
+  $input-padding-y: 20em;
+}
+
+.temp-wrapper {
+  background: rgb(13, 110, 253);
+  background: linear-gradient(
+    171deg,
+    rgba(13, 110, 253, 0.3) 0%,
+    rgba(0, 177, 255, 0.3) 100%
+  );
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+form {
+  background-color: $bg;
+  width: 24em;
+  height: min-content;
+  border-radius: 0.2em;
+  box-shadow: 0 0.4em 1em -0.1em #41414148;
+}
+
+.form-header {
+  background: rgb(13, 110, 253);
+  background: linear-gradient(
+    171deg,
+    rgba(13, 110, 253, 1) 0%,
+    rgba(0, 177, 255, 1) 100%
+  );
+
+  color: white;
+  text-align: center;
+  font-weight: lighter;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+
+  padding: 1rem;
+  font-size: 1.4em;
+  box-shadow: 0 0.1em 0.4em -0.2em rgb(161, 161, 161);
+}
+
+.form-controls {
+  padding: 1em;
+  border: 1px solid #d0d2dc;
+  border-top: none;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+button {
+  width: 100%;
+}
+
+.form-wrapper{
+  display: flex;
+  align-items: center;
+}
+
+.side-text{
+  background-color: #ffffff;
+  max-width: 12em;
+  max-height: 90%;
+  height: min-content;
+  padding: 2em;
+}

@@ -6,25 +6,29 @@ header {
   position: sticky;
 
   top: 0;
+  z-index: 1;
 }
 
 main {
   display: flex;
-  height: calc(100% - $header-height);
 
+  height: calc(100% - $header-height);
   position: relative;
 }
 
-.sidebar-wrapper{
-    position: -webkit-sticky;
-    position: sticky;
+.sidebar-wrapper {
+  position: -webkit-sticky;
+  position: sticky;
 
-    height: calc(100vh - $header-height);
-    align-self: baseline;
-    top: $header-height;
+  height: calc(100vh - $header-height);
+  align-self: baseline;
+  top: $header-height;
 }
 
-.vert-spacer{
-    height: 300vh;
+.vert-spacer {
+  height: 300vh;
 }
 
+.content {
+  width: 100%;
+}

@@ -1,4 +1,18 @@
-#sidebar{
-    height: 100%;
-    border-right: 1px solid rgb(207, 207, 207);
+$bg: #ffffff;
+$action-bg: #d0d2da;
+$action-br: 0.2em;
+
+#sidebar {
+  width: 16em;
+  height: 100%;
+  border-right: 1px solid rgb(207, 207, 207);
+
+  background-color: $bg;
+  display: flex;
+  flex-direction: column;
+}
+
+.divider {
+  content: '';
+  border-bottom: 1px solid rgb(207, 207, 207);
 }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {
-  faPlus,
   faProjectDiagram,
   faUser,
   faUsers,
@@ -8,13 +7,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  selector: 'app-enterprise-sidebar-menu',
+  templateUrl: './enterprise-sidebar-menu.component.html',
+  styleUrls: ['./enterprise-sidebar-menu.component.scss']
 })
-export class SidebarComponent {
-  plus = faPlus;
-
+export class EnterpriseSidebarMenuComponent {
   department = faUsers;
   project = faProjectDiagram;
   user = faUser;

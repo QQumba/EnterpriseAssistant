@@ -11,6 +11,7 @@ using UserService.Contract.ViewModels;
 
 namespace EnterpriseService.API;
 
+// todo remove anonymous attribute
 [AllowAnonymous]
 [ApiController]
 [Route("api/enterprise")]

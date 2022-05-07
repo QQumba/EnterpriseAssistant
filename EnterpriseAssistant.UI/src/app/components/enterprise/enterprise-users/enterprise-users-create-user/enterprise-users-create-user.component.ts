@@ -76,6 +76,7 @@ export class EnterpriseUsersCreateUserComponent {
         .subscribe((user: User) => {
           console.log(user);
           this.userFormGroup.reset();
+          this.isSubmited = false;
         });
     }
   }

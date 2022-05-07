@@ -1,0 +1,32 @@
+<div class="temp-wrapper">
+  <form action="post">
+    <div class="form-header">Welome to [put enterprise name here]</div>
+    <div class="form-controls">
+      <div class="input-group mb-3">
+        <span class="input-group-text">
+          <fa-icon [icon]="user" [fixedWidth]="true"></fa-icon>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Login *"
+          aria-label="Login"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">
+          <fa-icon [icon]="lock" [fixedWidth]="true"></fa-icon>
+        </span>
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Password *"
+          aria-label="Password"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+      <button type="submit" class="btn-lg btn-primary mb-3">Sign In</button>
+    </div>
+  </form>
+</div>

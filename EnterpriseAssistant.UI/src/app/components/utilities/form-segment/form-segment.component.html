@@ -1,0 +1,10 @@
+<div [formGroup]="parentForm" class="form-segment">
+  <div *ngFor="let control of controls()">
+    <app-form-input
+      [parentForm]="formSegment"
+      [controlName]="control"
+      label="{{ control }}"
+      placeholder="{{ control }}"
+    ></app-form-input>
+  </div>
+</div>

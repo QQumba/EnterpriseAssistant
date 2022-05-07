@@ -1,0 +1,17 @@
+{
+  "navbar":{
+    "menu": "Меню"
+  },
+  "enterprise":{
+    "sidebar":{
+      "title": "Підприємство",
+      "departments": "Відділи",
+      "projects": "Проєкти",
+      "users": "Користувачі",
+      "billings": "Рахунки",
+      "enterprise-picker":{
+        "add-enterprise": "Додати підприємство"
+      }
+    }
+  }
+}

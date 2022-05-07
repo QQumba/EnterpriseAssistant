@@ -9,6 +9,7 @@ namespace UserService.API;
 
 [ApiController]
 [Route("api/user")]
+[AllowAnonymous]
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,7 +20,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
+    [SwaggerOperation(Summary = "Create a new user")]
     public async Task<ActionResult<ManagedUserViewModel>> CreateUser([FromBody] ManagedUserCreateViewModel model)
     {
         var result = await _mediator.Send(new CreateManagedUserCommand(model));
@@ -27,7 +28,6 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("emailAvailability")]
-    [AllowAnonymous]
     [SwaggerOperation(Summary = "Check if email is available")]
     public async Task<ActionResult<bool>> GetManagedUserEmailAvailability([FromQuery] string email)
     {
@@ -42,7 +42,6 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<ManagedUserViewModel>>> GetAllUsers()
     {
         var result = await _mediator.Send(new GetAllManagedUsersCommand());

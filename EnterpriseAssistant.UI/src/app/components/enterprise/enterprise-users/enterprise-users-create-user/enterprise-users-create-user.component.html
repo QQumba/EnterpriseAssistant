@@ -1,0 +1,64 @@
+<form action="post" [formGroup]="createUserForm" (ngSubmit)="createUser()">
+  <div formGroupName="user" class="form-segment mb-4">
+    <div>Add new user</div>
+    <div class="from-group mb-2">
+      <label class="required">Login</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        [ngClass]="{ 'is-invalid': hasError('user.login') }"
+        placeholder="Login"
+        formControlName="login"
+      />
+      <small *ngIf="hasError('user.login')">
+        <div *ngIf="getValidationError('user.login', 'userExists') as error">
+          <fa-icon [icon]="warning"></fa-icon>
+          {{ error }}
+        </div>
+        <div *ngIf="getValidationError('user.login', 'required') as error">
+          <fa-icon [icon]="warning"></fa-icon>
+          This field is required
+        </div>
+      </small>
+    </div>
+    <div class="from-group mb-2">
+      <label class="required">First name</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        [ngClass]="{ 'is-invalid': hasError('user.firstName') }"
+        placeholder="First name"
+        formControlName="firstName"
+      />
+      <small *ngIf="hasError('user.firstName')">
+        <fa-icon [icon]="warning"></fa-icon>
+        This field is required
+      </small>
+    </div>
+    <div class="from-group mb-2">
+      <label>Last name</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        [ngClass]="{ 'is-invalid': hasError('user.lastName') }"
+        placeholder="Last name"
+        formControlName="lastName"
+      />
+      <small *ngIf="hasError('user.lastName')">
+        <fa-icon [icon]="warning"></fa-icon>
+        This field is required
+      </small>
+    </div>
+    <div class="from-group mb-2">
+      <button type="submit" class="btn btn-primary btn-sm">Create</button>
+    </div>
+  </div>
+</form>
+<ngb-toast
+  *ngIf="true"
+  header="Autohide can be cancelled"
+  [animation]="true"
+  [autohide]="false"
+>
+  simple toast
+</ngb-toast>

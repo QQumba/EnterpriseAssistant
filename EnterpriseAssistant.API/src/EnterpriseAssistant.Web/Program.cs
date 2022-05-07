@@ -92,7 +92,7 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
     }
 
     // todo: move to config
-    app.UseCors(b => b.WithOrigins("https://localhost:5004").AllowAnyHeader().AllowAnyMethod());
+    app.UseCors(b => b.WithOrigins("https://localhost:5004", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
     app.UseHttpsRedirection();
     app.UseRouting();
 

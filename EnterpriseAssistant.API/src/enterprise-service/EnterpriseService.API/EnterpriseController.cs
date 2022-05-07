@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using UserService.Contract.ViewModels;
 
 namespace EnterpriseService.API;
 
+// todo remove anonymous attribute
 [AllowAnonymous]
 [ApiController]
 [Route("api/enterprise")]
@@ -36,7 +38,8 @@ public class EnterpriseController : ControllerBase
 
     [HttpPost("user")]
     [SwaggerOperation(Summary = "Create user for enterprise")]
-    public async Task<ActionResult<UserViewModel>> CreateUser([FromBody] UserCreateViewModel model)
+    public async Task<ActionResult<UserViewModel>> CreateUser(
+        [FromBody] UserCreateViewModel model)
     {
         var enterpriseId = User.GetEnterpriseId();
         var result = await _mediator.Send(new CreateEnterpriseUser(model, enterpriseId));

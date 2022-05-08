@@ -24,6 +24,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
+import { AuthConfigModule } from './auth/auth-config.module';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -61,7 +62,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         deps: [HttpClient]
       }
     }),
-    NgbToastModule
+    NgbToastModule,
+    AuthConfigModule
   ],
   providers: [],
   bootstrap: [AppComponent]

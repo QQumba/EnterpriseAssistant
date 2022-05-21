@@ -47,7 +47,7 @@ public class EnterpriseController : ControllerBase
             e => BadRequest($"User login: {e.UserLogin} has taken already for enterprise with id: {e.EnterpriseId}"));
     }
 
-    [HttpGet("isIdAvailable")]
+    [HttpGet("exits")]
     public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromQuery] [StringLength(50)] string id)
     {
         var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));

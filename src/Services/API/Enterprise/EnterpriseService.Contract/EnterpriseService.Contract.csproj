@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>EnterpriseService.Contract</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Department\DepartmentService.Contract\DepartmentService.Contract.csproj" />
+      <ProjectReference Include="..\..\User\UserService.Contract\UserService.Contract.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>EnterpriseService.API</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
+      <PackageReference Include="Mapster" Version="7.3.0" />
+      <PackageReference Include="MediatR" Version="10.0.1" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+      <PackageReference Include="OneOf" Version="3.0.211" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\Application\Application.csproj" />
+      <ProjectReference Include="..\..\Application\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\..\Department\DepartmentService.Contract\DepartmentService.Contract.csproj" />
+      <ProjectReference Include="..\..\User\UserService.Contract\UserService.Contract.csproj" />
+      <ProjectReference Include="..\EnterpriseService.Contract\EnterpriseService.Contract.csproj" />
+    </ItemGroup>
+
+</Project>

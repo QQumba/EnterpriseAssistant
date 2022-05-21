@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.ViewModels;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserService.Contract.ViewModels;
 
-namespace EnterpriseService.API;
+namespace EnterpriseService.API.Controllers;
 
 // todo remove anonymous attribute
 [AllowAnonymous]

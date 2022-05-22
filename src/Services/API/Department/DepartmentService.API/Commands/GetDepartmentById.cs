@@ -1,4 +1,4 @@
-﻿using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.DataAccess;
 using MediatR;
 using OneOf;

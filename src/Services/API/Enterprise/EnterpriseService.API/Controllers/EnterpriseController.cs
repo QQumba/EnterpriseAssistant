@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseService.API.Commands;
-using EnterpriseService.Contract.ViewModels;
-using FluentValidation.AspNetCore;
+using EnterpriseService.Contract.DataTransfer;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
-namespace EnterpriseService.API;
+namespace EnterpriseService.API.Controllers;
 
 // todo remove anonymous attribute
 [AllowAnonymous]
@@ -28,7 +27,7 @@ public class EnterpriseController : ControllerBase
     [HttpPost]
     [SwaggerOperation(Summary = "Create an enterprise",
         Description = "Create an enterprise with root department and admin user")]
-    public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise([FromBody] EnterpriseCreateViewModel model)
+    public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise([FromBody] EnterpriseCreateDto model)
     {
         var email = User.GetEmail();
         var result = await _mediator.Send(new CreateEnterprise(model, email));
@@ -37,19 +36,17 @@ public class EnterpriseController : ControllerBase
 
     [HttpPost("user")]
     [SwaggerOperation(Summary = "Create user for enterprise")]
-    public async Task<ActionResult<UserViewModel>> CreateUser(
-        [FromBody] UserCreateViewModel model)
+    public async Task<ActionResult<UserDto>> CreateUser(
+        [FromBody] UserCreateDto model)
     {
         var enterpriseId = User.GetEnterpriseId();
         var result = await _mediator.Send(new CreateEnterpriseUser(model, enterpriseId));
 
-        return result.Match<ActionResult>(Ok,
-            e => NotFound($"Enterprise with id: {e.EnterpriseId} not found"),
-            e => BadRequest($"User login: {e.UserLogin} has taken already for enterprise with id: {e.EnterpriseId}"));
+        return result.Match<ActionResult>(Ok, e => NotFound(e.Message), e => BadRequest(e.Message));
     }
 
-    [HttpGet("isIdAvailable")]
-    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromQuery] [StringLength(50)] string id)
+    [HttpGet("exists")]
+    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromQuery] [Required, StringLength(50)] string id)
     {
         var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));
         return Ok(result);

@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DepartmentService.API.Commands;
-using DepartmentService.Contract.ViewModels;
-using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+using DepartmentService.Contract.DataTransfer;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace DepartmentService.API.Controllers;
 
@@ -82,14 +81,14 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateViewModel model)
+    public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateDto model)
     {
         var result = await _mediator.Send(new CreateDepartment(model));
         return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
     }
 
     [HttpGet("users/{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<UserViewModel>>> GetDepartmentUsers(
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetDepartmentUsers(
         [Range(1, long.MaxValue), FromRoute] long departmentId)
     {
         throw new NotImplementedException();

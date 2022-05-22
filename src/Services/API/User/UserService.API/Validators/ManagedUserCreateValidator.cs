@@ -1,9 +1,9 @@
 using FluentValidation;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace UserService.API.Validators;
 
-public class ManagedUserCreateValidator : AbstractValidator<ManagedUserCreateViewModel>
+public class ManagedUserCreateValidator : AbstractValidator<ManagedUserCreateDto>
 {
     public ManagedUserCreateValidator()
     {

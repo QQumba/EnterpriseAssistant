@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using EnterpriseAssistant.Application.Errors;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using EnterpriseAssistant.DataAccess.Entities.Enums;
@@ -10,25 +10,25 @@ using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace EnterpriseService.API.Commands;
 
-public class CreateEnterpriseUser : IRequest<OneOf<UserViewModel, EnterpriseNotFoundError, EnterpriseUserAlreadyExists>>
+public class CreateEnterpriseUser : IRequest<OneOf<UserDto, INotFoundError, IBadRequestError>>
 {
-    public CreateEnterpriseUser(UserCreateViewModel model, string enterpriseId)
+    public CreateEnterpriseUser(UserCreateDto model, string enterpriseId)
     {
         Model = model;
         EnterpriseId = enterpriseId;
     }
 
-    public UserCreateViewModel Model { get; }
+    public UserCreateDto Model { get; }
 
     public string EnterpriseId { get; }
 }
 
 public class CreateEnterpriseUserHandler
-    : IRequestHandler<CreateEnterpriseUser, OneOf<UserViewModel, EnterpriseNotFoundError, EnterpriseUserAlreadyExists>>
+    : IRequestHandler<CreateEnterpriseUser, OneOf<UserDto, INotFoundError, IBadRequestError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -37,7 +37,7 @@ public class CreateEnterpriseUserHandler
         _db = db;
     }
 
-    public async Task<OneOf<UserViewModel, EnterpriseNotFoundError, EnterpriseUserAlreadyExists>> Handle(
+    public async Task<OneOf<UserDto, INotFoundError, IBadRequestError>> Handle(
         CreateEnterpriseUser request,
         CancellationToken cancellationToken)
     {
@@ -47,7 +47,7 @@ public class CreateEnterpriseUserHandler
 
         if (rootDepartment is null)
         {
-            return new EnterpriseNotFoundError(request.EnterpriseId);
+            return new DepartmentNotFoundError(request.EnterpriseId);
         }
 
         var userAlreadyExists =
@@ -74,6 +74,6 @@ public class CreateEnterpriseUserHandler
         _db.DepartmentUsers.Add(departmentUser);
 
         await _db.SaveChangesAsync(cancellationToken);
-        return user.Adapt<UserViewModel>();
+        return user.Adapt<UserDto>();
     }
 }

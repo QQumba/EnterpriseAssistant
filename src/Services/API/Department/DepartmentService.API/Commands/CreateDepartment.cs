@@ -1,5 +1,4 @@
-﻿using DepartmentService.Contract.ViewModels;
-using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using Mapster;
@@ -10,12 +9,12 @@ namespace DepartmentService.API.Commands;
 
 public class CreateDepartment : IRequest<OneOf<DepartmentDto>>
 {
-    public CreateDepartment(DepartmentCreateViewModel model)
+    public CreateDepartment(DepartmentCreateDto model)
     {
         Model = model;
     }
 
-    public DepartmentCreateViewModel Model { get; }
+    public DepartmentCreateDto Model { get; }
 }
 
 public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentDto>>

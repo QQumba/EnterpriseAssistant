@@ -1,6 +1,6 @@
-﻿namespace UserService.Contract.ViewModels;
+﻿namespace UserService.Contract.DataTransfer;
 
-public class UserCreateViewModel
+public class UserCreateDto
 {
     public string Login { get; set; } = null!;
 

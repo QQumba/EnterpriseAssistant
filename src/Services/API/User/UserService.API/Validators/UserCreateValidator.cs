@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace UserService.API.Validators;
 
-public class UserCreateValidator : AbstractValidator<UserCreateViewModel>
+public class UserCreateValidator : AbstractValidator<UserCreateDto>
 {
     public UserCreateValidator()
     {

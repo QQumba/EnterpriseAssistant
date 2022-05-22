@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using DepartmentService.Contract.ViewModels;
+using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using EnterpriseAssistant.DataAccess.Entities.Enums;
 using EnterpriseService.API.Helpers;
 using EnterpriseService.API.OneOfResponses;
-using EnterpriseService.Contract.ViewModels;
+using EnterpriseService.Contract.DataTransfer;
 using Mapster;
 using MediatR;
 using OneOf;
@@ -15,13 +15,13 @@ namespace EnterpriseService.API.Commands;
 
 public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
 {
-    public CreateEnterprise(EnterpriseCreateViewModel enterpriseCreate, string ownerEmail)
+    public CreateEnterprise(EnterpriseCreateDto enterpriseCreate, string ownerEmail)
     {
         EnterpriseCreate = enterpriseCreate;
         OwnerEmail = ownerEmail;
     }
 
-    public EnterpriseCreateViewModel EnterpriseCreate { get; }
+    public EnterpriseCreateDto EnterpriseCreate { get; }
 
     public string OwnerEmail { get; }
 }
@@ -56,7 +56,7 @@ public class CreateEnterpriseHandler
     }
 
     private Enterprise CreateEnterprise(
-        EnterpriseCreateViewModel enterpriseCreate, string email)
+        EnterpriseCreateDto enterpriseCreate, string email)
     {
         var enterpriseToCreate = enterpriseCreate.Adapt<Enterprise>();
 
@@ -66,7 +66,7 @@ public class CreateEnterpriseHandler
         return enterprise;
     }
 
-    private Department CreateDepartment(DepartmentCreateViewModel departmentCreate)
+    private Department CreateDepartment(DepartmentCreateDto departmentCreate)
     {
         var departmentToCreate = departmentCreate.Adapt<Department>();
         departmentToCreate.DepartmentType = DepartmentType.Root;

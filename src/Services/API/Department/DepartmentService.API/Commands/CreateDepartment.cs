@@ -8,7 +8,7 @@ using OneOf;
 
 namespace DepartmentService.API.Commands;
 
-public class CreateDepartment : IRequest<OneOf<DepartmentViewModel>>
+public class CreateDepartment : IRequest<OneOf<DepartmentDto>>
 {
     public CreateDepartment(DepartmentCreateViewModel model)
     {
@@ -18,7 +18,7 @@ public class CreateDepartment : IRequest<OneOf<DepartmentViewModel>>
     public DepartmentCreateViewModel Model { get; }
 }
 
-public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentViewModel>>
+public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentDto>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -27,10 +27,10 @@ public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<D
         _db = db;
     }
 
-    public async Task<OneOf<DepartmentViewModel>> Handle(CreateDepartment request, CancellationToken cancellationToken)
+    public async Task<OneOf<DepartmentDto>> Handle(CreateDepartment request, CancellationToken cancellationToken)
     {
         var department = _db.Departments.Add(request.Model.Adapt<Department>()).Entity;
         await _db.SaveChangesAsync(cancellationToken);
-        return department.Adapt<DepartmentViewModel>();
+        return department.Adapt<DepartmentDto>();
     }
 }

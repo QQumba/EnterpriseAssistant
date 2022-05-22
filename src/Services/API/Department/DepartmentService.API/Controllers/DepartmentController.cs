@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserService.Contract.ViewModels;
 
-namespace DepartmentService.API;
+namespace DepartmentService.API.Controllers;
 
 [Authorize]
 [ApiController]
@@ -23,7 +23,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpGet("{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetDepartmentById(
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartmentById(
         [Range(1, long.MaxValue), FromRoute] long departmentId,
         [FromQuery] bool includeChild = false)
     {
@@ -32,32 +32,32 @@ public class DepartmentController : ControllerBase
         return result.Match<ActionResult>(Ok, x => NotFound());
     }
 
-    // doesn't seem useful as a user can be part of multiple departments
-    [HttpGet("my")]
-    public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetUserDepartments(
-        [FromQuery] bool includeChild = false)
+    [HttpGet]
+    [SwaggerOperation(Summary = "Get user departments", Description = "Get user departments")]
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserDepartments()
     {
+        var result = await _mediator.Send(new GetUserDepartmentsCommand());
         throw new NotImplementedException();
     }
 
     [HttpGet("subordinate/{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetSubordinateDepartments(
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetSubordinateDepartments(
         [Range(1, long.MaxValue), FromRoute] long departmentId)
     {
         throw new NotImplementedException();
     }
 
     [HttpGet("my/subordinate")]
-    public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetUserSubordinateDepartments()
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserSubordinateDepartments()
     {
         throw new NotImplementedException();
     }
 
     [HttpGet("test/recursive")]
-    public async Task<ActionResult<DepartmentViewModel>> GetRecursiveDepartments(
+    public async Task<ActionResult<DepartmentDto>> GetRecursiveDepartments(
         [Range(0, int.MaxValue), FromQuery] int nestingLevel)
     {
-        var root = new DepartmentViewModel()
+        var root = new DepartmentDto()
         {
             Id = 0,
             Name = "root"
@@ -66,7 +66,7 @@ public class DepartmentController : ControllerBase
         var lastChild = root;
         for (var i = 1; i < nestingLevel + 1; i++)
         {
-            var department = new DepartmentViewModel()
+            var department = new DepartmentDto()
             {
                 Id = i,
                 Name = $"name {i}",
@@ -82,7 +82,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<DepartmentViewModel>> CreateDepartment([FromBody] DepartmentCreateViewModel model)
+    public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateViewModel model)
     {
         var result = await _mediator.Send(new CreateDepartment(model));
         return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));

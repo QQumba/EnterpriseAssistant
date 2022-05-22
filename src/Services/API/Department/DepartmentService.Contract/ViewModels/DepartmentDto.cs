@@ -1,6 +1,6 @@
 ﻿namespace EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
 
-public class DepartmentViewModel
+public class DepartmentDto
 {
     public long Id { get; set; }
 
@@ -8,5 +8,5 @@ public class DepartmentViewModel
 
     public long? ParentDepartmentId { get; set; }
 
-    public IList<DepartmentViewModel> ChildDepartments { get; set; } = new List<DepartmentViewModel>();
+    public IList<DepartmentDto> ChildDepartments { get; set; } = new List<DepartmentDto>();
 }

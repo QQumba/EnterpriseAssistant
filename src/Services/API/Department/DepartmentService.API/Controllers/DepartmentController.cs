@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DepartmentService.API.Commands;
 using DepartmentService.Contract.DataTransfer;
+using EnterpriseAssistant.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using UserService.Contract.DataTransfer;
 
 namespace DepartmentService.API.Controllers;
 
-[Authorize]
+[AllowAnonymous]
 [ApiController]
 [Route("api/department")]
 public class DepartmentController : ControllerBase
@@ -35,8 +36,9 @@ public class DepartmentController : ControllerBase
     [SwaggerOperation(Summary = "Get user departments", Description = "Get user departments")]
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserDepartments()
     {
-        var result = await _mediator.Send(new GetUserDepartmentsCommand());
-        throw new NotImplementedException();
+        var authContext = User.GetAuthContext();
+        var result = await _mediator.Send(new GetUserDepartmentsCommand(authContext));
+        return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
     }
 
     [HttpGet("subordinate/{departmentId:long}")]

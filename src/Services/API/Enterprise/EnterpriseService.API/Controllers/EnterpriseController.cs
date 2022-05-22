@@ -27,7 +27,7 @@ public class EnterpriseController : ControllerBase
     [HttpPost]
     [SwaggerOperation(Summary = "Create an enterprise",
         Description = "Create an enterprise with root department and admin user")]
-    public async Task<ActionResult<EnterpriseViewModel>> CreateEnterprise([FromBody] EnterpriseCreateDto model)
+    public async Task<ActionResult<EnterpriseDto>> CreateEnterprise([FromBody] EnterpriseCreateDto model)
     {
         var email = User.GetEmail();
         var result = await _mediator.Send(new CreateEnterprise(model, email));

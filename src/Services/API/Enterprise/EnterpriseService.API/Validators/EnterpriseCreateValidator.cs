@@ -1,9 +1,9 @@
-using EnterpriseService.Contract.ViewModels;
+using EnterpriseService.Contract.DataTransfer;
 using FluentValidation;
 
 namespace EnterpriseService.API.Validators;
 
-public class EnterpriseCreateValidator : AbstractValidator<EnterpriseCreateViewModel>
+public class EnterpriseCreateValidator : AbstractValidator<EnterpriseCreateDto>
 {
     public EnterpriseCreateValidator()
     {

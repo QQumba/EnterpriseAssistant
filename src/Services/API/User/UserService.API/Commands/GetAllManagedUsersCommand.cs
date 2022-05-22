@@ -2,17 +2,17 @@ using EnterpriseAssistant.DataAccess;
 using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace UserService.API.Commands;
 
 public class GetAllManagedUsersCommand
-    : IRequest<IEnumerable<ManagedUserViewModel>>
+    : IRequest<IEnumerable<ManagedUserDto>>
 {
 }
 
 public class GetAllManagedUsersCommandHandler
-    : IRequestHandler<GetAllManagedUsersCommand, IEnumerable<ManagedUserViewModel>>
+    : IRequestHandler<GetAllManagedUsersCommand, IEnumerable<ManagedUserDto>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -21,9 +21,9 @@ public class GetAllManagedUsersCommandHandler
         _db = db;
     }
 
-    public async Task<IEnumerable<ManagedUserViewModel>> Handle(GetAllManagedUsersCommand request,
+    public async Task<IEnumerable<ManagedUserDto>> Handle(GetAllManagedUsersCommand request,
         CancellationToken cancellationToken)
     {
-        return (await _db.ManagedUsers.ToListAsync(cancellationToken)).Adapt<IEnumerable<ManagedUserViewModel>>();
+        return (await _db.ManagedUsers.ToListAsync(cancellationToken)).Adapt<IEnumerable<ManagedUserDto>>();
     }
 }

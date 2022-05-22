@@ -5,22 +5,22 @@ using MediatR;
 using OneOf;
 using UserService.API.Helpers;
 using UserService.API.OneOfResponses;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace UserService.API.Commands;
 
-public class CreateManagedUserCommand : IRequest<OneOf<ManagedUserViewModel,EmailTakenError>>
+public class CreateManagedUserCommand : IRequest<OneOf<ManagedUserDto,EmailTakenError>>
 {
-    public CreateManagedUserCommand(ManagedUserCreateViewModel model)
+    public CreateManagedUserCommand(ManagedUserCreateDto model)
     {
         Model = model;
     }
 
-    public ManagedUserCreateViewModel Model { get; }
+    public ManagedUserCreateDto Model { get; }
 }
 
 public class CreateManagedUserCommandHandler
-    : IRequestHandler<CreateManagedUserCommand,OneOf<ManagedUserViewModel,EmailTakenError>>
+    : IRequestHandler<CreateManagedUserCommand,OneOf<ManagedUserDto,EmailTakenError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -29,7 +29,7 @@ public class CreateManagedUserCommandHandler
         _db = db;
     }
 
-    public async Task<OneOf<ManagedUserViewModel,EmailTakenError>> Handle(CreateManagedUserCommand request,
+    public async Task<OneOf<ManagedUserDto,EmailTakenError>> Handle(CreateManagedUserCommand request,
         CancellationToken cancellationToken)
     {
         if (await _db.ManagedUsers.IsEmailTaken(request.Model.Email,cancellationToken))
@@ -43,6 +43,6 @@ public class CreateManagedUserCommandHandler
         
         // TODO: trigger email verification process
         
-        return createdUser.Adapt<ManagedUserViewModel>();
+        return createdUser.Adapt<ManagedUserDto>();
     }
 }

@@ -1,4 +1,4 @@
-﻿using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.DataAccess;
 using MediatR;
 using OneOf;
@@ -6,7 +6,7 @@ using OneOf.Types;
 
 namespace DepartmentService.API.Commands;
 
-public class GetDepartmentById : IRequest<OneOf<IEnumerable<DepartmentViewModel>, NotFound>>
+public class GetDepartmentById : IRequest<OneOf<IEnumerable<DepartmentDto>, NotFound>>
 {
     public GetDepartmentById(long id, bool includeChild)
     {
@@ -20,7 +20,7 @@ public class GetDepartmentById : IRequest<OneOf<IEnumerable<DepartmentViewModel>
 }
 
 public class
-    GetDepartmentByIdHandler : IRequestHandler<GetDepartmentById, OneOf<IEnumerable<DepartmentViewModel>, NotFound>>
+    GetDepartmentByIdHandler : IRequestHandler<GetDepartmentById, OneOf<IEnumerable<DepartmentDto>, NotFound>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -29,7 +29,7 @@ public class
         _db = db;
     }
 
-    public Task<OneOf<IEnumerable<DepartmentViewModel>, NotFound>> Handle(GetDepartmentById request,
+    public Task<OneOf<IEnumerable<DepartmentDto>, NotFound>> Handle(GetDepartmentById request,
         CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

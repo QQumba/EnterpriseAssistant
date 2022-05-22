@@ -1,5 +1,4 @@
-﻿using DepartmentService.Contract.ViewModels;
-using EnterpriseAssistant.Application.Features.DepartmentFeatures.ViewModels;
+﻿using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using Mapster;
@@ -8,17 +7,17 @@ using OneOf;
 
 namespace DepartmentService.API.Commands;
 
-public class CreateDepartment : IRequest<OneOf<DepartmentViewModel>>
+public class CreateDepartment : IRequest<OneOf<DepartmentDto>>
 {
-    public CreateDepartment(DepartmentCreateViewModel model)
+    public CreateDepartment(DepartmentCreateDto model)
     {
         Model = model;
     }
 
-    public DepartmentCreateViewModel Model { get; }
+    public DepartmentCreateDto Model { get; }
 }
 
-public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentViewModel>>
+public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentDto>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -27,10 +26,10 @@ public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<D
         _db = db;
     }
 
-    public async Task<OneOf<DepartmentViewModel>> Handle(CreateDepartment request, CancellationToken cancellationToken)
+    public async Task<OneOf<DepartmentDto>> Handle(CreateDepartment request, CancellationToken cancellationToken)
     {
         var department = _db.Departments.Add(request.Model.Adapt<Department>()).Entity;
         await _db.SaveChangesAsync(cancellationToken);
-        return department.Adapt<DepartmentViewModel>();
+        return department.Adapt<DepartmentDto>();
     }
 }

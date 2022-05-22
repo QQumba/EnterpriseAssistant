@@ -1,6 +1,6 @@
-namespace UserService.Contract.ViewModels;
+namespace UserService.Contract.DataTransfer;
 
-public class ManagedUserCreateViewModel
+public class ManagedUserCreateDto
 {
     public string Email { get; set; } = null!;
     

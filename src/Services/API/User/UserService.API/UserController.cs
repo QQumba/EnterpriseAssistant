@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserService.API.Commands;
-using UserService.Contract.ViewModels;
+using UserService.Contract.DataTransfer;
 
 namespace UserService.API;
 
@@ -21,7 +21,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(Summary = "Create a new user")]
-    public async Task<ActionResult<ManagedUserViewModel>> CreateUser([FromBody] ManagedUserCreateViewModel model)
+    public async Task<ActionResult<ManagedUserDto>> CreateUser([FromBody] ManagedUserCreateDto model)
     {
         var result = await _mediator.Send(new CreateManagedUserCommand(model));
         return result.Match<ActionResult>(Ok,e => BadRequest($"Email already taken, email: {e.Email}"));
@@ -42,7 +42,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ManagedUserViewModel>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<ManagedUserDto>>> GetAllUsers()
     {
         var result = await _mediator.Send(new GetAllManagedUsersCommand());
         return Ok(result);

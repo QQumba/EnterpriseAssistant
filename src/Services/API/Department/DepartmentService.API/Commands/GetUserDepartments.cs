@@ -9,9 +9,9 @@ using OneOf;
 
 namespace DepartmentService.API.Commands;
 
-public class GetUserDepartmentsCommand : IRequest<OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
+public class GetUserDepartments : IRequest<OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
 {
-    public GetUserDepartmentsCommand(AuthContext authContext)
+    public GetUserDepartments(AuthContext authContext)
     {
         AuthContext = authContext;
     }
@@ -20,7 +20,7 @@ public class GetUserDepartmentsCommand : IRequest<OneOf<IEnumerable<DepartmentDt
 }
 
 public class GetUserDepartmentsHandler
-    : IRequestHandler<GetUserDepartmentsCommand, OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
+    : IRequestHandler<GetUserDepartments, OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -29,7 +29,7 @@ public class GetUserDepartmentsHandler
         _db = db;
     }
 
-    public async Task<OneOf<IEnumerable<DepartmentDto>, INotFoundError>> Handle(GetUserDepartmentsCommand request,
+    public async Task<OneOf<IEnumerable<DepartmentDto>, INotFoundError>> Handle(GetUserDepartments request,
         CancellationToken cancellationToken)
     {
         var user = await _db.Users.FirstAsync(
@@ -46,11 +46,7 @@ public class GetUserDepartmentsHandler
         {
             return new NotFoundError("Departments not found");
         }
-
-        // IEnumerable<DepartmentDto> d = null;
-        // return d;
         
-        // return departments.Select(d => d.Adapt<DepartmentDto>()).ToList();
         return departments.Adapt<List<DepartmentDto>>();
     }
 }

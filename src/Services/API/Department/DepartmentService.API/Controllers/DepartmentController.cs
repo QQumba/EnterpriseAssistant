@@ -37,7 +37,7 @@ public class DepartmentController : ControllerBase
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserDepartments()
     {
         var authContext = User.GetAuthContext();
-        var result = await _mediator.Send(new GetUserDepartmentsCommand(authContext));
+        var result = await _mediator.Send(new GetUserDepartments(authContext));
         return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
     }
 

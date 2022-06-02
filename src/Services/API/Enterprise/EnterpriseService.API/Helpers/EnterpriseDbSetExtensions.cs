@@ -14,10 +14,10 @@ public static class EnterpriseDbSetExtensions
         return await enterprises.AnyAsync(e => e.Id.Equals(id), cancellationToken);
     }
 
-    public static async Task<bool> IsEnterpriseUserExists(this IQueryable<User> users, string enterpriseId,
+    public static async Task<bool> IsEnterpriseUserExists(this IQueryable<EnterpriseUser> enterpriseUsers, string enterpriseId,
         string login, CancellationToken cancellationToken = default)
     {
-        return await users.AnyAsync(u => u.EnterpriseId.Equals(enterpriseId) && u.Login.Equals(login),
+        return await enterpriseUsers.AnyAsync(u => u.EnterpriseId.Equals(enterpriseId) && u.Login.Equals(login),
             cancellationToken);
     }
 }

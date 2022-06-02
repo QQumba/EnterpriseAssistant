@@ -21,30 +21,29 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(Summary = "Create a new user")]
-    public async Task<ActionResult<ManagedUserDto>> CreateUser([FromBody] ManagedUserCreateDto model)
+    public async Task<ActionResult<UserDto>> CreateUser([FromBody] UserCreateDto model)
     {
-        var result = await _mediator.Send(new CreateManagedUserCommand(model));
+        var result = await _mediator.Send(new CreateUserCommand(model));
         return result.Match<ActionResult>(Ok,e => BadRequest($"Email already taken, email: {e.Email}"));
     }
 
-    [HttpGet("emailAvailability")]
-    [SwaggerOperation(Summary = "Check if email is available")]
-    public async Task<ActionResult<bool>> GetManagedUserEmailAvailability([FromQuery] string email)
+    [HttpGet("exists")]
+    [SwaggerOperation(Summary = "Check if user already exists")]
+    public async Task<ActionResult<bool>> GetUserEmailAvailability([FromQuery] string email)
     {
         if (email.Contains('@') == false)
         {
-            // TODO: wrap error in a generic response
             return BadRequest("Email is not valid");
         }
 
-        var result = await _mediator.Send(new GetManagedUserEmailAvailability(email));
+        var result = await _mediator.Send(new CheckIfUserExists(email));
         return Ok(result);
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ManagedUserDto>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
     {
-        var result = await _mediator.Send(new GetAllManagedUsersCommand());
+        var result = await _mediator.Send(new GetAllUsersCommand());
         return Ok(result);
     }
 }

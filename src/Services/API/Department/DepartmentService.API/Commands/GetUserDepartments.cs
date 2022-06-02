@@ -22,25 +22,24 @@ public class GetUserDepartments : IRequest<OneOf<IEnumerable<DepartmentDto>, INo
 public class GetUserDepartmentsHandler
     : IRequestHandler<GetUserDepartments, OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
 {
-    private readonly EnterpriseAssistantDbContext _db;
+    private readonly AuthenticatedDbContextFactory _factory;
 
-    public GetUserDepartmentsHandler(EnterpriseAssistantDbContext db)
+    public GetUserDepartmentsHandler(AuthenticatedDbContextFactory factory)
     {
-        _db = db;
+        _factory = factory;
     }
 
     public async Task<OneOf<IEnumerable<DepartmentDto>, INotFoundError>> Handle(GetUserDepartments request,
         CancellationToken cancellationToken)
     {
-        var user = await _db.Users.FirstAsync(
-            u => u.Login == request.AuthContext.Login && u.EnterpriseId == request.AuthContext.EnterpriseId,
-            cancellationToken);
+        var db = _factory.Create(request.AuthContext);
+        var user = await db.Users.SingleAsync(u => u.Email.Equals(request.AuthContext.Email), cancellationToken);
 
-        var departments = await _db.DepartmentUsers
+        var departments = await db.DepartmentUsers
             .Where(du => du.UserId == user.Id)
             .Include(du => du.Department)
             .Select(du => du.Department)
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
 
         if (departments.Any() == false)
         {

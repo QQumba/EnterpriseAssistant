@@ -9,18 +9,18 @@ using UserService.Contract.DataTransfer;
 
 namespace UserService.API.Commands;
 
-public class CreateManagedUserCommand : IRequest<OneOf<ManagedUserDto,EmailTakenError>>
+public class CreateUserCommand : IRequest<OneOf<UserDto,EmailTakenError>>
 {
-    public CreateManagedUserCommand(ManagedUserCreateDto model)
+    public CreateUserCommand(UserCreateDto model)
     {
         Model = model;
     }
 
-    public ManagedUserCreateDto Model { get; }
+    public UserCreateDto Model { get; }
 }
 
-public class CreateManagedUserCommandHandler
-    : IRequestHandler<CreateManagedUserCommand,OneOf<ManagedUserDto,EmailTakenError>>
+public class CreateManagedUserCommandHandler 
+    : IRequestHandler<CreateUserCommand,OneOf<UserDto,EmailTakenError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -29,20 +29,20 @@ public class CreateManagedUserCommandHandler
         _db = db;
     }
 
-    public async Task<OneOf<ManagedUserDto,EmailTakenError>> Handle(CreateManagedUserCommand request,
+    public async Task<OneOf<UserDto,EmailTakenError>> Handle(CreateUserCommand request,
         CancellationToken cancellationToken)
     {
-        if (await _db.ManagedUsers.IsEmailTaken(request.Model.Email,cancellationToken))
+        if (await _db.Users.IsEmailTaken(request.Model.Email,cancellationToken))
         {
             return new EmailTakenError(request.Model.Email);
         }
 
-        var userToCreate = request.Model.Adapt<ManagedUser>();
-        var createdUser = _db.ManagedUsers.Add(userToCreate).Entity;
+        var userToCreate = request.Model.Adapt<User>();
+        var createdUser = _db.Users.Add(userToCreate).Entity;
         await _db.SaveChangesAsync(cancellationToken);
         
         // TODO: trigger email verification process
         
-        return createdUser.Adapt<ManagedUserDto>();
+        return createdUser.Adapt<UserDto>();
     }
 }

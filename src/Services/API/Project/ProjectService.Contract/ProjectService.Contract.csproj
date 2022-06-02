@@ -7,4 +7,11 @@
         <RootNamespace>ProjectService.Contract</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\Application\Application.csproj" />
+      <ProjectReference Include="..\..\Application\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\..\Enterprise\EnterpriseService.API\EnterpriseService.API.csproj" />
+      <ProjectReference Include="..\..\Enterprise\EnterpriseService.Contract\EnterpriseService.Contract.csproj" />
+    </ItemGroup>
+
 </Project>

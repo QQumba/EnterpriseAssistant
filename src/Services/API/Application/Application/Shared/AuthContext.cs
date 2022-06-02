@@ -2,7 +2,7 @@
 
 public class AuthContext
 {
-    public string? Email { get; init; }
+    public string Email { get; init; }
     
     public string? Login { get; init; }
     

@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     [SwaggerOperation(Summary = "Create a new user")]
     public async Task<ActionResult<UserDto>> CreateUser([FromBody] UserCreateDto model)
     {
-        var result = await _mediator.Send(new CreateUserCommand(model));
+        var result = await _mediator.Send(new CreateUser(model));
         return result.Match<ActionResult>(Ok,e => BadRequest($"Email already taken, email: {e.Email}"));
     }
 

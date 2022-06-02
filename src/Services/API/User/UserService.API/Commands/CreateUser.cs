@@ -9,9 +9,9 @@ using UserService.Contract.DataTransfer;
 
 namespace UserService.API.Commands;
 
-public class CreateUserCommand : IRequest<OneOf<UserDto,EmailTakenError>>
+public class CreateUser : IRequest<OneOf<UserDto,EmailTakenError>>
 {
-    public CreateUserCommand(UserCreateDto model)
+    public CreateUser(UserCreateDto model)
     {
         Model = model;
     }
@@ -19,17 +19,17 @@ public class CreateUserCommand : IRequest<OneOf<UserDto,EmailTakenError>>
     public UserCreateDto Model { get; }
 }
 
-public class CreateManagedUserCommandHandler 
-    : IRequestHandler<CreateUserCommand,OneOf<UserDto,EmailTakenError>>
+public class CreateUserHandler 
+    : IRequestHandler<CreateUser,OneOf<UserDto,EmailTakenError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
-    public CreateManagedUserCommandHandler(EnterpriseAssistantDbContext db)
+    public CreateUserHandler(EnterpriseAssistantDbContext db)
     {
         _db = db;
     }
 
-    public async Task<OneOf<UserDto,EmailTakenError>> Handle(CreateUserCommand request,
+    public async Task<OneOf<UserDto,EmailTakenError>> Handle(CreateUser request,
         CancellationToken cancellationToken)
     {
         if (await _db.Users.IsEmailTaken(request.Model.Email,cancellationToken))

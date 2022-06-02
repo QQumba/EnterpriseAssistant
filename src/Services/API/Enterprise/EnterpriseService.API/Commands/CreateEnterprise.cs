@@ -13,7 +13,7 @@ using OneOf;
 
 namespace EnterpriseService.API.Commands;
 
-public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
+public class CreateEnterprise : IRequest<OneOf<EnterpriseDto, EnterpriseIdAlreadyTakenError>>
 {
     public CreateEnterprise(EnterpriseCreateDto enterpriseCreate, string ownerEmail)
     {
@@ -27,7 +27,7 @@ public class CreateEnterprise : IRequest<OneOf<EnterpriseViewModel, EnterpriseId
 }
 
 public class CreateEnterpriseHandler
-    : IRequestHandler<CreateEnterprise, OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>>
+    : IRequestHandler<CreateEnterprise, OneOf<EnterpriseDto, EnterpriseIdAlreadyTakenError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -36,7 +36,7 @@ public class CreateEnterpriseHandler
         _db = db;
     }
 
-    public async Task<OneOf<EnterpriseViewModel, EnterpriseIdAlreadyTakenError>> Handle(CreateEnterprise request,
+    public async Task<OneOf<EnterpriseDto, EnterpriseIdAlreadyTakenError>> Handle(CreateEnterprise request,
         CancellationToken cancellationToken)
     {
         if (await _db.Enterprises.IsIdTaken(request.EnterpriseCreate.Id, cancellationToken))
@@ -52,7 +52,7 @@ public class CreateEnterpriseHandler
         CreateUserForDepartment(request.EnterpriseCreate.UserCreate.Adapt<User>(), department);
 
         await _db.SaveChangesAsync(cancellationToken);
-        return enterprise.Adapt<EnterpriseViewModel>();
+        return enterprise.Adapt<EnterpriseDto>();
     }
 
     private Enterprise CreateEnterprise(

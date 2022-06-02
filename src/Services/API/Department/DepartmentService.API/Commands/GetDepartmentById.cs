@@ -1,4 +1,5 @@
 ﻿using DepartmentService.Contract.DataTransfer;
+using EnterpriseAssistant.Application.Errors;
 using EnterpriseAssistant.DataAccess;
 using MediatR;
 using OneOf;
@@ -6,7 +7,7 @@ using OneOf.Types;
 
 namespace DepartmentService.API.Commands;
 
-public class GetDepartmentById : IRequest<OneOf<IEnumerable<DepartmentDto>, NotFound>>
+public class GetDepartmentById : IRequest<OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
 {
     public GetDepartmentById(long id, bool includeChild)
     {
@@ -19,8 +20,8 @@ public class GetDepartmentById : IRequest<OneOf<IEnumerable<DepartmentDto>, NotF
     public bool IncludeChild { get; }
 }
 
-public class
-    GetDepartmentByIdHandler : IRequestHandler<GetDepartmentById, OneOf<IEnumerable<DepartmentDto>, NotFound>>
+public class GetDepartmentByIdHandler
+    : IRequestHandler<GetDepartmentById, OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -29,7 +30,7 @@ public class
         _db = db;
     }
 
-    public Task<OneOf<IEnumerable<DepartmentDto>, NotFound>> Handle(GetDepartmentById request,
+    public Task<OneOf<IEnumerable<DepartmentDto>, INotFoundError>> Handle(GetDepartmentById request,
         CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

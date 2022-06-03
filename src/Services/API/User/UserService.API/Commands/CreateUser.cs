@@ -37,8 +37,9 @@ public class CreateUserHandler
             return new EmailTakenError(request.Model.Email);
         }
 
-        var userToCreate = request.Model.Adapt<User>();
-        var createdUser = _db.Users.Add(userToCreate).Entity;
+        var user = request.Model.Adapt<User>();
+        user.Salt = "test_salt";
+        var createdUser = _db.Users.Add(user).Entity;
         await _db.SaveChangesAsync(cancellationToken);
         
         // TODO: trigger email verification process

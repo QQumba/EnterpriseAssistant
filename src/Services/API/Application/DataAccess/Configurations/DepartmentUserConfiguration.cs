@@ -13,13 +13,13 @@ namespace EnterpriseAssistant.DataAccess.Configurations
             builder.HasIndex(du => new { du.DepartmentId, du.UserId })
                 .IsUnique();
 
-            builder.HasOne<User>()
+            builder.HasOne(du => du.User)
                 .WithMany()
                 .HasForeignKey(du => du.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne<Department>()
+            builder.HasOne(du => du.Department)
                 .WithMany()
                 .HasForeignKey(du => du.DepartmentId)
                 .IsRequired()

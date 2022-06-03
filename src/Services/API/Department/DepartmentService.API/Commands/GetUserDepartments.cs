@@ -22,9 +22,9 @@ public class GetUserDepartments : IRequest<OneOf<IEnumerable<DepartmentDto>, INo
 public class GetUserDepartmentsHandler
     : IRequestHandler<GetUserDepartments, OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
 {
-    private readonly AuthenticatedDbContextFactory _factory;
+    private readonly DbContextFactory _factory;
 
-    public GetUserDepartmentsHandler(AuthenticatedDbContextFactory factory)
+    public GetUserDepartmentsHandler(DbContextFactory factory)
     {
         _factory = factory;
     }
@@ -32,7 +32,7 @@ public class GetUserDepartmentsHandler
     public async Task<OneOf<IEnumerable<DepartmentDto>, INotFoundError>> Handle(GetUserDepartments request,
         CancellationToken cancellationToken)
     {
-        var db = _factory.Create(request.AuthContext);
+        var db = _factory.CreateReadOnlyContext(request.AuthContext);
         var user = await db.Users.SingleAsync(u => u.Email.Equals(request.AuthContext.Email), cancellationToken);
 
         var departments = await db.DepartmentUsers

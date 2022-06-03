@@ -52,6 +52,7 @@ public class CreateEnterpriseHandler
         department.Enterprise = enterprise;
 
         var user = await _db.Users.SingleAsync(u => u.Email.Equals(request.AuthContext.Email), cancellationToken);
+        AddUserToEnterprise(user, enterprise, request.EnterpriseCreate.UserLogin);
         AddUserToDepartment(user, department);
 
         await _db.SaveChangesAsync(cancellationToken);
@@ -74,9 +75,20 @@ public class CreateEnterpriseHandler
         return _db.Departments.Add(departmentToCreate).Entity;
     }
 
+    private void AddUserToEnterprise(User user, Enterprise enterprise, string userLogin)
+    {
+        var enterpriseUser = new EnterpriseUser
+        {
+            Enterprise = enterprise,
+            User = user,
+            Login = userLogin
+        };
+        _db.EnterpriseUsers.Add(enterpriseUser);
+    }
+
     private void AddUserToDepartment(User user, Department department)
     {
-        var enterprise = department.Enterprise!;
+        var enterprise = department.Enterprise;
         var departmentUser = new DepartmentUser
         {
             Department = department,
@@ -84,7 +96,6 @@ public class CreateEnterpriseHandler
             DepartmentUserRole = DepartmentUserRole.Admin,
             EnterpriseId = enterprise.Id
         };
-
         _db.DepartmentUsers.Add(departmentUser);
     }
 }

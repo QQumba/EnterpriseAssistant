@@ -4,18 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EnterpriseAssistant.DataAccess;
 
-public class AuthenticatedDbContextFactory
+public class DbContextFactory
 {
     private readonly EnterpriseAssistantDbContext _context;
 
-    public AuthenticatedDbContextFactory(EnterpriseAssistantDbContext context)
+    public DbContextFactory(EnterpriseAssistantDbContext context)
     {
         _context = context;
     }
     
-    public AuthenticatedDbContext Create(AuthContext authContext, bool readDeleted = false)
+    public AuthenticatedDbContext CreateReadOnlyContext(AuthContext authContext, bool readDeleted = false)
     {
         return new AuthenticatedDbContext(_context, authContext, readDeleted);
+    }
+    
+    public EnterpriseAssistantDbContext Create()
+    {
+        return _context;
     }
 }
 

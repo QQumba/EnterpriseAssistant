@@ -1,4 +1,5 @@
-﻿using EnterpriseAssistant.DataAccess.Entities;
+﻿using EnterpriseAssistant.Application.Shared;
+using EnterpriseAssistant.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnterpriseAssistant.DataAccess;
@@ -18,7 +19,6 @@ public class EnterpriseAssistantDbContext : DbContext
     public DbSet<DepartmentUser> DepartmentUsers { get; set; }
 
     public DbSet<EnterpriseUser> EnterpriseUsers { get; set; }
-
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

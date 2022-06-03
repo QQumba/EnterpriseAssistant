@@ -13,12 +13,12 @@ public class EnterpriseUserConfiguration : IEntityTypeConfiguration<EnterpriseUs
         builder.HasIndex(e => new { e.UserId, e.Login, e.EnterpriseId })
             .IsUnique();
 
-        builder.HasOne<User>()
+        builder.HasOne(eu => eu.User)
             .WithMany()
             .HasForeignKey(e => e.UserId)
             .IsRequired();
 
-        builder.HasOne<Enterprise>()
+        builder.HasOne(eu => eu.Enterprise)
             .WithMany()
             .HasForeignKey(e => e.EnterpriseId)
             .IsRequired();

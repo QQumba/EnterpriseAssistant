@@ -139,11 +139,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_soft_deleted");
 
-                    b.Property<string>("OwnerEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("owner_email");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -153,52 +148,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("OwnerEmail");
-
                     b.ToTable("enterprise");
                 });
 
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.ManagedUser", b =>
-                {
-                    b.Property<string>("Email")
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<bool>("IsEmailConfirmed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_email_confirmed");
-
-                    b.Property<bool>("IsSoftDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_soft_deleted");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("password");
-
-                    b.Property<string>("Salt")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("salt");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Email");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("managed_user");
-                });
-
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.EnterpriseUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -216,6 +169,58 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("enterprise_id");
 
+                    b.Property<bool>("IsSoftDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_soft_deleted");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("login");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnterpriseId");
+
+                    b.HasIndex("UserId", "Login", "EnterpriseId")
+                        .IsUnique();
+
+                    b.ToTable("enterprise_user");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("EnterpriseId")
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -229,23 +234,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("login");
-
-                    b.Property<string>("ManagedUserEmail")
-                        .HasColumnType("text")
-                        .HasColumnName("managed_user_email");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("password");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer")
-                        .HasColumnName("role");
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -258,12 +250,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnterpriseId");
-
-                    b.HasIndex("ManagedUserEmail");
-
-                    b.HasIndex("Login", "EnterpriseId")
+                    b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("EnterpriseId");
 
                     b.ToTable("user");
                 });
@@ -311,33 +301,30 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.EnterpriseUser", b =>
                 {
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.ManagedUser", "Owner")
-                        .WithMany("Enterprises")
-                        .HasForeignKey("OwnerEmail")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
+                        .WithMany()
+                        .HasForeignKey("EnterpriseId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enterprise");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
                 {
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", null)
                         .WithMany("Users")
-                        .HasForeignKey("EnterpriseId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
-
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.ManagedUser", "ManagedUser")
-                        .WithMany("Users")
-                        .HasForeignKey("ManagedUserEmail")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Enterprise");
-
-                    b.Navigation("ManagedUser");
+                        .HasForeignKey("EnterpriseId");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
@@ -348,13 +335,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
                 {
                     b.Navigation("Departments");
-
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.ManagedUser", b =>
-                {
-                    b.Navigation("Enterprises");
 
                     b.Navigation("Users");
                 });

@@ -29,8 +29,8 @@ public class EnterpriseController : ControllerBase
         Description = "Create an enterprise with root department and admin user")]
     public async Task<ActionResult<EnterpriseDto>> CreateEnterprise([FromBody] EnterpriseCreateDto model)
     {
-        var email = User.GetEmail();
-        var result = await _mediator.Send(new CreateEnterprise(model, email));
+        var context = User.GetAuthContext();
+        var result = await _mediator.Send(new CreateEnterprise(model, context));
         return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }
 
@@ -40,7 +40,7 @@ public class EnterpriseController : ControllerBase
         [FromBody] UserCreateDto model)
     {
         var enterpriseId = User.GetEnterpriseId();
-        var result = await _mediator.Send(new CreateEnterpriseUser(model, enterpriseId));
+        var result = await _mediator.Send(new AddUserToEnterprise(model, enterpriseId));
 
         return result.Match<ActionResult>(Ok, e => NotFound(e.Message), e => BadRequest(e.Message));
     }

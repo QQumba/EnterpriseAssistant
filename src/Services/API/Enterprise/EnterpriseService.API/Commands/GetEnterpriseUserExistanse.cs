@@ -30,6 +30,6 @@ public class GetEnterpriseUserExistenceHandler : IRequestHandler<GetEnterpriseUs
 
     public async Task<bool> Handle(GetEnterpriseUserExistence request, CancellationToken cancellationToken)
     {
-        return await _db.Users.IsEnterpriseUserExists(request.EnterpriseId, request.UserLogin, cancellationToken);
+        return await _db.EnterpriseUsers.IsEnterpriseUserExists(request.EnterpriseId, request.UserLogin, cancellationToken);
     }
 }

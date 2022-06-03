@@ -83,6 +83,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(Summary = "Create department", Description = "Create department")]
     public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateDto model)
     {
         var result = await _mediator.Send(new CreateDepartment(model));

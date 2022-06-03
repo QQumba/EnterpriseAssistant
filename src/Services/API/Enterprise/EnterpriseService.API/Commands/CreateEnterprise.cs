@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DepartmentService.Contract.DataTransfer;
+using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using EnterpriseAssistant.DataAccess.Entities.Enums;
@@ -9,21 +10,22 @@ using EnterpriseService.API.OneOfResponses;
 using EnterpriseService.Contract.DataTransfer;
 using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OneOf;
 
 namespace EnterpriseService.API.Commands;
 
 public class CreateEnterprise : IRequest<OneOf<EnterpriseDto, EnterpriseIdAlreadyTakenError>>
 {
-    public CreateEnterprise(EnterpriseCreateDto enterpriseCreate, string ownerEmail)
+    public CreateEnterprise(EnterpriseCreateDto enterpriseCreate, AuthContext authContext)
     {
+        AuthContext = authContext;
         EnterpriseCreate = enterpriseCreate;
-        OwnerEmail = ownerEmail;
     }
 
     public EnterpriseCreateDto EnterpriseCreate { get; }
 
-    public string OwnerEmail { get; }
+    public AuthContext AuthContext { get; }
 }
 
 public class CreateEnterpriseHandler
@@ -44,23 +46,23 @@ public class CreateEnterpriseHandler
             return new EnterpriseIdAlreadyTakenError(request.EnterpriseCreate.Id);
         }
 
-        var enterprise = CreateEnterprise(request.EnterpriseCreate, request.OwnerEmail);
+        var enterprise = CreateEnterprise(request.EnterpriseCreate);
 
         var department = CreateDepartment(request.EnterpriseCreate.DepartmentCreate);
         department.Enterprise = enterprise;
 
-        CreateUserForDepartment(request.EnterpriseCreate.UserCreate.Adapt<User>(), department);
+        var user = await _db.Users.SingleAsync(u => u.Email.Equals(request.AuthContext.Email), cancellationToken);
+        AddUserToEnterprise(user, enterprise, request.EnterpriseCreate.UserLogin);
+        AddUserToDepartment(user, department);
 
         await _db.SaveChangesAsync(cancellationToken);
         return enterprise.Adapt<EnterpriseDto>();
     }
 
-    private Enterprise CreateEnterprise(
-        EnterpriseCreateDto enterpriseCreate, string email)
+    private Enterprise CreateEnterprise(EnterpriseCreateDto enterpriseCreate)
     {
         var enterpriseToCreate = enterpriseCreate.Adapt<Enterprise>();
 
-        enterpriseToCreate.OwnerEmail = email;
         var enterprise = _db.Enterprises.Add(enterpriseToCreate).Entity;
 
         return enterprise;
@@ -73,14 +75,20 @@ public class CreateEnterpriseHandler
         return _db.Departments.Add(departmentToCreate).Entity;
     }
 
-    private void CreateUserForDepartment(User user, Department department)
+    private void AddUserToEnterprise(User user, Enterprise enterprise, string userLogin)
     {
-        var enterprise = department.Enterprise!;
-        // todo: add password secret handling
-        user.Salt = "default_salt";
-        user.ManagedUserEmail = enterprise.OwnerEmail;
-        user.Enterprise = enterprise;
-        _db.Users.Add(user);
+        var enterpriseUser = new EnterpriseUser
+        {
+            Enterprise = enterprise,
+            User = user,
+            Login = userLogin
+        };
+        _db.EnterpriseUsers.Add(enterpriseUser);
+    }
+
+    private void AddUserToDepartment(User user, Department department)
+    {
+        var enterprise = department.Enterprise;
         var departmentUser = new DepartmentUser
         {
             Department = department,
@@ -88,7 +96,6 @@ public class CreateEnterpriseHandler
             DepartmentUserRole = DepartmentUserRole.Admin,
             EnterpriseId = enterprise.Id
         };
-
         _db.DepartmentUsers.Add(departmentUser);
     }
 }

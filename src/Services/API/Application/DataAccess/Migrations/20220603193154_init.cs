@@ -15,7 +15,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 columns: table => new
                 {
                     id = table.Column<string>(type: "text", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
+                    displayed_name = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
@@ -23,23 +23,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_enterprise", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "managed_user",
-                columns: table => new
-                {
-                    email = table.Column<string>(type: "text", nullable: false),
-                    is_email_confirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    password = table.Column<string>(type: "text", nullable: false),
-                    salt = table.Column<string>(type: "text", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_managed_user", x => x.email);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,14 +62,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    login = table.Column<string>(type: "text", nullable: false),
-                    EnterpriseId = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: true),
-                    role = table.Column<int>(type: "integer", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
                     salt = table.Column<string>(type: "text", nullable: false),
-                    managed_user_email = table.Column<string>(type: "text", nullable: true),
+                    EnterpriseId = table.Column<string>(type: "text", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
@@ -98,14 +79,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         name: "FK_user_enterprise_EnterpriseId",
                         column: x => x.EnterpriseId,
                         principalTable: "enterprise",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_user_managed_user_managed_user_email",
-                        column: x => x.managed_user_email,
-                        principalTable: "managed_user",
-                        principalColumn: "email",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -116,7 +90,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     department_id = table.Column<long>(type: "bigint", nullable: false),
                     user_id = table.Column<long>(type: "bigint", nullable: false),
-                    department_user_type = table.Column<int>(type: "integer", nullable: false),
+                    department_user_role = table.Column<int>(type: "integer", nullable: false),
                     enterprise_id = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -139,6 +113,37 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_department_user_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "enterprise_user",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    user_id = table.Column<long>(type: "bigint", nullable: false),
+                    enterprise_id = table.Column<string>(type: "text", nullable: false),
+                    login = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_enterprise_user", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_enterprise_user_enterprise_enterprise_id",
+                        column: x => x.enterprise_id,
+                        principalTable: "enterprise",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_enterprise_user_user_user_id",
                         column: x => x.user_id,
                         principalTable: "user",
                         principalColumn: "id",
@@ -178,8 +183,19 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_managed_user_email",
-                table: "managed_user",
+                name: "IX_enterprise_user_enterprise_id",
+                table: "enterprise_user",
+                column: "enterprise_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_enterprise_user_user_id_login_enterprise_id",
+                table: "enterprise_user",
+                columns: new[] { "user_id", "login", "enterprise_id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_email",
+                table: "user",
                 column: "email",
                 unique: true);
 
@@ -187,29 +203,15 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 name: "IX_user_EnterpriseId",
                 table: "user",
                 column: "EnterpriseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_user_id",
-                table: "user",
-                column: "id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_user_login_EnterpriseId",
-                table: "user",
-                columns: new[] { "login", "EnterpriseId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_user_managed_user_email",
-                table: "user",
-                column: "managed_user_email");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "department_user");
+
+            migrationBuilder.DropTable(
+                name: "enterprise_user");
 
             migrationBuilder.DropTable(
                 name: "department");
@@ -219,9 +221,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "enterprise");
-
-            migrationBuilder.DropTable(
-                name: "managed_user");
         }
     }
 }

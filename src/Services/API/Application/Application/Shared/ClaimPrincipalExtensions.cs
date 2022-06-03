@@ -6,7 +6,7 @@ public static class ClaimPrincipalExtensions
 {
     public static string? GetEmail(this ClaimsPrincipal principal)
     {
-        return "dummy@e.mail";
+        return "test@mail.com";
         // todo: use when auth is done
         return principal.FindFirst("email")?.Value;
     }

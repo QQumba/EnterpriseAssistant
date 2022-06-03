@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
     [DbContext(typeof(EnterpriseAssistantDbContext))]
-    [Migration("20220603193154_init")]
+    [Migration("20220603220257_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,6 +70,18 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("ParentDepartmentId");
 
                     b.ToTable("department");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            DepartmentType = 0,
+                            EnterpriseId = "test",
+                            IsSoftDeleted = false,
+                            Name = "Test department",
+                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627)
+                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.DepartmentUser", b =>
@@ -120,6 +132,19 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("department_user");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            DepartmentId = 1L,
+                            DepartmentUserRole = 0,
+                            EnterpriseId = "test",
+                            IsSoftDeleted = false,
+                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
@@ -151,6 +176,16 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("enterprise");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "test",
+                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            DisplayedName = "test",
+                            IsSoftDeleted = false,
+                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627)
+                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.EnterpriseUser", b =>
@@ -200,6 +235,19 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("enterprise_user");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            EnterpriseId = "test",
+                            IsSoftDeleted = false,
+                            Login = "test",
+                            Role = 0,
+                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
@@ -219,9 +267,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("email");
-
-                    b.Property<string>("EnterpriseId")
-                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -255,9 +300,21 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("EnterpriseId");
-
                     b.ToTable("user");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            Email = "test@mail.com",
+                            FirstName = "Test",
+                            IsSoftDeleted = false,
+                            LastName = "User",
+                            Password = "qwe",
+                            Salt = "test_salt",
+                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627)
+                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
@@ -322,13 +379,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
-                {
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", null)
-                        .WithMany("Users")
-                        .HasForeignKey("EnterpriseId");
-                });
-
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
                 {
                     b.Navigation("ChildDepartments");
@@ -337,8 +387,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
                 {
                     b.Navigation("Departments");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

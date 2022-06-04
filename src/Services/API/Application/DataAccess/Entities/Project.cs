@@ -16,4 +16,5 @@ public class Project : BaseEntity.WithId<long>
 
     [Column("enterprise_id")]
     public int Enterprise_id { get; set; }
+    public Enterprise Enterprise { get; set; }
 }

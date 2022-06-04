@@ -54,16 +54,20 @@ public class ProjectController : ControllerBase
     [SwaggerOperation(Summary = "Add project", Description = "add project")]
     public async Task<ActionResult<Project>> PostProject(ProjectCreateDto request)
     {
-        var project = request.Adapt<Project>();
-        _context.Projects.Add(project);
-        await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(PostProject), new { id = project.Id }, project);
+            var project = request.Adapt<Project>();
+            if (project == null)
+            {
+            return BadRequest();
+            }
+            _context.Projects.Add(project);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(PostProject), new { id = project.Id }, project);
     }
 
     [HttpDelete("{id}")]
     [SwaggerOperation(Summary = "Delete project by id", Description = "delete project")]
-    public async Task<IActionResult> DeleteProject(int id)
+    public async Task<IActionResult> DeleteProject(long id)
     {
         var project = await _context.Projects.FindAsync(id);
         if (project == null)
@@ -90,7 +94,7 @@ public class ProjectController : ControllerBase
 
     [HttpGet("{id}")]
     [SwaggerOperation(Summary = "get project by id", Description = "get project by id")]
-    public async Task<ActionResult<Project>> GetProjectDetail(int id)
+    public async Task<ActionResult<Project>> GetProjectDetail(long id)
     {
         var project = await _context.Projects.FindAsync(id);
 
@@ -107,14 +111,15 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult<Project>> UpdateProject(Project project)
     {
         var projectToUpdate = await _context.Projects.FindAsync();
-        
-        if (projectToUpdate != null)
-        {
-            projectToUpdate.Name = project.Name;
-            projectToUpdate.Description = project.Description;
 
-            _context.SaveChanges();
+        if (project == null)
+        {
+            return NotFound();
         }
+
+        projectToUpdate = project.Adapt<Project>();
+
+        _context.SaveChanges();
         
         return projectToUpdate;
     }

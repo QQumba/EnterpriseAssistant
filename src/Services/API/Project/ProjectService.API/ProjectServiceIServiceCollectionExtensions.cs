@@ -10,7 +10,8 @@ public static class ProjectServiceIServiceCollectionExtensions
 {
     public static void AddProjectService(this IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers().AddFluentValidation(fv =>
+                fv.RegisterValidatorsFromAssemblyContaining(typeof(ProjectServiceIServiceCollectionExtensions)));
         services.AddMediatR(typeof(ProjectServiceIServiceCollectionExtensions));
     }
 

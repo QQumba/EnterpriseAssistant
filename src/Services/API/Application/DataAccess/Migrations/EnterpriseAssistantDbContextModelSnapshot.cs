@@ -57,6 +57,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("parent_department_id");
 
+                    b.Property<long?>("ProjectId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("project_id");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -67,18 +71,21 @@ namespace EnterpriseAssistant.DataAccess.Migrations
 
                     b.HasIndex("ParentDepartmentId");
 
+                    b.HasIndex("ProjectId")
+                        .IsUnique();
+
                     b.ToTable("department");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            CreatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             DepartmentType = 0,
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
                             Name = "Test department",
-                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627)
+                            UpdatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714)
                         });
                 });
 
@@ -135,12 +142,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            CreatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             DepartmentId = 1L,
                             DepartmentUserRole = 0,
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            UpdatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             UserId = 1L
                         });
                 });
@@ -179,10 +186,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = "test",
-                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            CreatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             DisplayedName = "test",
                             IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627)
+                            UpdatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714)
                         });
                 });
 
@@ -238,14 +245,61 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            CreatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
                             Login = "test",
                             Role = 0,
-                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            UpdatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             UserId = 1L
                         });
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("department_id");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("EnterpriseId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("enterprise_id");
+
+                    b.Property<bool>("IsSoftDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_soft_deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnterpriseId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("project");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
@@ -304,14 +358,14 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627),
+                            CreatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714),
                             Email = "test@mail.com",
                             FirstName = "Test",
                             IsSoftDeleted = false,
                             LastName = "User",
                             Password = "qwe",
                             Salt = "test_salt",
-                            UpdatedAt = new DateTime(2022, 6, 3, 22, 2, 57, 294, DateTimeKind.Utc).AddTicks(3627)
+                            UpdatedAt = new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714)
                         });
                 });
 
@@ -328,9 +382,16 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasForeignKey("ParentDepartmentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Project", "Project")
+                        .WithOne("Department")
+                        .HasForeignKey("EnterpriseAssistant.DataAccess.Entities.Department", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Enterprise");
 
                     b.Navigation("ParentDepartment");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.DepartmentUser", b =>
@@ -377,6 +438,17 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
+                        .WithMany()
+                        .HasForeignKey("EnterpriseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enterprise");
+                });
+
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
                 {
                     b.Navigation("ChildDepartments");
@@ -385,6 +457,11 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
                 {
                     b.Navigation("Departments");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
+                {
+                    b.Navigation("Department");
                 });
 #pragma warning restore 612, 618
         }

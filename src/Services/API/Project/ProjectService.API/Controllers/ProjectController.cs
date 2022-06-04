@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using EnterpriseAssistant.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseAssistant.DataAccess.Entities;
-
+using Mapster;
 
 namespace ProjectService.API.Controllers;
 
@@ -54,11 +54,7 @@ public class ProjectController : ControllerBase
     [SwaggerOperation(Summary = "Add project", Description = "add project")]
     public async Task<ActionResult<Project>> PostProject(ProjectCreateDto request)
     {
-        var project = new Project
-        {
-            Name = request.ProjectName,
-            Description = request.ProjectDescription,
-        };
+        var project = request.Adapt<Project>();
         _context.Projects.Add(project);
         await _context.SaveChangesAsync();
 

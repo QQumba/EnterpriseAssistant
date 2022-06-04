@@ -15,6 +15,10 @@ public class Project : BaseEntity.WithId<long>
     public string? Description { get; set; }
 
     [Column("enterprise_id")]
-    public int Enterprise_id { get; set; }
-    public Enterprise Enterprise { get; set; }
+    public string EnterpriseId { get; set; } = null!;
+    public Enterprise? Enterprise { get; set; }
+
+    [Column("department_id")]
+    public long DepartmentId  { get; set; }
+    public Department? Department { get; set; }
 }

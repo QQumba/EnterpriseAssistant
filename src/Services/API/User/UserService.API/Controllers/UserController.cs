@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using UserService.API.Commands;
 using UserService.Contract.DataTransfer;
 
-namespace UserService.API;
+namespace UserService.API.Controllers;
 
 [ApiController]
 [Route("api/user")]

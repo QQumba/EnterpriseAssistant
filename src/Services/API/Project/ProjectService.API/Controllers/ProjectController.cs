@@ -75,13 +75,13 @@ public class ProjectController : ControllerBase
             return NotFound();
         }
 
-        _context.Projects.Remove(project);
+        project.IsSoftDeleted = true;
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
-    [HttpGet] // Can be upgr to get by user
+    [HttpGet] 
     [SwaggerOperation(Summary = "get all projects", Description = "get all projects")] 
     public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
     {
@@ -110,14 +110,13 @@ public class ProjectController : ControllerBase
     [SwaggerOperation(Summary = "update project by id", Description = "update project by id")]
     public async Task<ActionResult<Project>> UpdateProject(Project project)
     {
-        var projectToUpdate = await _context.Projects.FindAsync();
+        var projectToUpdate = project.Adapt<Project>();
+        projectToUpdate = await _context.Projects.FindAsync(project.Id);
 
         if (project == null)
         {
             return NotFound();
         }
-
-        projectToUpdate = project.Adapt<Project>();
 
         _context.SaveChanges();
         

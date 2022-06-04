@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using EnterpriseAssistant.Application.Shared;
-using ProjectService.API.Commands;
-using ProjectService.Contract.DataTransfer;
-using MediatR;
+﻿using ProjectService.Contract.DataTransfer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using EnterpriseAssistant.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseAssistant.DataAccess.Entities;
+
 
 namespace ProjectService.API.Controllers;
 
@@ -18,14 +14,14 @@ namespace ProjectService.API.Controllers;
 [Route("api/project")]
 public class ProjectController : ControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly EnterpriseAssistantDbContext _context;
 
-    public ProjectController(IMediator mediator)
+    public ProjectController(EnterpriseAssistantDbContext context)
     {
-        _mediator = mediator;
+        _context = context;
     }
 
+    /*
     [HttpPost]
     [SwaggerOperation(Summary ="Create project", Description = "Create a project")]
 
@@ -46,13 +42,28 @@ public class ProjectController : ControllerBase
         return result.Match<ActionResult>(Ok, x => NotFound());
     }
 
-    /* [HttpDelete("{projectId:long}")]
+    [HttpDelete("{projectId:long}")]
      [SwaggerOperation(Summary = "Delete project by id", Description = "delete project")]
       public async Task<IActionResult> ProjectDelete(long id)
      {
 
      }
     */
+
+    [HttpPost]
+    [SwaggerOperation(Summary = "Add project", Description = "add project")]
+    public async Task<ActionResult<Project>> PostProject(ProjectCreateDto request)
+    {
+        var project = new Project
+        {
+            Name = request.ProjectName,
+            Description = request.ProjectDescription,
+        };
+        _context.Projects.Add(project);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(PostProject), new { id = project.Id }, project);
+    }
 
     [HttpDelete("{id}")]
     [SwaggerOperation(Summary = "Delete project by id", Description = "delete project")]
@@ -71,7 +82,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet] // Can be upgr to get by user
-    [SwaggerOperation(Summary = "get projets", Description = "get project")] 
+    [SwaggerOperation(Summary = "get all projects", Description = "get all projects")] 
     public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
     {
         if (_context == null)
@@ -82,8 +93,8 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [SwaggerOperation(Summary = "get projets by id", Description = "get project by id")]
-    public async Task<ActionResult<Project>> GetBikeDetail(int id)
+    [SwaggerOperation(Summary = "get project by id", Description = "get project by id")]
+    public async Task<ActionResult<Project>> GetProjectDetail(int id)
     {
         var project = await _context.Projects.FindAsync(id);
 
@@ -93,5 +104,22 @@ public class ProjectController : ControllerBase
         }
 
         return project;
+    }
+
+    [HttpPut("{id}")]
+    [SwaggerOperation(Summary = "update project by id", Description = "update project by id")]
+    public async Task<ActionResult<Project>> UpdateProject(Project project)
+    {
+        var projectToUpdate = await _context.Projects.FindAsync();
+        
+        if (projectToUpdate != null)
+        {
+            projectToUpdate.Name = project.Name;
+            projectToUpdate.Description = project.Description;
+
+            _context.SaveChanges();
+        }
+        
+        return projectToUpdate;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EnterpriseAssistant.DataAccess.Entities;
 
@@ -13,4 +14,6 @@ public class Project : BaseEntity.WithId<long>
     [Column("description")]
     public string? Description { get; set; }
 
+    [Column("enterprise_id")]
+    public int Enterprise_id { get; set; }
 }

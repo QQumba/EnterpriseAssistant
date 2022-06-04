@@ -5,8 +5,9 @@ namespace EnterpriseAssistant.DataAccess;
 
 public class EnterpriseAssistantDbContext : DbContext
 {
-    public EnterpriseAssistantDbContext(DbContextOptions options) : base(options)
+    public EnterpriseAssistantDbContext(DbContextOptions<EnterpriseAssistantDbContext> options) : base(options)
     {
+
     }
 
     public DbSet<User> Users { get; set; }

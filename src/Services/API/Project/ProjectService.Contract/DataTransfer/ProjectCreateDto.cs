@@ -1,7 +1,7 @@
 ﻿namespace ProjectService.Contract.DataTransfer;
 
-public record ProjectCreateDto
-(
-    string Id,
-    string ProjectName
-);
+public class ProjectCreateDto
+{
+    public string ProjectName { get; set; } = null!;
+    public string ProjectDescription { get; set; } = String.Empty;
+};

@@ -9,7 +9,6 @@ public class EnterpriseCreateValidator : AbstractValidator<EnterpriseCreateDto>
     {
         RuleFor(e => e.Id).MaximumLength(50)
             .WithMessage(e => $"Max enterprise id length is 50, provided id length: {e.Id.Length}");
-        RuleFor(e => e.UserCreate).InjectValidator();
         RuleFor(e => e.DepartmentCreate).InjectValidator();
     }
 }

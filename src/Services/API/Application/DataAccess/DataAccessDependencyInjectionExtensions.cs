@@ -10,5 +10,6 @@ public static class DataAccessDependencyInjectionExtensions
     {
         services.AddDbContext<EnterpriseAssistantDbContext>(o =>
             o.UseNpgsql(configuration.GetConnectionString("Npgsql")));
+        services.AddScoped<DbContextFactory>();
     }
 }

@@ -21,7 +21,7 @@ namespace EnterpriseAssistant.Identity
 
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
-            new("ea")
+            new("enterprise_assistant")
         };
 
         public static IEnumerable<Client> Clients => new Client[]
@@ -38,6 +38,24 @@ namespace EnterpriseAssistant.Identity
                 AllowedCorsOrigins = {$"{ApiUrl}"},
                 AllowOfflineAccess = true,
 
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "ea",
+                },
+            },
+            new()
+            {
+                ClientId = "ea.swagger",
+                ClientName = "Enterprise Assistant Swagger",
+                ClientSecrets = {new Secret("ea.secret".Sha256())},
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RedirectUris = {$"{ApiUrl}/swagger/oauth2-redirect.html"},
+                PostLogoutRedirectUris = {$"{ApiUrl}/signout-callback-oidc"},
+                AllowedCorsOrigins = {$"{ApiUrl}"},
+                AllowOfflineAccess = true,
                 AllowedScopes =
                 {
                     IdentityServerConstants.StandardScopes.OpenId,

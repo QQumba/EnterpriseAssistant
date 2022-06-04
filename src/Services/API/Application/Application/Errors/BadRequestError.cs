@@ -1,8 +1,8 @@
 ﻿namespace EnterpriseAssistant.Application.Errors;
 
-public class BadRequest : IBadRequestError
+public class BadRequestError : IBadRequestError
 {
-    public BadRequest(string message)
+    public BadRequestError(string message)
     {
         Message = message;
     }

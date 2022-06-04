@@ -1,8 +1,8 @@
 ﻿namespace EnterpriseAssistant.Application.Errors;
 
-public class NotFound : INotFoundError
+public class NotFoundError : INotFoundError
 {
-    public NotFound(string message)
+    public NotFoundError(string message)
     {
         Message = message;
     }

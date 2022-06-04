@@ -10,7 +10,20 @@ namespace EnterpriseAssistant.DataAccess.Configurations
         {
             builder.ConfigureGeneratedId();
 
-            builder.HasIndex(du => new { du.DepartmentId, du.UserId }).IsUnique();
+            builder.HasIndex(du => new { du.DepartmentId, du.UserId })
+                .IsUnique();
+
+            builder.HasOne(du => du.User)
+                .WithMany()
+                .HasForeignKey(du => du.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.HasOne(du => du.Department)
+                .WithMany()
+                .HasForeignKey(du => du.DepartmentId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasOne<Enterprise>()

@@ -10,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DepartmentService.API.Controllers;
 
-[AllowAnonymous]
+[Authorize(Policy = "EnterpriseUser")]
 [ApiController]
 [Route("api/department")]
 public class DepartmentController : ControllerBase

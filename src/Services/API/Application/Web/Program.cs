@@ -67,6 +67,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         o.DocInclusionPredicate((name, api) => true);
     });
 
+    services.AddAuthorization(o =>
+    {
+        o.AddPolicy("EnterpriseUser", p => p.RequireClaim(ClaimUtilities.EnterpriseId));
+    });
     services.AddControllers(c =>
     {
         c.Filters.Add<AuditActionFilter>();
@@ -104,8 +108,8 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
     app.UseRouting();
 
     app.UseAuthentication();
-    app.UseAuthorization();
     app.UseEnterpriseAuthorization();
+    app.UseAuthorization();
 }
 
 void ConfigureEndpoints(IEndpointRouteBuilder app)

@@ -20,16 +20,16 @@
                         <input type="hidden" asp-for="ReturnUrl" />
 
                         <div class="form-group">
-                            <label asp-for="Login"></label>
-                            <input class="form-control" placeholder="Login" asp-for="Login" autofocus>
+                            <label asp-for="Email"></label>
+                            <input class="form-control" placeholder="Email" asp-for="Email" autofocus>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Name"></label>
-                            <input class="form-control" placeholder="Full name" asp-for="Name">
+                            <label asp-for="FirstName"></label>
+                            <input class="form-control" placeholder="First name" asp-for="FirstName">
                         </div>
                         <div class="form-group">
-                            <label asp-for="Position"></label>
-                            <input class="form-control" placeholder="Position" asp-for="Position">
+                            <label asp-for="LastName"></label>
+                            <input class="form-control" placeholder="Last name" asp-for="LastName">
                         </div>
                         <div class="form-group">
                             <label asp-for="Password"></label>
@@ -40,8 +40,8 @@
                             <input type="password" class="form-control" placeholder="Confirm password" asp-for="PasswordConfirmation" autocomplete="off">
                         </div>
 
-                        <button class="btn btn-primary" name="button" value="login">Login</button>
-                        <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+                        <button class="btn btn-primary" name="button" value="signup">Create new account</button>
+                        <button class="btn btn-secondary" name="button" value="login">I already have an account</button>
                     </form>
                 </div>
             </div>

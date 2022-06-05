@@ -1,5 +1,6 @@
 ﻿using DepartmentService.Contract.Commands;
 using DepartmentService.Contract.DataTransfer;
+using EnterpriseAssistant.Application.Errors;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using EnterpriseAssistant.DataAccess.Entities.Enums;
@@ -10,7 +11,7 @@ using OneOf;
 
 namespace DepartmentService.API.Handlers;
 
-public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentDto>>
+public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<DepartmentDto, IBadRequestError>>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
@@ -19,7 +20,7 @@ public class CreateDepartmentHandler : IRequestHandler<CreateDepartment, OneOf<D
         _db = db;
     }
 
-    public async Task<OneOf<DepartmentDto>> Handle(CreateDepartment request,
+    public async Task<OneOf<DepartmentDto, IBadRequestError>> Handle(CreateDepartment request,
         CancellationToken cancellationToken)
     {
         var department = request.Model.Adapt<Department>();

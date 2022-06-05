@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading;
 using System.Threading.Tasks;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseService.API.Commands;
@@ -46,9 +47,9 @@ public class EnterpriseController : ControllerBase
     }
 
     [HttpGet("exists")]
-    public async Task<ActionResult<bool>> GetEnterpriseIdAvailability([FromQuery] [Required, StringLength(50)] string id)
+    public async Task<ActionResult<bool>> IsEnterpriseExists([FromQuery] [Required, StringLength(50)] string id)
     {
-        var result = await _mediator.Send(new GetEnterpriseIdAvailability(id));
+        var result = await _mediator.Send(new IsEnterpriseExists(id));
         return Ok(result);
     }
 
@@ -56,7 +57,7 @@ public class EnterpriseController : ControllerBase
     public async Task<ActionResult<bool>> IsUserExists([Required] [FromQuery] string login)
     {
         var enterpriseId = User.GetEnterpriseId();
-        var result = await _mediator.Send(new GetEnterpriseUserExistence(enterpriseId, login));
+        var result = await _mediator.Send(new GetEnterpriseUserExistence(enterpriseId!, login));
         return Ok(result);
     }
 }

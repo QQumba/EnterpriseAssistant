@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EnterpriseService.API.Commands;
 
-public class GetEnterpriseIdAvailability : IRequest<bool>
+public class IsEnterpriseExists : IRequest<bool>
 {
-    public GetEnterpriseIdAvailability(string id)
+    public IsEnterpriseExists(string id)
     {
         Id = id;
     }
@@ -16,16 +16,16 @@ public class GetEnterpriseIdAvailability : IRequest<bool>
     public string Id { get; }
 }
 
-public class GetEnterpriseIdAvailabilityHandler : IRequestHandler<GetEnterpriseIdAvailability, bool>
+public class IsEnterpriseExistsHandler : IRequestHandler<IsEnterpriseExists, bool>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
-    public GetEnterpriseIdAvailabilityHandler(EnterpriseAssistantDbContext db)
+    public IsEnterpriseExistsHandler(EnterpriseAssistantDbContext db)
     {
         _db = db;
     }
 
-    public async Task<bool> Handle(GetEnterpriseIdAvailability request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsEnterpriseExists request, CancellationToken cancellationToken)
     {
         return await _db.Enterprises.AnyAsync(e => e.Id.Equals(request.Id), cancellationToken);
     }

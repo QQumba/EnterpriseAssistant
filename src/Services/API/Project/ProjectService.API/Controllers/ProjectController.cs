@@ -102,7 +102,7 @@ public class ProjectController : ControllerBase
         return project;
     }
 
-    [HttpPut("{id}")] //need to fix
+    [HttpPut("{id}")]
     [SwaggerOperation(Summary = "update project by id", Description = "update project by id")]
     public async Task<ActionResult<Project>> UpdateProject(long id, ProjectCreateDto project)
     {
@@ -114,7 +114,7 @@ public class ProjectController : ControllerBase
         }
         else
         {
-            return NoContent();
+            return NotFound();
         }
         return Ok(_update);
     }

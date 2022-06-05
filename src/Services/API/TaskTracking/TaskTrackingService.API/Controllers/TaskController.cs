@@ -25,7 +25,10 @@ public class TaskController : ControllerBase
     [SwaggerOperation(Summary = "Create task", Description = "create task")]
     public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> PostTask(TaskCreateDto request)
     {
-        return Ok();
+        var task = request.Adapt<EnterpriseAssistant.DataAccess.Entities.Task>();
+        _context.Tasks.Add(task);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(PostTask), new {id = task.Id}, task);
     }
 
     [HttpGet]

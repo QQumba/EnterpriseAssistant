@@ -6,7 +6,5 @@ public class AuthContext
     
     public string Email { get; init; } = null!;
 
-    public string? Login { get; init; }
-    
     public string? EnterpriseId { get; init; }
 }

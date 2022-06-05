@@ -13,7 +13,7 @@ using UserService.Contract.DataTransfer;
 namespace EnterpriseService.API.Controllers;
 
 // todo remove anonymous attribute
-[AllowAnonymous]
+[Authorize]
 [ApiController]
 [Route("api/enterprise")]
 public class EnterpriseController : ControllerBase

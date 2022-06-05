@@ -58,35 +58,21 @@ public class DepartmentController : ControllerBase
     public async Task<ActionResult<DepartmentDto>> GetRecursiveDepartments(
         [Range(0, int.MaxValue), FromQuery] int nestingLevel)
     {
-        var root = new DepartmentDto()
-        {
-            Id = 0,
-            Name = "root"
-        };
-
-        var lastChild = root;
-        for (var i = 1; i < nestingLevel + 1; i++)
-        {
-            var department = new DepartmentDto()
-            {
-                Id = i,
-                Name = $"name {i}",
-                ParentDepartmentId = lastChild.Id
-            };
-
-            lastChild.ChildDepartments.Add(department);
-
-            lastChild = department;
-        }
-
-        return Ok(root);
+        throw new NotImplementedException();
     }
 
     [HttpPost]
     [SwaggerOperation(Summary = "Create department", Description = "Create department")]
     public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateDto model)
     {
-        var result = await _mediator.Send(new CreateDepartment(model));
+        var authContext = User.GetAuthContext();
+        var departmentAlreadyExists = await _mediator.Send(new CheckIfDepartmentExists(model.Name, authContext));
+        if (departmentAlreadyExists)
+        {
+            return BadRequest($"Department with name {model.Name} already exists");
+        }
+
+        var result = await _mediator.Send(new CreateDepartment(model, authContext));
         return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
     }
 
@@ -105,5 +91,16 @@ public class DepartmentController : ControllerBase
         [Range(1, long.MaxValue), FromBody] long userId)
     {
         throw new NotImplementedException();
+    }
+
+    [HttpDelete("{departmentId:long}")]
+    [SwaggerResponse(204, "Department deleted")]
+    [SwaggerResponse(404, "Department not found")]
+    [SwaggerOperation(Summary = "Delete department")]
+    public async Task<ActionResult> DeleteDepartment([Range(1, long.MaxValue), FromRoute] long departmentId)
+    {
+        var authContext = User.GetAuthContext();
+        var response = await _mediator.Send(new DeleteDepartment(departmentId, authContext));
+        return response.Match<ActionResult>(x => NoContent(), e => NotFound(e.Message));
     }
 }

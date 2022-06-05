@@ -43,7 +43,7 @@ public class TaskController : ControllerBase
         return await _context.Tasks.ToListAsync();
     }
 
-    [HttpGet("user/{id}")]
+    [HttpGet("user/{id}")] //later
     [SwaggerOperation(Summary = "Read all user task", Description = "User task")]
     public async Task<ActionResult<IEnumerable<EnterpriseAssistant.DataAccess.Entities.Task>>> GetUserTasks(long id)
     {
@@ -54,20 +54,42 @@ public class TaskController : ControllerBase
     [SwaggerOperation(Summary = "Update task", Description = "update task")]
     public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> UpdateTask(long id, TaskCreateDto task)
     {
-        return Ok();
+        var _update = _context.Tasks.FirstOrDefault(task => task.Id == id); 
+        if (_update == null)
+        {
+            return NotFound();
+        }
+        _update = task.Adapt(_update);
+        _context.SaveChanges();
+        return Ok(_update);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [SwaggerOperation(Summary = "Delete task", Description = "delete task")]
     public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> TaskDelete(long id)
     {
-        return Ok();
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null)
+        {
+            return NotFound();
+        }
+
+        task.IsSoftDeleted = true;
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 
     [HttpGet("{id}")]
     [SwaggerOperation(Summary = "task by id", Description = "Read task by id")]
     public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> GetTaskDetail(long id)
     {
-        return NotFound();
+        var task = await _context.Tasks.FindAsync(id);
+
+        if (task == null)
+        {
+            return NotFound();
+        }
+
+        return task;
     }
 }

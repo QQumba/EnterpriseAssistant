@@ -21,7 +21,7 @@ public class TaskController : ControllerBase
         _context = context;
     }
 
-    [HttpPost]
+    [HttpPost] //need to add project IsSoftDelete check
     [SwaggerOperation(Summary = "Create task", Description = "create task")]
     public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> PostTask(TaskCreateDto request)
     {
@@ -33,9 +33,14 @@ public class TaskController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(Summary = "Read all task", Description = "read all task")]
-    public async Task<ActionResult<IEnumerable<EnterpriseAssistant.DataAccess.Entities.Task>>> GetTasks(TaskCreateDto request)
+    public async Task<ActionResult<IEnumerable<EnterpriseAssistant.DataAccess.Entities.Task>>> GetTasks()
     {
-        return Ok();
+        if (_context == null)
+        {
+            return NotFound();
+        }
+
+        return await _context.Tasks.ToListAsync();
     }
 
     [HttpGet("user/{id}")]

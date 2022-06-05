@@ -33,6 +33,13 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
                     Reference = new OpenApiReference { Id = "OAuth", Type = ReferenceType.SecurityScheme }
                 },
                 new List<string>()
+            },
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference { Id = "Enterprise", Type = ReferenceType.SecurityScheme }
+                },
+                new List<string>()
             }
         });
     }

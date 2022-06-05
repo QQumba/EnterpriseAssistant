@@ -60,7 +60,9 @@ public class DepartmentController : ControllerBase
         }
 
         var result = await _mediator.Send(new CreateDepartment(model, authContext));
-        return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
+        return result.Match<ActionResult>(
+            d => CreatedAtAction(nameof(CreateDepartment), d),
+            e => BadRequest(e.Message));
     }
 
     [HttpDelete("{departmentId:long}")]

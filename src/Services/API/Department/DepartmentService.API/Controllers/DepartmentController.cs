@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using UserService.Contract.DataTransfer;
 
 namespace DepartmentService.API.Controllers;
 
@@ -34,22 +33,16 @@ public class DepartmentController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(Summary = "Get user departments", Description = "Get user departments")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserDepartments()
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartments()
     {
         var authContext = User.GetAuthContext();
         var result = await _mediator.Send(new GetUserDepartments(authContext));
         return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
     }
 
-    [HttpGet("subordinate/{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetSubordinateDepartments(
+    [HttpGet("{departmentId:long}/child")]
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetChildDepartments(
         [Range(1, long.MaxValue), FromRoute] long departmentId)
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpGet("my/subordinate")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserSubordinateDepartments()
     {
         throw new NotImplementedException();
     }
@@ -67,23 +60,6 @@ public class DepartmentController : ControllerBase
 
         var result = await _mediator.Send(new CreateDepartment(model, authContext));
         return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
-    }
-
-    [HttpGet("users/{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetDepartmentUsers(
-        [Range(1, long.MaxValue), FromRoute] long departmentId)
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpPost("{departmentId:long}/add/user")]
-    [SwaggerResponse(204, "User added to department")]
-    [SwaggerResponse(404, "Department or user not found")]
-    [SwaggerOperation(Summary = "Add user to department")]
-    public async Task<ActionResult> AddUser([Range(1, long.MaxValue), FromRoute] long departmentId,
-        [Range(1, long.MaxValue), FromBody] long userId)
-    {
-        throw new NotImplementedException();
     }
 
     [HttpDelete("{departmentId:long}")]

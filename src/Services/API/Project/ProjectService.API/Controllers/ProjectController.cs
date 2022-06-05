@@ -56,10 +56,6 @@ public class ProjectController : ControllerBase
     {
 
             var project = request.Adapt<Project>();
-            if (project == null)
-            {
-            return BadRequest();
-            }
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(PostProject), new { id = project.Id }, project);
@@ -106,20 +102,20 @@ public class ProjectController : ControllerBase
         return project;
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}")] //need to fix
     [SwaggerOperation(Summary = "update project by id", Description = "update project by id")]
-    public async Task<ActionResult<Project>> UpdateProject(Project project)
+    public async Task<ActionResult<Project>> UpdateProject(long id, ProjectCreateDto project)
     {
-        var projectToUpdate = project.Adapt<Project>();
-        projectToUpdate = await _context.Projects.FindAsync(project.Id);
-
-        if (project == null)
+        var _update =  _context.Projects.FirstOrDefault(p => p.Id == id);
+        if (_update != null)
         {
-            return NotFound();
+            _update = project.Adapt(_update);
+            _context.SaveChanges();
         }
-
-        _context.SaveChanges();
-        
-        return projectToUpdate;
+        else
+        {
+            return NoContent();
+        }
+        return Ok(_update);
     }
 }

@@ -7,7 +7,7 @@ namespace ProjectService.API.Validation
     {
         public ProjectCreateDtoValidator()
         {
-            RuleFor(p => p.Name).NotEmpty().MaximumLength(60).MinimumLength(1).WithMessage("err");
+            RuleFor(p => p.Name).NotEmpty().MaximumLength(60).MinimumLength(1).WithMessage("Validator error");
         }
     }
 }

@@ -23,13 +23,13 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpGet("{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartmentById(
+    public async Task<ActionResult<DepartmentDto>> GetDepartmentById(
         [Range(1, long.MaxValue), FromRoute] long departmentId,
         [FromQuery] bool includeChild = false)
     {
-        var result = await _mediator.Send(new GetDepartmentById(departmentId, includeChild));
-
-        return result.Match<ActionResult>(Ok, x => NotFound());
+        var authContext = User.GetAuthContext();
+        var result = await _mediator.Send(new GetDepartmentById(departmentId, authContext, includeChild));
+        return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
     }
 
     [HttpGet]

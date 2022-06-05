@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DepartmentService.API.Commands;
+using DepartmentService.Contract.Commands;
 using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.Application.Shared;
 using MediatR;

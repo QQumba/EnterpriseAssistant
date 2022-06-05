@@ -2,8 +2,10 @@
 
 public class AuthContext
 {
-    public string Email { get; init; }
+    public long UserId { get; init; }
     
+    public string Email { get; init; } = null!;
+
     public string? Login { get; init; }
     
     public string? EnterpriseId { get; init; }

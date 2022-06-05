@@ -10,6 +10,8 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     {
         builder.ConfigureGeneratedId();
 
+        builder.HasIndex(d => new {d.Name, d.EnterpriseId, d.IsSoftDeleted}).IsUnique();
+        
         builder.HasMany(d => d.ChildDepartments)
             .WithOne(d => d.ParentDepartment)
             .HasForeignKey(d => d.ParentDepartmentId)

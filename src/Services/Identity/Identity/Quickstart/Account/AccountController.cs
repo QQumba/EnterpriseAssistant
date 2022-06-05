@@ -139,6 +139,7 @@ namespace EnterpriseAssistant.Identity.Quickstart.Account
 						AdditionalClaims =
 						{
 							new Claim("login", user.Login),
+							new Claim("enterprise_ids", "test 123"),
 							new Claim(nameof(Role), user.Role.ToString())
 						}
 					};
@@ -236,11 +237,20 @@ namespace EnterpriseAssistant.Identity.Quickstart.Account
 			return View("LoggedOut", vm);
 		}
 
-		[HttpGet]
-		public IActionResult AccessDenied()
-		{
-			return View();
-		}
+		// [HttpGet]
+		// public async Task<IActionResult> SignUp(string returnUrl)
+		// {
+		// 	// build a model so we know what to show on the login page
+		// 	var vm = await BuildLoginViewModelAsync(returnUrl);
+		//
+		// 	if (vm.IsExternalLoginOnly)
+		// 	{
+		// 		// we only have one option for logging in and it's an external provider
+		// 		return RedirectToAction("Challenge", "External", new { scheme = vm.ExternalLoginScheme, returnUrl });
+		// 	}
+		//
+		// 	return View(vm);
+		// }
 
 
 		/*****************************************/

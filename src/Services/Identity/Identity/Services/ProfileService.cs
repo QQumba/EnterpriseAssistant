@@ -26,6 +26,7 @@ namespace EnterpriseAssistant.Identity.Services
 			context.IssuedClaims.Add(new Claim("role", user.Role.ToString()));
 			context.IssuedClaims.Add(new Claim("login", user.Login));
 			context.IssuedClaims.Add(new Claim("name", user.Name));
+			context.IssuedClaims.Add(new Claim("enterprise_ids", "test 123"));
 		}
 
 		public async Task IsActiveAsync(IsActiveContext context)

@@ -6,10 +6,12 @@ using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.Web;
 using EnterpriseAssistant.Web.Filters;
 using EnterpriseAssistant.Web.Helpers;
+using EnterpriseAssistant.Web.Middleware;
 using EnterpriseService.API;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -40,10 +42,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 {
     services.AddEndpointsApiExplorer();
 
-    // services.AddOidcAuthentication(configuration);
     services.AddJwtAuthentication(configuration);
-    // services.AddCustomAuthentication(configuration);
-
 
     services.AddSwaggerGen(o =>
     {
@@ -68,7 +67,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         o.DocInclusionPredicate((name, api) => true);
     });
 
-    services.AddControllers(c => { c.Filters.Add<AuditActionFilter>(); });
+    services.AddControllers(c =>
+    {
+        c.Filters.Add<AuditActionFilter>();
+    });
 
     services.AddDataAccess(configuration);
     services.AddApplication();
@@ -103,11 +105,12 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
 
     app.UseAuthentication();
     app.UseAuthorization();
+    app.UseEnterpriseAuthorization();
 }
 
 void ConfigureEndpoints(IEndpointRouteBuilder app)
 {
-    app.MapControllers().RequireAuthorization();
+    app.MapControllers();
 }
 
 void ConfigureLogging(WebApplicationBuilder app, IConfiguration configuration)

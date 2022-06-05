@@ -20,4 +20,9 @@ public class Task : BaseEntity.WithId<long>
 
     [Column("enterprise_id")]
     public string EnterpriseId { get; set; } = null!;
+    public Enterprise? Enterprise { get; set; }
+
+    [Column("project_id")]
+    public long ProjectId { get; set; }
+    public Project? Project { get; set; }
 }

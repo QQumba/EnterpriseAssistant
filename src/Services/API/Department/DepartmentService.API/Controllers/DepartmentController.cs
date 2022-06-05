@@ -54,13 +54,6 @@ public class DepartmentController : ControllerBase
         throw new NotImplementedException();
     }
 
-    [HttpGet("test/recursive")]
-    public async Task<ActionResult<DepartmentDto>> GetRecursiveDepartments(
-        [Range(0, int.MaxValue), FromQuery] int nestingLevel)
-    {
-        throw new NotImplementedException();
-    }
-
     [HttpPost]
     [SwaggerOperation(Summary = "Create department", Description = "Create department")]
     public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateDto model)

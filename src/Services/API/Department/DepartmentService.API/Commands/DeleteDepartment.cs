@@ -41,8 +41,9 @@ public class DeleteDepartmentHandler : IRequestHandler<DeleteDepartment, OneOf<U
                          && du.DepartmentUserRole == DepartmentUserRole.Admin)
             .Include(du => du.Department)
             .Select(du => du.Department)
-            .FirstOrDefaultAsync(d => d.IsSoftDeleted == false, cancellationToken);
-        
+            .FirstOrDefaultAsync(d => d.IsSoftDeleted == false
+                                      && d.DepartmentType != DepartmentType.Root, cancellationToken);
+
         if (department is null)
         {
             return new NotFoundError($"Department with id {request.DepartmentId} not found");
@@ -51,7 +52,7 @@ public class DeleteDepartmentHandler : IRequestHandler<DeleteDepartment, OneOf<U
         department.IsSoftDeleted = true;
         _context.Entry(department).Property(d => d.IsSoftDeleted).IsModified = true;
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return Unit.Value;
     }
 }

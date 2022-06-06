@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DepartmentService.API.Commands;
+using DepartmentService.Contract.Commands;
 using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.Application.Shared;
 using MediatR;
@@ -9,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DepartmentService.API.Controllers;
 
-[AllowAnonymous]
+[Authorize(Policy = "EnterpriseUser")]
 [ApiController]
 [Route("api/department")]
 public class DepartmentController : ControllerBase
@@ -59,7 +60,9 @@ public class DepartmentController : ControllerBase
         }
 
         var result = await _mediator.Send(new CreateDepartment(model, authContext));
-        return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
+        return result.Match<ActionResult>(
+            d => CreatedAtAction(nameof(CreateDepartment), d),
+            e => BadRequest(e.Message));
     }
 
     [HttpDelete("{departmentId:long}")]

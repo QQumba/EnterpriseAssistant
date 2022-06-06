@@ -20,4 +20,11 @@ public static class EnterpriseDbSetExtensions
         return await enterpriseUsers.AnyAsync(u => u.EnterpriseId.Equals(enterpriseId) && u.Login.Equals(login),
             cancellationToken);
     }
+    
+    public static async Task<bool> IsEnterpriseUserExists(this IQueryable<EnterpriseUser> enterpriseUsers, string enterpriseId,
+        long userId, CancellationToken cancellationToken = default)
+    {
+        return await enterpriseUsers.AnyAsync(u => u.EnterpriseId.Equals(enterpriseId) && u.UserId == userId,
+            cancellationToken);
+    }
 }

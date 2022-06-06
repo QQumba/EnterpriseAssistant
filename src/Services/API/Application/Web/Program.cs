@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using DepartmentService.API;
 using EnterpriseAssistant.Application;
 using EnterpriseAssistant.Application.Shared;
@@ -67,10 +68,19 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         o.DocInclusionPredicate((name, api) => true);
     });
 
+    services.AddAuthorization(o =>
+    {
+        o.AddPolicy("EnterpriseUser", p => p.RequireClaim(ClaimUtilities.EnterpriseId));
+    });
     services.AddControllers(c =>
     {
         c.Filters.Add<AuditActionFilter>();
-    });
+    })
+        .AddJsonOptions(o =>
+        {
+            var enumConverter = new JsonStringEnumConverter();
+            o.JsonSerializerOptions.Converters.Add(enumConverter);
+        });
 
     services.AddDataAccess(configuration);
     services.AddApplication();
@@ -104,8 +114,8 @@ void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)
     app.UseRouting();
 
     app.UseAuthentication();
-    app.UseAuthorization();
     app.UseEnterpriseAuthorization();
+    app.UseAuthorization();
 }
 
 void ConfigureEndpoints(IEndpointRouteBuilder app)

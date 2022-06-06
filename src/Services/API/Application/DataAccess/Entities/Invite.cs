@@ -6,10 +6,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EnterpriseAssistant.DataAccess.Entities;
 
+[Table("invite")]
 public class Invite : BaseEntity.WithId<long>
 {
     [Column("user_id")]
-    public long UserId { get; set; }
+    public long? UserId { get; set; }
+
+    [Column("user_email")]
+    public string UserEmail { get; set; } = null!;
 
     public User? User { get; set; }
 
@@ -17,16 +21,20 @@ public class Invite : BaseEntity.WithId<long>
     public string EnterpriseId { get; set; } = null!;
 
     public Enterprise? Enterprise { get; set; }
-    
-    [Column("invite_status")]
-    public InviteStatus Status { get; set; }
 
-    public EnterpriseUser Accept(string login)
+    [Column("invite_status")]
+    public InviteStatus Status { get; set; } = InviteStatus.Pending;
+
+    public EnterpriseUser? Accept(string login)
     {
+        if (UserId.HasValue == false)
+        {
+            return null;
+        }
         Status = InviteStatus.Accepted;
         return new EnterpriseUser
         {
-            UserId = UserId,
+            UserId = UserId.Value,
             EnterpriseId = EnterpriseId,
             Login = login,
             Role = EnterpriseUserRole.User,
@@ -51,8 +59,8 @@ public class InviteConfiguration : IEntityTypeConfiguration<Invite>
         builder.HasOne(i => i.User)
             .WithMany()
             .HasForeignKey(i => i.UserId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
         
         builder.HasOne(i => i.Enterprise)
             .WithMany()

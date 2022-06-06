@@ -55,7 +55,7 @@ public class UserController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet]
+    [HttpGet("enterprise-invites")]
     [Authorize]
     [SwaggerOperation(Summary = "Get pending invites", Description = "Get pending invites for current user")]
     public async Task<ActionResult<IEnumerable<InviteDto>>> GetPendingInvites()

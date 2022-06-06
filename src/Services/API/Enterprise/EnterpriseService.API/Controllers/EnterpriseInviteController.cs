@@ -30,28 +30,44 @@ public class EnterpriseInviteController : ControllerBase
     // todo: check if the user is admin
     [HttpPost]
     [Authorize(Policy = "EnterpriseUser")]
+    [SwaggerOperation(Summary = "Invite a user to join an enterprise",
+        Description = "Invite a user to join an enterprise")]
     public async Task<ActionResult<InviteDto>> InviteUser([FromBody] InviteCreateDto inviteCreate)
     {
         var enterpriseId = User.GetEnterpriseId()!;
-        var isEnterpriseUserExists =
-            await _dbContext.EnterpriseUsers.IsEnterpriseUserExists(enterpriseId, inviteCreate.UserId);
-        if (isEnterpriseUserExists)
+        var enterpriseUserAlreadyExists = await _dbContext.EnterpriseUsers
+            .Include(eu => eu.Enterprise)
+            .AnyAsync(eu => eu.EnterpriseId == enterpriseId &&
+                            eu.IsSoftDeleted == false &&
+                            eu.User.Email.Equals(inviteCreate));
+        if (enterpriseUserAlreadyExists)
         {
             return BadRequest(
-                $"User with id {inviteCreate.UserId} is already in the enterprise with id {enterpriseId}");
+                $"User with email {inviteCreate.UserEmail} is already in the enterprise with id {enterpriseId}");
         }
 
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == inviteCreate.UserId);
-        if (user is null)
+        var inviteAlreadyExists = await _dbContext.Invites.AnyAsync(i =>
+            i.UserEmail.Equals(inviteCreate.UserEmail) &&
+            i.IsSoftDeleted == false &&
+            i.Status == InviteStatus.Pending);
+        if (inviteAlreadyExists)
         {
-            return NotFound($"User with id {inviteCreate.UserId} not found");
+            return BadRequest($"User with email {inviteCreate.UserEmail} already invited");
         }
+
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u =>
+            u.IsSoftDeleted == false && u.Email.Equals(inviteCreate.UserEmail));
 
         var invite = inviteCreate.Adapt<Invite>();
+        if (user is not null)
+        {
+            invite.UserId = user.Id;
+        }
+
         invite.EnterpriseId = enterpriseId;
         var createdInvite = _dbContext.Invites.Add(invite).Entity;
         await _dbContext.SaveChangesAsync();
-        return createdInvite.Adapt<InviteDto>();
+        return Ok(createdInvite.Adapt<InviteDto>());
     }
 
     // todo: check if the user is admin
@@ -61,23 +77,20 @@ public class EnterpriseInviteController : ControllerBase
     public async Task<ActionResult<IEnumerable<InviteDto>>> GetInvites()
     {
         var invites = await _dbContext.Invites
-            .Include(i => i.User)
             .Include(i => i.Enterprise)
             .Where(i => i.EnterpriseId == User.GetEnterpriseId() &&
-                        i.IsSoftDeleted == false &&
-                        i.Enterprise!.IsSoftDeleted == false &&
-                        i.User!.IsSoftDeleted == false)
+                        i.IsSoftDeleted == false)
             .Select(i => new InviteDto(i)
             {
-                EnterpriseDisplayedName = i.Enterprise!.DisplayedName,
-                User = i.User!.Adapt<UserDto>()
+                EnterpriseDisplayedName = i.Enterprise!.DisplayedName
             })
             .ToListAsync();
 
-        return Ok(invites);
+        return Ok(invites.Adapt<List<InviteDto>>());
     }
 
     [HttpPut]
+    [SwaggerOperation(Summary = "Accept an invite")]
     public async Task<ActionResult> SubmitInvite([FromBody] InviteSubmitDto inviteSubmit)
     {
         var authContext = User.GetAuthContext();
@@ -100,7 +113,7 @@ public class EnterpriseInviteController : ControllerBase
         }
 
         var enterpriseUser = invite.Accept(inviteSubmit.Login);
-        _dbContext.EnterpriseUsers.Add(enterpriseUser);
+        _dbContext.EnterpriseUsers.Add(enterpriseUser!);
         _dbContext.Entry(invite).Property(i => i.Status).IsModified = true;
         await _dbContext.SaveChangesAsync();
         return Ok();

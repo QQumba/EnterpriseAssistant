@@ -2,5 +2,5 @@
 
 public class InviteCreateDto
 {
-    public long UserId { get; set; }
+    public string UserEmail { get; set; } = null!;
 }

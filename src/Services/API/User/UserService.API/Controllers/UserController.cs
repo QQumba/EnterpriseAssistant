@@ -1,6 +1,12 @@
-﻿using MediatR;
+﻿using EnterpriseAssistant.Application.Shared;
+using EnterpriseAssistant.DataAccess;
+using EnterpriseAssistant.DataAccess.Entities;
+using EnterpriseService.Contract.DataTransfer;
+using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using UserService.API.Commands;
 using UserService.Contract.DataTransfer;
@@ -13,10 +19,12 @@ namespace UserService.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private EnterpriseAssistantDbContext _dbContext;
 
-    public UserController(IMediator mediator)
+    public UserController(IMediator mediator, EnterpriseAssistantDbContext dbContext)
     {
         _mediator = mediator;
+        _dbContext = dbContext;
     }
 
     [HttpPost]
@@ -24,7 +32,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult<UserDto>> CreateUser([FromBody] UserCreateDto model)
     {
         var result = await _mediator.Send(new CreateUser(model));
-        return result.Match<ActionResult>(Ok,e => BadRequest($"Email already taken, email: {e.Email}"));
+        return result.Match<ActionResult>(Ok, e => BadRequest($"Email already taken, email: {e.Email}"));
     }
 
     [HttpGet("exists")]
@@ -39,11 +47,31 @@ public class UserController : ControllerBase
         var result = await _mediator.Send(new CheckIfUserExists(email));
         return Ok(result);
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
     {
         var result = await _mediator.Send(new GetAllUsersCommand());
         return Ok(result);
+    }
+
+    [HttpGet("enterprise-invites")]
+    [Authorize]
+    [SwaggerOperation(Summary = "Get pending invites", Description = "Get pending invites for current user")]
+    public async Task<ActionResult<IEnumerable<InviteDto>>> GetPendingInvites()
+    {
+        var userId = User.GetUserId();
+        var invites = await _dbContext.Invites
+            .Where(i => i.UserId == userId &&
+                        i.Status == InviteStatus.Pending &&
+                        i.IsSoftDeleted == false)
+            .Include(i => i.Enterprise)
+            .Select(i => new InviteDto(i)
+            {
+                EnterpriseDisplayedName = i.Enterprise!.DisplayedName
+            })
+            .ToListAsync();
+
+        return Ok(invites);
     }
 }

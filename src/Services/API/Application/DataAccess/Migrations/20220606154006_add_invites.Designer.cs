@@ -3,6 +3,7 @@ using System;
 using EnterpriseAssistant.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
     [DbContext(typeof(EnterpriseAssistantDbContext))]
-    partial class EnterpriseAssistantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220606154006_add_invites")]
+    partial class add_invites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,12 +78,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             DepartmentType = 0,
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
                             Name = "Test department",
-                            UpdatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836)
+                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296)
                         });
                 });
 
@@ -138,12 +140,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             DepartmentId = 1L,
                             DepartmentUserRole = 0,
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             UserId = 1L
                         });
                 });
@@ -182,10 +184,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = "test",
-                            CreatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             DisplayedName = "test",
                             IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836)
+                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296)
                         });
                 });
 
@@ -241,12 +243,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
                             Login = "test",
                             Role = 0,
-                            UpdatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             UserId = 1L
                         });
                 });
@@ -281,12 +283,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
-
-                    b.Property<long?>("UserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
@@ -297,7 +294,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("UserId", "EnterpriseId")
                         .IsUnique();
 
-                    b.ToTable("invite");
+                    b.ToTable("Invites");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
@@ -356,14 +353,14 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836),
+                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
                             Email = "test@mail.com",
                             FirstName = "Test",
                             IsSoftDeleted = false,
                             LastName = "User",
                             Password = "qwe",
                             Salt = "test_salt",
-                            UpdatedAt = new DateTime(2022, 6, 6, 16, 12, 34, 681, DateTimeKind.Utc).AddTicks(3836)
+                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296)
                         });
                 });
 
@@ -440,7 +437,8 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Enterprise");
 

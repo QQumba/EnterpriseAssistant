@@ -57,7 +57,7 @@ public class EnterpriseController : ControllerBase
     public async Task<ActionResult<bool>> IsUserExists([Required] [FromQuery] string login)
     {
         var enterpriseId = User.GetEnterpriseId();
-        var result = await _mediator.Send(new GetEnterpriseUserExistence(enterpriseId!, login));
+        var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId!, login));
         return Ok(result);
     }
 }

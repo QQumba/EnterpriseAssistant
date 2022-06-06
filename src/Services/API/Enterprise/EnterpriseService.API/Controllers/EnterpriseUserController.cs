@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess;
+using EnterpriseService.API.Commands;
 using EnterpriseService.Contract.DataTransfer;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +20,12 @@ namespace EnterpriseService.API.Controllers;
 public class EnterpriseUserController : ControllerBase
 {
     private readonly DbContextFactory _factory;
+    private readonly IMediator _mediator;
 
-    public EnterpriseUserController(DbContextFactory factory)
+    public EnterpriseUserController(DbContextFactory factory, IMediator mediator)
     {
         _factory = factory;
+        _mediator = mediator;
     }
 
     [HttpGet]
@@ -42,5 +47,13 @@ public class EnterpriseUserController : ControllerBase
             .ToListAsync();
 
         return Ok(users);
+    }
+    
+    [HttpGet("exists")]
+    public async Task<ActionResult<bool>> IsUserExists([Required] [FromQuery] string login)
+    {
+        var enterpriseId = User.GetEnterpriseId();
+        var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId!, login));
+        return Ok(result);
     }
 }

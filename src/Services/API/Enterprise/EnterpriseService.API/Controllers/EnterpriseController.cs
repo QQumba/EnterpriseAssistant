@@ -12,7 +12,6 @@ using UserService.Contract.DataTransfer;
 
 namespace EnterpriseService.API.Controllers;
 
-// todo remove anonymous attribute
 [Authorize]
 [ApiController]
 [Route("api/enterprise")]
@@ -35,29 +34,10 @@ public class EnterpriseController : ControllerBase
         return result.Match<ActionResult>(Ok, e => BadRequest($"Enterprise id: {e.TakenId} has taken already"));
     }
 
-    [HttpPost("user")]
-    [SwaggerOperation(Summary = "Create user for enterprise")]
-    public async Task<ActionResult<UserDto>> CreateUser(
-        [FromBody] UserCreateDto model)
-    {
-        var enterpriseId = User.GetEnterpriseId();
-        var result = await _mediator.Send(new AddUserToEnterprise(model, enterpriseId));
-
-        return result.Match<ActionResult>(Ok, e => NotFound(e.Message), e => BadRequest(e.Message));
-    }
-
     [HttpGet("exists")]
     public async Task<ActionResult<bool>> IsEnterpriseExists([FromQuery] [Required, StringLength(50)] string id)
     {
         var result = await _mediator.Send(new IsEnterpriseExists(id));
-        return Ok(result);
-    }
-
-    [HttpGet("user/exists")]
-    public async Task<ActionResult<bool>> IsUserExists([Required] [FromQuery] string login)
-    {
-        var enterpriseId = User.GetEnterpriseId();
-        var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId!, login));
         return Ok(result);
     }
 }

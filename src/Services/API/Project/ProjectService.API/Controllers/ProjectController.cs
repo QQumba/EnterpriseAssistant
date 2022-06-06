@@ -52,13 +52,13 @@ public class ProjectController : ControllerBase
 
     [HttpPost]
     [SwaggerOperation(Summary = "Add project", Description = "add project")]
-    public async Task<ActionResult<Project>> PostProject(ProjectCreateDto request)
+    public async Task<ActionResult<Project>> CreateProject(ProjectCreateDto request)
     {
 
             var project = request.Adapt<Project>();
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(PostProject), new { id = project.Id }, project);
+            return CreatedAtAction(nameof(CreateProject), new { id = project.Id }, project);
     }
 
     [HttpDelete("{id}")]
@@ -96,7 +96,7 @@ public class ProjectController : ControllerBase
 
         if (project == null)
         {
-            return NotFound();
+            return NotFound("Project with id " + id + " not found");
         }
 
         return project;

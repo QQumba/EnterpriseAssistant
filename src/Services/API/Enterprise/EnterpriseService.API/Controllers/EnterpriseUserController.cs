@@ -39,6 +39,7 @@ public class EnterpriseUserController : ControllerBase
             .Where(eu => eu.User.IsSoftDeleted == false)
             .Select(eu => new EnterpriseUserDto
             {
+                UserId = eu.UserId,
                 Login = eu.Login,
                 Email = eu.User.Email,
                 FirstName = eu.User.FirstName,
@@ -56,4 +57,5 @@ public class EnterpriseUserController : ControllerBase
         var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId!, login));
         return Ok(result);
     }
+    
 }

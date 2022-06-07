@@ -9,7 +9,7 @@ using Mapster;
 
 namespace TaskTrackingService.API.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 [ApiController]
 [Route("api/task")]
 public class TaskController : ControllerBase

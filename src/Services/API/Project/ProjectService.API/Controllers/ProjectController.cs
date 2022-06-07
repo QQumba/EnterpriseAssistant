@@ -5,7 +5,11 @@ using Swashbuckle.AspNetCore.Annotations;
 using EnterpriseAssistant.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using EnterpriseAssistant.DataAccess.Entities;
+using MediatR;
 using Mapster;
+using DepartmentService.Contract.Commands;
+using DepartmentService.Contract.DataTransfer;
+using EnterpriseAssistant.Application.Shared;
 
 namespace ProjectService.API.Controllers;
 
@@ -14,11 +18,13 @@ namespace ProjectService.API.Controllers;
 [Route("api/project")]
 public class ProjectController : ControllerBase
 {
+    IMediator _mediator;
     private readonly EnterpriseAssistantDbContext _context;
 
-    public ProjectController(EnterpriseAssistantDbContext context)
+    public ProjectController(EnterpriseAssistantDbContext context, IMediator mediator)
     {
         _context = context;
+        _mediator = mediator;
     }
 
     /*
@@ -54,11 +60,15 @@ public class ProjectController : ControllerBase
     [SwaggerOperation(Summary = "Add project", Description = "add project")]
     public async Task<ActionResult<Project>> CreateProject(ProjectCreateDto request)
     {
-
-            var project = request.Adapt<Project>();
-            _context.Projects.Add(project);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreateProject), new { id = project.Id }, project);
+        var response = await _mediator.Send(new CreateDepartment(request.DepartmentCreate, User.GetAuthContext()));
+        if (response.IsT1)
+        {
+            return BadRequest(response.AsT1.Message);
+        }
+        var project = request.Adapt<Project>();
+        _context.Projects.Add(project);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(CreateProject), new { id = project.Id }, project);
     }
 
     [HttpDelete("{id}")]
@@ -77,8 +87,8 @@ public class ProjectController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet] 
-    [SwaggerOperation(Summary = "get all projects", Description = "get all projects")] 
+    [HttpGet]
+    [SwaggerOperation(Summary = "get all projects", Description = "get all projects")]
     public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
     {
         if (_context == null)
@@ -106,7 +116,7 @@ public class ProjectController : ControllerBase
     [SwaggerOperation(Summary = "update project by id", Description = "update project by id")]
     public async Task<ActionResult<Project>> UpdateProject(long id, ProjectCreateDto project)
     {
-        var _update =  _context.Projects.FirstOrDefault(p => p.Id == id);
+        var _update = _context.Projects.FirstOrDefault(p => p.Id == id);
         if (_update != null)
         {
             _update = project.Adapt(_update);

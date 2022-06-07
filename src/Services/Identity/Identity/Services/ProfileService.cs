@@ -20,18 +20,23 @@ namespace EnterpriseAssistant.Identity.Services
 
 		public async Task GetProfileDataAsync(ProfileDataRequestContext context)
 		{
-			var login = context.Subject.GetSubjectId();
-			var user = await _userService.GetUserByLoginAsync(login);
+			var email = context.Subject.GetSubjectId();
+			var user = await _userService.GetUserByEmailAsync(email);
 
-			context.IssuedClaims.Add(new Claim("role", user.Role.ToString()));
-			context.IssuedClaims.Add(new Claim("login", user.Login));
-			context.IssuedClaims.Add(new Claim("name", user.Name));
+			context.IssuedClaims.Add(new Claim("user_id", user.Id.ToString()));
+			context.IssuedClaims.Add(new Claim("email", user.Email));
+			context.IssuedClaims.Add(new Claim("name", user.FirstName));
+
+			if (user.EnterpriseIds is not null)
+			{
+				context.IssuedClaims.Add(new Claim("enterprise_ids", user.EnterpriseIds));
+			}
 		}
 
 		public async Task IsActiveAsync(IsActiveContext context)
 		{
 			var login = context.Subject.GetSubjectId();
-			var user = await _userService.GetUserByLoginAsync(login);
+			var user = await _userService.GetUserByEmailAsync(login);
 			if (user is null)
 			{
 				return;

@@ -6,7 +6,6 @@ namespace EnterpriseAssistant.Identity.DataAccess
     public interface IUserRepository
     {
         Task<User> CreateUserAsync(User user);
-        Task<User> GetUserByLogin(string login);
-        Task<User> UpdateUser(User user);
+        Task<User> GetUserByEmail(string email);
     }
 }

@@ -1,13 +1,17 @@
-﻿namespace EnterpriseAssistant.Identity.DTOs
+﻿namespace EnterpriseAssistant.Identity.DataTransfer
 {
 	public class UserDto
 	{
-		public string Login { get; set; }
+		public long Id { get; set; }
+		
+		public string Email { get; set; }
+		
+		public string EnterpriseIds { get; set; }
 
-		public string Name { get; set; }
+		public string FirstName { get; set; }
+		
+		public string LastName { get; set; }
 
 		public bool IsSoftDeleted { get; set; }
-
-		public Role Role { get; set; }
 	}
 }

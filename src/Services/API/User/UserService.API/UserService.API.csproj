@@ -23,6 +23,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Application\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\..\Department\DepartmentService.Contract\DepartmentService.Contract.csproj" />
+      <ProjectReference Include="..\..\Enterprise\EnterpriseService.Contract\EnterpriseService.Contract.csproj" />
       <ProjectReference Include="..\UserService.Contract\UserService.Contract.csproj" />
     </ItemGroup>
 

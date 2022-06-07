@@ -22,6 +22,8 @@ public class EnterpriseAssistantDbContext : DbContext
     public DbSet<Project> Projects { get; set; }
 
     public DbSet<EnterpriseUser> EnterpriseUsers { get; set; }
+    
+    public DbSet<Invite> Invites { get; set; }
 
     public DbSet<Entities.Task> Tasks { get; set; }
 

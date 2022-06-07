@@ -16,8 +16,8 @@ namespace EnterpriseAssistant.Identity.DataAccess
             var user = new User
             {
                 Id = 1,
-                Login = "test",
-                Name = "test user",
+                Email = "test@mail.com",
+                FirstName = "test user",
                 Salt = secret.Salt,
                 Password = secret.PasswordHash,
                 IsSoftDeleted = false
@@ -31,14 +31,9 @@ namespace EnterpriseAssistant.Identity.DataAccess
             throw new System.NotImplementedException();
         }
 
-        public Task<User> GetUserByLogin(string login)
+        public Task<User> GetUserByEmail(string email)
         {
-            return Task.FromResult(_users.FirstOrDefault(u => u.Login.Equals(login)));
-        }
-
-        public Task<User> UpdateUser(User user)
-        {
-            throw new System.NotImplementedException();
+            return Task.FromResult(_users.FirstOrDefault(u => u.Email.Equals(email)));
         }
     }
 }

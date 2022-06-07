@@ -1,11 +1,15 @@
-﻿namespace EnterpriseAssistant.Identity.Quickstart.Account
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EnterpriseAssistant.Identity.Quickstart.Account
 {
 	public class SignupViewModel : LoginInputModel
 	{
-        public string Name { get; set; }
+		[Required]
+        public string FirstName { get; set; }
+        
+        public string LastName { get; set; }
 
-		public string Position { get; set; }
-
+        [Required]
         public string PasswordConfirmation { get; set; }
     }
 }

@@ -6,9 +6,9 @@ using MediatR;
 
 namespace EnterpriseService.API.Commands;
 
-public class GetEnterpriseUserExistence : IRequest<bool>
+public class CheckIfEnterpriseUserExists : IRequest<bool>
 {
-    public GetEnterpriseUserExistence(string enterpriseId, string userLogin)
+    public CheckIfEnterpriseUserExists(string enterpriseId, string userLogin)
     {
         EnterpriseId = enterpriseId;
         UserLogin = userLogin;
@@ -19,16 +19,16 @@ public class GetEnterpriseUserExistence : IRequest<bool>
     public string UserLogin { get; set; }
 }
 
-public class GetEnterpriseUserExistenceHandler : IRequestHandler<GetEnterpriseUserExistence, bool>
+public class CheckIfEnterpriseUserExistsHandler : IRequestHandler<CheckIfEnterpriseUserExists, bool>
 {
     private readonly EnterpriseAssistantDbContext _db;
 
-    public GetEnterpriseUserExistenceHandler(EnterpriseAssistantDbContext db)
+    public CheckIfEnterpriseUserExistsHandler(EnterpriseAssistantDbContext db)
     {
         _db = db;
     }
 
-    public async Task<bool> Handle(GetEnterpriseUserExistence request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(CheckIfEnterpriseUserExists request, CancellationToken cancellationToken)
     {
         return await _db.EnterpriseUsers.IsEnterpriseUserExists(request.EnterpriseId, request.UserLogin, cancellationToken);
     }

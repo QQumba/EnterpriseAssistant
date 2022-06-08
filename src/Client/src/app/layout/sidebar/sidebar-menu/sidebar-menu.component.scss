@@ -25,7 +25,7 @@ a {
       background-color: rgb(231, 231, 231);
     }
 
-    &:focus {
+    &:active {
       background-color: rgb(207, 207, 207);
     }
 
@@ -46,4 +46,8 @@ a {
   color: rgb(82, 82, 82);
   padding: 0.2em 0.5em;
   margin-bottom: 0.5em;
+}
+
+.active-link{
+  background-color: rgb(207, 207, 207);
 }

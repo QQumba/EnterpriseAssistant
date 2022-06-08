@@ -66,17 +66,16 @@ $nav-hover: #b5b5b5;
     fa-icon {
       color: inherit;
       margin: 0 0 0 0.4em;
-      transition: transform 0.1s ease-out;
+      transition: transform 0.2s ease-out;
     }
 
     &:hover {
-      // background-color: #272f39;
       color: $nav-hover;
       cursor: pointer;
     }
 
     .navbar-menu-opened {
-      transform: rotate(-90deg);
+      transform: rotate(-180deg);
     }
   }
 

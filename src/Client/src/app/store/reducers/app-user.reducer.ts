@@ -15,9 +15,10 @@ export const appUserReducer = createReducer(
   appUserInitialState,
   on(userAuthenticated, (_, user) => user),
   on(enterpriseIdChanged, (state, action: { enterpriseId: string }) => {
+    let a = state.enterpriseIds?.indexOf(action.enterpriseId);
     if (
       state.enterpriseIds &&
-      state.enterpriseIds.indexOf(action.enterpriseId)
+      state.enterpriseIds.indexOf(action.enterpriseId) >= 0
     ) {
       const newState = Object.assign({}, state);
       newState.enterpriseId = action.enterpriseId;

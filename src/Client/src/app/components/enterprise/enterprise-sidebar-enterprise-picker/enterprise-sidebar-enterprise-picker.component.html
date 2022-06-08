@@ -1,14 +1,40 @@
-<div class="enterprise-picker" (click)="isExpanded = !isExpanded">
-  <span> {{ 'enterprise.sidebar.enterprise-picker.add-enterprise' | translate }} </span>
-  <span class="spacer"></span>
-  <span
-    class="picker-arrow"
-    [ngClass]="{ expanded: isExpanded, folded: !isExpanded }"
+<div ngbDropdown>
+  <div
+    class="enterprise-picker"
+    id="enterprisePicker"
+    (click)="isExpanded = !isExpanded"
+    ngbDropdownToggle
   >
-    <fa-icon [icon]="arrowUp"></fa-icon>
-  </span>
-  <div class="picker-content" [hidden]="!isExpanded">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis necessitatibus
-    corrupti, dolore minima atque voluptatem itaque dolorum? Magnam, vel ipsa.
+    <span *ngIf="$enterpriseId | async as enterpriseId">
+      {{ enterpriseId }}
+    </span>
+    <span *ngIf="!($enterpriseId | async)">
+      {{ 'enterprise.sidebar.enterprise-picker.add-enterprise' | translate }}
+    </span>
+    <span class="spacer"></span>
+    <span
+      *ngIf="$enterprises | async"
+      class="picker-arrow"
+      [ngClass]="{ expanded: isExpanded, folded: !isExpanded }"
+    >
+      <fa-icon [icon]="arrowUp"></fa-icon>
+    </span>
+    <span *ngIf="!($enterprises | async)" class="picker-arrow">
+      <fa-icon [icon]="plus"></fa-icon>
+    </span>
+  </div>
+  <div
+    ngbDropdownMenu
+    aria-labelledby="enterprisePicker"
+    class="dropdown-items"
+    *ngIf="$enterprises | async as enterprises"
+  >
+    <button
+      *ngFor="let enterprise of enterprises"
+      ngbDropdownItem
+      (click)="selectEnterprise(enterprise)"
+    >
+      {{ enterprise }}
+    </button>
   </div>
 </div>

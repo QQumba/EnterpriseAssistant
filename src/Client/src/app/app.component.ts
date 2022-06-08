@@ -2,9 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { AppUser } from './models/appState/app-user.model';
-import { userAuthenticated } from './store/actions/appState.actions';
+import {
+  enterpriseIdChanged,
+  userAuthenticated
+} from './store/actions/appState.actions';
 
 const DefaultLang = 'en';
 
@@ -22,7 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private translate: TranslateService,
     private authService: OidcSecurityService,
-    private store: Store
+    private store: Store,
+    private cookieService: CookieService
   ) {
     translate.setDefaultLang(DefaultLang);
     translate.use(DefaultLang);
@@ -41,12 +46,16 @@ export class AppComponent implements OnInit, OnDestroy {
             name: userData.name,
             email: userData.email
           };
-          const enterpirseIds = userData.enterpirse_ids as string | undefined;
+          const enterpirseIds = userData.enterprise_ids as string | undefined;
           if (enterpirseIds) {
             appUser.enterpriseIds = enterpirseIds?.split(' ');
           }
           console.log(appUser);
           this.store.dispatch(userAuthenticated(appUser));
+          const enterpriseId = this.cookieService.get('enterpriseId');
+          if (enterpriseId) {
+            this.store.dispatch(enterpriseIdChanged({ enterpriseId }));
+          }
         }
       });
   }

@@ -1,5 +1,5 @@
 .enterprise-picker {
-  padding: 1em;
+  padding: 0.5em 1em;
   border-top: 1px solid rgb(207, 207, 207);
   display: flex;
 
@@ -9,12 +9,12 @@
 
   .expanded {
     transform: rotate(180deg);
-    transition: transform 0.1s ease-out;
+    transition: transform 0.2s ease-out;
   }
 
   .folded {
     transform: rotate(0deg);
-    transition: transform 0.1s ease-out;
+    transition: transform 0.2s ease-out;
   }
 
   &:hover {
@@ -34,4 +34,12 @@
     max-height: 5em;
     padding: 1em;
   }
+}
+
+.dropdown-items {
+  width: 100%;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }

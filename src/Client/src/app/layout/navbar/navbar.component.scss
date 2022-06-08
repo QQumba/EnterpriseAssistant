@@ -28,6 +28,7 @@ $nav-hover: #b5b5b5;
     font-size: 1.2rem;
     width: 16rem;
     text-align: center;
+    font-weight: 500;
   }
 
   .account-group {
@@ -65,7 +66,7 @@ $nav-hover: #b5b5b5;
     fa-icon {
       color: inherit;
       margin: 0 0 0 0.4em;
-      transition: transform .1s ease-out;
+      transition: transform 0.1s ease-out;
     }
 
     &:hover {
@@ -74,11 +75,33 @@ $nav-hover: #b5b5b5;
       cursor: pointer;
     }
 
-    &:active, &:focus {
-      // background-color: #353d47;
-      fa-icon{
-        transform: rotate(-90deg);
+    .navbar-menu-opened {
+      transform: rotate(-90deg);
+    }
+  }
+
+  .navbar-menu-actions {
+    a,
+    button {
+      cursor: pointer;
+
+      &:focus {
+        background-color: rgb(197, 198, 202);
+        color: black;
       }
     }
+
+    .dropdown-divider {
+      margin-left: 0;
+    }
+
+    .user-email {
+      color: #3d3d3d;
+      font-size: 0.8em;
+    }
+  }
+
+  .dropdown-toggle::after {
+    display: none;
   }
 }

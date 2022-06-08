@@ -50,6 +50,7 @@ namespace EnterpriseAssistant.Identity
 			app.UseStaticFiles();
 
 			app.UseRouting();
+			// todo: this can be limited to API and SPA client
 			app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader());
 
 			app.UseIdentityServer();
@@ -61,6 +62,7 @@ namespace EnterpriseAssistant.Identity
 					pattern: "{controller}/{action}");
 			});
 
+			// todo: redirect to SPA
 			app.Use(async (context, next) =>
 			{
 				await next();

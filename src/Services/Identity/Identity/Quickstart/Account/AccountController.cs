@@ -202,7 +202,7 @@ namespace EnterpriseAssistant.Identity.Quickstart.Account
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
             }
 
-            return View("LoggedOut", vm);
+            return Redirect(vm.PostLogoutRedirectUri);
         }
 
         [HttpGet]

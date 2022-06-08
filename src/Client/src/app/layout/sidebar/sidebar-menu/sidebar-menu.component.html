@@ -1,0 +1,15 @@
+<div class="action-group">
+  <div class="action-group-header">
+    {{ menu.title | translate }}
+  </div>
+  <a
+    *ngFor="let action of menu.actions"
+    class="action"
+    routerLink="{{action.route}}"
+  >
+    <div class="action-icon">
+      <fa-icon [icon]="action.icon"></fa-icon>
+    </div>
+    {{ action.text | translate }}</a
+  >
+</div>

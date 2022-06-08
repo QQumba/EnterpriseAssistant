@@ -14,7 +14,7 @@ import {
   switchMap
 } from 'rxjs';
 
-const URL = 'https://localhost:5002/api/enterprise/isIdAvailable';
+const URL = 'api/enterprise/exists';
 
 @Injectable({ providedIn: 'root' })
 export class EnterpriseIdValidator implements AsyncValidator {

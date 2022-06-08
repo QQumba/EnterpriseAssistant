@@ -15,7 +15,11 @@ import { SidebarMenuActionComponent } from './components/sidebar/sidebar-menu-ac
 import { EnterpriseCreateEnterpriseComponent } from './components/enterprise/enterprise-create-enterprise/enterprise-create-enterprise.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from './components/utilities/loader/loader.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS
+} from '@angular/common/http';
 import { EnterpriseUsersComponent } from './components/enterprise/enterprise-users/enterprise-users.component';
 import { EnterpriseUsersCreateUserComponent } from './components/enterprise/enterprise-users/enterprise-users-create-user/enterprise-users-create-user.component';
 import { FormSegmentComponent } from './components/utilities/form-segment/form-segment.component';
@@ -34,6 +38,7 @@ import { SidebarMenuComponent } from './layout/sidebar/sidebar-menu/sidebar-menu
 import { StartComponent } from './components/start/start.component';
 import { StoreModule } from '@ngrx/store';
 import { appUserReducer } from './store/reducers/app-user.reducer';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -80,7 +85,13 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       appUser: appUserReducer
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

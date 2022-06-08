@@ -6,6 +6,7 @@
     *ngFor="let action of menu.actions"
     class="action"
     routerLink="{{action.route}}"
+    routerLinkActive="active-link"
   >
     <div class="action-icon">
       <fa-icon [icon]="action.icon"></fa-icon>

@@ -9,14 +9,14 @@ import {
   faUsers,
   faWallet
 } from '@fortawesome/free-solid-svg-icons';
-import { filter, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SidebarMenu } from 'src/app/models/helpers/sidebar-menu.model';
 
 const startMenu: SidebarMenu = {
   title: 'start.sidebar.title',
   actions: [
-    { route: '#', text: 'start.sidebar.create-enterprise', icon: faBuilding },
-    { route: '#', text: 'start.sidebar.invites', icon: faUserPlus }
+    { route: 'create-enterprise', text: 'start.sidebar.create-enterprise', icon: faBuilding },
+    { route: 'invites', text: 'start.sidebar.invites', icon: faUserPlus }
   ]
 };
 

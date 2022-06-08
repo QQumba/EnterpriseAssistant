@@ -39,6 +39,7 @@ public class GetUserDepartmentsHandler
             .Where(du => du.UserId == user.Id)
             .Include(du => du.Department)
             .Select(du => du.Department)
+            .Where(d => d.IsSoftDeleted == false)
             .ToListAsync(cancellationToken);
 
         if (departments.Any() == false)

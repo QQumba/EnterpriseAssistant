@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using EnterpriseAssistant.Identity.DataTransfer;
 using EnterpriseAssistant.Identity.DTOs;
 using EnterpriseAssistant.Identity.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,33 +18,15 @@ namespace EnterpriseAssistant.Identity.Quickstart.Account
 		}
 
 		[HttpPost("create")]
-		public async Task<ActionResult<UserDto>> CreateUser(IdentityUserCreateDto userDto)
+		public async Task<ActionResult<UserDto>> CreateUser(UserCreateDto userDto)
 		{
-			var user = await _userService.GetUserByLoginAsync(userDto.Login);
+			var user = await _userService.GetUserByEmailAsync(userDto.Email);
 			if (user is not null)
 			{
-				return BadRequest($"User with login: {userDto.Login} already exist");
+				return BadRequest($"User with login: {userDto.Email} already exist");
 			}
 
 			var createdUser = await _userService.CreateUserAsync(userDto);
-			if (createdUser is null)
-			{
-				return BadRequest("User cannot be created");
-			}
-
-			return Created(nameof(CreateUser), createdUser);
-		}
-
-		[HttpPut("update")]
-		public async Task<ActionResult<UserDto>> UpdateUser(UserDto userDto)
-		{
-			var user = await _userService.GetUserByLoginAsync(userDto.Login);
-			if (user is not null)
-			{
-				return BadRequest($"User with login: {userDto.Login} not found");
-			}
-
-			var createdUser = await _userService.UpdateUserAsync(userDto);
 			if (createdUser is null)
 			{
 				return BadRequest("User cannot be created");

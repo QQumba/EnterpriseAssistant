@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
+using Dapper;
 using EnterpriseAssistant.Identity.DataAccess.Entities;
+using EnterpriseAssistant.Identity.DataAccess.Helpers;
 
 namespace EnterpriseAssistant.Identity.DataAccess
 {
@@ -12,22 +14,25 @@ namespace EnterpriseAssistant.Identity.DataAccess
         public UserRepository(IDbConnection connection)
         {
             _connection = connection;
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
 
         public async Task<User> CreateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            var now = DateTime.UtcNow;
+            user.CreatedAt = now;
+            user.UpdatedAt = now;
+
+            var query = SqlHelper.ReadSql("user_create");
+            var createdUser = await _connection.QueryFirstOrDefaultAsync<User>(query, user);
+            return createdUser;
         }
 
-        // todo: replace by valid logic
-        public async Task<User> GetUserByLogin(string login)
+        public async Task<User> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> UpdateUser(User user)
-        {
-            throw new NotImplementedException();
+            var query = SqlHelper.ReadSql("user_read");
+            var user = await _connection.QueryFirstOrDefaultAsync<User>(query, new {Email = email});
+            return user;
         }
     }
 }

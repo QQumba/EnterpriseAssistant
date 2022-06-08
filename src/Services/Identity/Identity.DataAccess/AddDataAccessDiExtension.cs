@@ -11,7 +11,7 @@ namespace EnterpriseAssistant.Identity.DataAccess
         public static void AddDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
             // services.AddScoped<IUserRepository, UserRepository>();
-            services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddTransient<IDbConnection>(
                 db =>
                 {

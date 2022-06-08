@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DepartmentService.API.Commands;
+using DepartmentService.Contract.Commands;
 using DepartmentService.Contract.DataTransfer;
 using EnterpriseAssistant.Application.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using UserService.Contract.DataTransfer;
 
 namespace DepartmentService.API.Controllers;
 
-[AllowAnonymous]
+[Authorize(Policy = "EnterpriseUser")]
 [ApiController]
 [Route("api/department")]
 public class DepartmentController : ControllerBase
@@ -23,87 +23,56 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpGet("{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartmentById(
+    public async Task<ActionResult<DepartmentDto>> GetDepartmentById(
         [Range(1, long.MaxValue), FromRoute] long departmentId,
         [FromQuery] bool includeChild = false)
     {
-        var result = await _mediator.Send(new GetDepartmentById(departmentId, includeChild));
-
-        return result.Match<ActionResult>(Ok, x => NotFound());
+        var authContext = User.GetAuthContext();
+        var result = await _mediator.Send(new GetDepartmentById(departmentId, authContext, includeChild));
+        return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
     }
 
     [HttpGet]
     [SwaggerOperation(Summary = "Get user departments", Description = "Get user departments")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserDepartments()
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartments()
     {
         var authContext = User.GetAuthContext();
         var result = await _mediator.Send(new GetUserDepartments(authContext));
         return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
     }
 
-    [HttpGet("subordinate/{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetSubordinateDepartments(
+    [HttpGet("{departmentId:long}/child")]
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetChildDepartments(
         [Range(1, long.MaxValue), FromRoute] long departmentId)
     {
         throw new NotImplementedException();
-    }
-
-    [HttpGet("my/subordinate")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserSubordinateDepartments()
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpGet("test/recursive")]
-    public async Task<ActionResult<DepartmentDto>> GetRecursiveDepartments(
-        [Range(0, int.MaxValue), FromQuery] int nestingLevel)
-    {
-        var root = new DepartmentDto()
-        {
-            Id = 0,
-            Name = "root"
-        };
-
-        var lastChild = root;
-        for (var i = 1; i < nestingLevel + 1; i++)
-        {
-            var department = new DepartmentDto()
-            {
-                Id = i,
-                Name = $"name {i}",
-                ParentDepartmentId = lastChild.Id
-            };
-
-            lastChild.ChildDepartments.Add(department);
-
-            lastChild = department;
-        }
-
-        return Ok(root);
     }
 
     [HttpPost]
     [SwaggerOperation(Summary = "Create department", Description = "Create department")]
     public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateDto model)
     {
-        var result = await _mediator.Send(new CreateDepartment(model));
-        return result.Match(d => CreatedAtAction(nameof(CreateDepartment), d));
+        var authContext = User.GetAuthContext();
+        var departmentAlreadyExists = await _mediator.Send(new CheckIfDepartmentExists(model.Name, authContext));
+        if (departmentAlreadyExists)
+        {
+            return BadRequest($"Department with name {model.Name} already exists");
+        }
+
+        var result = await _mediator.Send(new CreateDepartment(model, authContext));
+        return result.Match<ActionResult>(
+            d => CreatedAtAction(nameof(CreateDepartment), d),
+            e => BadRequest(e.Message));
     }
 
-    [HttpGet("users/{departmentId:long}")]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetDepartmentUsers(
-        [Range(1, long.MaxValue), FromRoute] long departmentId)
+    [HttpDelete("{departmentId:long}")]
+    [SwaggerResponse(204, "Department deleted")]
+    [SwaggerResponse(404, "Department not found")]
+    [SwaggerOperation(Summary = "Delete department")]
+    public async Task<ActionResult> DeleteDepartment([Range(1, long.MaxValue), FromRoute] long departmentId)
     {
-        throw new NotImplementedException();
-    }
-
-    [HttpPost("{departmentId:long}/add/user")]
-    [SwaggerResponse(204, "User added to department")]
-    [SwaggerResponse(404, "Department or user not found")]
-    [SwaggerOperation(Summary = "Add user to department")]
-    public async Task<ActionResult> AddUser([Range(1, long.MaxValue), FromRoute] long departmentId,
-        [Range(1, long.MaxValue), FromBody] long userId)
-    {
-        throw new NotImplementedException();
+        var authContext = User.GetAuthContext();
+        var response = await _mediator.Send(new DeleteDepartment(departmentId, authContext));
+        return response.Match<ActionResult>(x => NoContent(), e => NotFound(e.Message));
     }
 }

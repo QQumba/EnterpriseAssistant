@@ -13,5 +13,19 @@
         "add-enterprise": "Create enterprise"
       }
     }
+  },
+  "department":{
+    "sidebar":{
+      "title": "Department",
+      "overview": "Overview",
+      "users": "Users"
+    }
+  },
+  "start":{
+    "sidebar":{
+      "title": "Pick an option",
+      "create-enterprise": "Create enterprise",
+      "invites": "Invites"
+    }
   }
 }

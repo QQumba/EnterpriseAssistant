@@ -22,9 +22,18 @@ import { FormSegmentComponent } from './components/utilities/form-segment/form-s
 import { FormInputComponent } from './components/utilities/form-input/form-input.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdown,
+  NgbDropdownModule,
+  NgbToast,
+  NgbToastModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
 import { AuthConfigModule } from './auth/auth-config.module';
+import { SidebarMenuComponent } from './layout/sidebar/sidebar-menu/sidebar-menu.component';
+import { StartComponent } from './components/start/start.component';
+import { StoreModule } from '@ngrx/store';
+import { appUserReducer } from './store/reducers/app-user.reducer';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -47,7 +56,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     EnterpriseUsersCreateUserComponent,
     FormSegmentComponent,
     FormInputComponent,
-    ToastContainerComponent
+    ToastContainerComponent,
+    SidebarMenuComponent,
+    StartComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +74,11 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       }
     }),
     NgbToastModule,
-    AuthConfigModule
+    NgbDropdownModule,
+    AuthConfigModule,
+    StoreModule.forRoot({
+      appUser: appUserReducer
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

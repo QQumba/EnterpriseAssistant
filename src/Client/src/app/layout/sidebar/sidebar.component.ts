@@ -19,4 +19,6 @@ export class SidebarComponent {
   project = faProjectDiagram;
   user = faUser;
   billing = faWallet;
+
+  
 }

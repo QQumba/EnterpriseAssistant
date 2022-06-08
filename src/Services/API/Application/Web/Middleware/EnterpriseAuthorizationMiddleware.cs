@@ -13,7 +13,7 @@ public class EnterpriseAuthorizationMiddleware
 
     public Task Invoke(HttpContext context)
     {
-        var enterpriseId = context.Request.Query["auth_enterprise_id"].FirstOrDefault();
+        var enterpriseId = context.Request.Headers["auth-enterprise"].FirstOrDefault();
         var userEnterpriseIds = context.User.FindFirst("enterprise_ids")?.Value.Split(' ');
         if (string.IsNullOrEmpty(enterpriseId) == false
             && userEnterpriseIds is not null

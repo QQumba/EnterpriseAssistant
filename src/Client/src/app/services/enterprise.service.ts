@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserCreate } from '../models/user-create.model';
 import { User } from '../models/user.model';
+import { API_URL } from '../util/urls';
 
 // todo: move to config
-const URL = 'https://localhost:5002/api/enterprise/';
+const URL = API_URL + 'enterprise/';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class EnterpriseService {
     return this.client.get<boolean>(URL + 'user/exists', {
       params: params
     });
+  }
+
+  getEneterpriseUsers(): Observable<User[]> {
+    return this.client.get<User[]>(URL + 'user');
   }
 }

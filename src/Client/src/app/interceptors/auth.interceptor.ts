@@ -10,6 +10,8 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Store } from '@ngrx/store';
 import { selectEnterpriseId } from '../store/selectors/app-user.selector';
 
+const AUTH_URL = 'https://localhost:5004';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: OidcSecurityService, private store: Store) {}
@@ -32,20 +34,19 @@ export class AuthInterceptor implements HttpInterceptor {
       .subscribe((id) => (enterpriseId = id));
     let authHeaders = request.headers;
 
-    if (token) {
-      authHeaders = authHeaders.append('Authorization', 'Bearer ' + token);
-    }
+    if (request.url.indexOf(AUTH_URL) == -1) {
+      if (token) {
+        authHeaders = authHeaders.append('Authorization', 'Bearer ' + token);
+      }
 
-    let params = request.params;
-    if (enterpriseId) {
-      // params = params.append('auth_enterprise_id', enterpriseId);
-      authHeaders = authHeaders.append('auth-enterprise', enterpriseId);
+      if (enterpriseId) {
+        authHeaders = authHeaders.append('auth-enterprise', enterpriseId);
+      }
     }
 
     const apiRequest = request.clone({
       url: request.url,
-      headers: authHeaders,
-      params: params
+      headers: authHeaders
     });
 
     return next.handle(apiRequest);

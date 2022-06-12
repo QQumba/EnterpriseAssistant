@@ -46,15 +46,21 @@ export class AppComponent implements OnInit, OnDestroy {
             name: userData.name,
             email: userData.email
           };
+          console.log(appUser);
+
           const enterpirseIds = userData.enterprise_ids as string | undefined;
           if (enterpirseIds) {
             appUser.enterpriseIds = enterpirseIds?.split(' ');
+            if (appUser.enterpriseIds.length == 1) {
+              this.cookieService.set('enterpriseId', appUser.enterpriseIds[0]);
+            }
           }
-          console.log(appUser);
+
           this.store.dispatch(userAuthenticated(appUser));
           const enterpriseId = this.cookieService.get('enterpriseId');
           if (enterpriseId) {
             this.store.dispatch(enterpriseIdChanged({ enterpriseId }));
+            console.log('user authorized in ' + enterpriseId);
           }
         }
       });

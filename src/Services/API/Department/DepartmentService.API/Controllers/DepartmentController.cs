@@ -34,12 +34,22 @@ public class DepartmentController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(Summary = "Get user departments", Description = "Get user departments")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartments()
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetUserDepartments()
     {
         var authContext = User.GetAuthContext();
         var result = await _mediator.Send(new GetUserDepartments(authContext));
-        return result.Match<ActionResult>(Ok, e => NotFound(e.Message));
+        return Ok(result);
     }
+
+    [HttpGet("by-enterprise")]
+    [SwaggerOperation(Summary = "Get enterprise departments")]
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetEnterpriseDepartments()
+    {
+        var authContext = User.GetAuthContext();
+        var result = await _mediator.Send(new GetEnterpriseDepartments(authContext));
+        return Ok(result);
+    }
+
 
     [HttpGet("{departmentId:long}/child")]
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetChildDepartments(

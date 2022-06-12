@@ -1,31 +1,37 @@
 {
-  "navbar":{
+  "navbar": {
     "menu": "menu"
   },
-  "enterprise":{
-    "sidebar":{
+  "enterprise": {
+    "sidebar": {
       "title": "Enterprise",
       "departments": "Departments",
       "projects": "Projects",
       "users": "Users",
       "billings": "Billings",
-      "enterprise-picker":{
+      "invites": "Invites",
+      "enterprise-picker": {
         "add-enterprise": "Create enterprise"
       }
     }
   },
-  "department":{
-    "sidebar":{
+  "department": {
+    "sidebar": {
       "title": "Department",
       "overview": "Overview",
       "users": "Users"
     }
   },
-  "start":{
-    "sidebar":{
+  "start": {
+    "sidebar": {
       "title": "Pick an option",
       "create-enterprise": "Create enterprise",
       "invites": "Invites"
+    }
+  },
+  "user": {
+    "invite": {
+      "empty": "You have no invites"
     }
   }
 }

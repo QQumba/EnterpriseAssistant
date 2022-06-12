@@ -71,7 +71,7 @@ namespace EnterpriseAssistant.Identity
                 RequireClientSecret = false,
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
-                RedirectUris = { SpaUrl, $"{SpaUrl}/signin-oidc" },
+                RedirectUris = { SpaUrl, $"{SpaUrl}/signin-oidc", $"{SpaUrl}/silent-renew.html" },
                 PostLogoutRedirectUris = { SpaUrl, $"{SpaUrl}/signout-callback-oidc" },
                 AllowedCorsOrigins = { $"{SpaUrl}" },
                 AllowOfflineAccess = true,

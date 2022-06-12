@@ -25,11 +25,11 @@ export class EnterpriseIdValidator implements AsyncValidator {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((value) => this.isIdAvailable(value)),
-      map((isAvailable) => {
-        if (isAvailable) {
-          return null;
+      map((exists) => {
+        if (exists) {
+          return { error: 'Id is already taken' };
         }
-        return { error: 'Id is already taken' };
+        return null;
       }),
       first()
     );

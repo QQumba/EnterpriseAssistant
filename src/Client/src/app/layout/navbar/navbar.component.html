@@ -15,7 +15,6 @@
       class="navbar-menu-links"
     >
       <a ngbDropdownItem [routerLink]="'enterprise'">Enterprise</a>
-      <a ngbDropdownItem [routerLink]="'department'">Department</a>
     </div>
   </div>
   <div class="spacer"></div>
@@ -24,7 +23,7 @@
       <!-- <fa-icon [icon]="account"></fa-icon> -->
       <span>{{ ($appUser | async)?.name }}</span>
       <img
-        src="https://i.pinimg.com/474x/34/30/a0/3430a061b7435ef0c58b1eff94453556.jpg"
+        src="../../../assets/Portrait_Placeholder.png"
         alt="onimel"
       />
       <fa-icon [icon]="caretDown"></fa-icon>
@@ -38,14 +37,16 @@
         {{ ($appUser | async)?.email }}
       </div>
       <div class="dropdown-divider"></div>
-      <a ngbDropdownItem [routerLink]="'enterprise'">
-        <fa-icon [icon]="gear"></fa-icon>
-        Settings
-      </a>
-      <a ngbDropdownItem [routerLink]="'department'">
-        <fa-icon [icon]="invite"></fa-icon>
-        Invites
-      </a>
+      <ng-container *ngIf="$isEnterpriseUser | async">
+        <a ngbDropdownItem [routerLink]="'/user/settings'">
+          <fa-icon [icon]="gear"></fa-icon>
+          Settings
+        </a>
+        <a ngbDropdownItem [routerLink]="'user/invite'">
+          <fa-icon [icon]="invite"></fa-icon>
+          Invites
+        </a>
+      </ng-container>
       <button ngbDropdownItem (click)="logout()">
         <fa-icon [icon]="signout"></fa-icon>
         Logout

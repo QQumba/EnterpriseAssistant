@@ -1,15 +1,15 @@
-<div ngbDropdown>
+<div
+  *ngIf="$enterpriseId | async as enterpriseId; else unauthorized"
+  ngbDropdown
+  (openChange)="isExpanded = !isExpanded"
+>
   <div
     class="enterprise-picker"
     id="enterprisePicker"
-    (click)="isExpanded = !isExpanded"
     ngbDropdownToggle
   >
-    <span *ngIf="$enterpriseId | async as enterpriseId">
+    <span>
       {{ enterpriseId }}
-    </span>
-    <span *ngIf="!($enterpriseId | async)">
-      {{ 'enterprise.sidebar.enterprise-picker.add-enterprise' | translate }}
     </span>
     <span class="spacer"></span>
     <span
@@ -19,9 +19,6 @@
     >
       <fa-icon [icon]="arrowUp"></fa-icon>
     </span>
-    <span *ngIf="!($enterprises | async)" class="picker-arrow">
-      <fa-icon [icon]="plus"></fa-icon>
-    </span>
   </div>
   <div
     ngbDropdownMenu
@@ -29,6 +26,11 @@
     class="dropdown-items"
     *ngIf="$enterprises | async as enterprises"
   >
+    <a [routerLink]="'/create-enterprise'" ngbDropdownItem class="create-new">
+      Create new enterprise
+      <div class="spacer"></div>
+      <fa-icon [icon]="plus"></fa-icon>
+    </a>
     <button
       *ngFor="let enterprise of enterprises"
       ngbDropdownItem
@@ -38,3 +40,13 @@
     </button>
   </div>
 </div>
+
+<ng-template #unauthorized>
+  <a class="enterprise-picker" [routerLink]="'/create-enterprise'">
+    {{ 'enterprise.sidebar.enterprise-picker.add-enterprise' | translate }}
+    <span class="spacer"></span>
+    <span *ngIf="!($enterprises | async)" class="picker-arrow">
+      <fa-icon [icon]="plus"></fa-icon>
+    </span>
+  </a>
+</ng-template>

@@ -9,7 +9,7 @@ using OneOf;
 
 namespace DepartmentService.API.Commands;
 
-public class GetUserDepartments : IRequest<OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
+public class GetUserDepartments : IRequest<IEnumerable<DepartmentDto>>
 {
     public GetUserDepartments(AuthContext authContext)
     {
@@ -20,7 +20,7 @@ public class GetUserDepartments : IRequest<OneOf<IEnumerable<DepartmentDto>, INo
 }
 
 public class GetUserDepartmentsHandler
-    : IRequestHandler<GetUserDepartments, OneOf<IEnumerable<DepartmentDto>, INotFoundError>>
+    : IRequestHandler<GetUserDepartments, IEnumerable<DepartmentDto>>
 {
     private readonly DbContextFactory _factory;
 
@@ -29,7 +29,7 @@ public class GetUserDepartmentsHandler
         _factory = factory;
     }
 
-    public async Task<OneOf<IEnumerable<DepartmentDto>, INotFoundError>> Handle(GetUserDepartments request,
+    public async Task<IEnumerable<DepartmentDto>> Handle(GetUserDepartments request,
         CancellationToken cancellationToken)
     {
         var db = _factory.CreateReadOnlyContext(request.AuthContext);
@@ -42,11 +42,6 @@ public class GetUserDepartmentsHandler
             .Where(d => d.IsSoftDeleted == false)
             .ToListAsync(cancellationToken);
 
-        if (departments.Any() == false)
-        {
-            return new NotFoundError("Departments not found");
-        }
-        
         return departments.Adapt<List<DepartmentDto>>();
     }
 }

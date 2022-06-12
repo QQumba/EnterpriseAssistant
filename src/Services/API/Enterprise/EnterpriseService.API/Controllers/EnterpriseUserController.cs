@@ -43,7 +43,7 @@ public class EnterpriseUserController : ControllerBase
                 Login = eu.Login,
                 Email = eu.User.Email,
                 FirstName = eu.User.FirstName,
-                LastName = eu.User.FirstName
+                LastName = eu.User.LastName
             })
             .ToListAsync();
 
@@ -57,5 +57,4 @@ public class EnterpriseUserController : ControllerBase
         var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId!, login));
         return Ok(result);
     }
-    
 }

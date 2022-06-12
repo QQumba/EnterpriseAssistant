@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <h4 class="modal-title">Invite new user</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form action="put" [formGroup]="inviteForm">
+    <div class="from-group mb-2">
+      <label class="required">Email</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        [ngClass]="{ 'is-invalid': hasError('email') }"
+        placeholder="Email"
+        formControlName="email"
+      />
+      <small *ngIf="hasError('email')">
+        <div *ngIf="getValidationError('email', 'email') as error">
+          <fa-icon [icon]="warning"></fa-icon>
+          Invalid email
+        </div>
+        <div *ngIf="getValidationError('email', 'required') as error">
+          <fa-icon [icon]="warning"></fa-icon>
+          This field is required
+        </div>
+      </small>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="submit()">
+    Invite new user
+  </button>
+</div>

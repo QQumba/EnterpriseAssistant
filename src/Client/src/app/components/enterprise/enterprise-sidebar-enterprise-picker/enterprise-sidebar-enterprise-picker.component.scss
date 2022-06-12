@@ -43,3 +43,13 @@
 .dropdown-toggle::after {
   display: none;
 }
+
+.create-new {
+  display: flex;
+  justify-content: space-between;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

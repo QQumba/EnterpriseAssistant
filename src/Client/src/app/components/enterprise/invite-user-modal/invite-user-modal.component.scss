@@ -1,0 +1,23 @@
+@import '../../../../variables.scss';
+$helper-color: rgb(108, 108, 108);
+
+label {
+  font-size: 0.8em;
+  color: $helper-color;
+  font-weight: 500;
+}
+
+.required {
+  &::after {
+    margin-left: 2pt;
+    content: '*';
+    color: $danger;
+  }
+}
+
+small {
+  font-size: 0.8em;
+  color: $helper-color;
+  font-weight: 400;
+  color: $danger;
+}

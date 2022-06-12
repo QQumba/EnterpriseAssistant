@@ -22,9 +22,14 @@ export class EnterpriseSidebarEnterprisePickerComponent {
   isExpanded = false;
 
   $enterpriseId = this.store.select(selectEnterpriseId);
-  $enterprises = this.store
-    .select(selectAppUser)
-    .pipe(map((appUser) => appUser.enterpriseIds));
+  $enterprises = this.store.select(selectAppUser).pipe(
+    map((appUser) => {
+      if (appUser.enterpriseId == null) {
+        return appUser.enterpriseIds;
+      }
+      return appUser.enterpriseIds?.filter((id) => id != appUser.enterpriseId);
+    })
+  );
 
   constructor(private store: Store, private cookieService: CookieService) {}
 

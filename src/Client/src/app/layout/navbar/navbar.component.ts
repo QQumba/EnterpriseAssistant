@@ -13,6 +13,7 @@ import {
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { map } from 'rxjs';
 import { selectAppUser } from 'src/app/store/selectors/app-user.selector';
 
 @Component({
@@ -36,6 +37,7 @@ export class NavbarComponent {
 
   isMenuOpened = false;
   $appUser = this.store.select(selectAppUser);
+  $isEnterpriseUser = this.$appUser.pipe(map((u) => !!u.enterpriseId));
 
   constructor(
     private translate: TranslateService,

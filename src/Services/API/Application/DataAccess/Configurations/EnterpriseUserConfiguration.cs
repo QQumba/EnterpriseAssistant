@@ -14,7 +14,7 @@ public class EnterpriseUserConfiguration : IEntityTypeConfiguration<EnterpriseUs
             .IsUnique();
 
         builder.HasOne(eu => eu.User)
-            .WithMany()
+            .WithMany(u => u.EnterpriseUsers)
             .HasForeignKey(e => e.UserId)
             .IsRequired();
 

@@ -19,6 +19,10 @@
         formControlName="email"
       />
       <small *ngIf="hasError('email')">
+        <div *ngIf="getValidationError('email', 'error') as error">
+          <fa-icon [icon]="warning"></fa-icon>
+          {{ error }}
+        </div>
         <div *ngIf="getValidationError('email', 'email') as error">
           <fa-icon [icon]="warning"></fa-icon>
           Invalid email

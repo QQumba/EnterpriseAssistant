@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseService.API.Commands;
+using EnterpriseService.API.Helpers;
 using EnterpriseService.Contract.DataTransfer;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -55,6 +56,15 @@ public class EnterpriseUserController : ControllerBase
     {
         var enterpriseId = User.GetEnterpriseId();
         var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId!, login));
+        return Ok(result);
+    }
+    
+    [HttpGet("exists/by-email")]
+    public async Task<ActionResult<bool>> IsUserWithEmailExists([Required] [FromQuery] string email)
+    {
+        var enterpriseId = User.GetEnterpriseId()!;
+        var context = _factory.Create();
+        var result = await context.EnterpriseUsers.IsUserWithEmailExists(enterpriseId, email);
         return Ok(result);
     }
 }

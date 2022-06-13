@@ -18,6 +18,11 @@ const routes: Routes = [
     canActivate: [EnterpriseUserGuard]
   },
   {
+    path: 'user/invite',
+    component: InviteComponent,
+    canActivate: [EnterpriseUserGuard]
+  },
+  {
     path: 'department/:id/users',
     component: DepartmentUsersComponent,
     canActivate: [EnterpriseUserGuard]

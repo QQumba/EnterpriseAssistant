@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -7,19 +7,25 @@ import {
   UrlTree
 } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map, Observable, take } from 'rxjs';
+import { map, Observable, Subscription, take } from 'rxjs';
 import { selectEnterpriseId } from '../store/selectors/app-user.selector';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NewUserGuard implements CanActivate {
+export class NewUserGuard implements CanActivate, OnDestroy {
+  private subscription?: Subscription;
+
   $newUser = this.store.select(selectEnterpriseId).pipe(
     take(1),
     map((id) => !!id)
   );
 
   constructor(private store: Store, private router: Router) {}
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -30,7 +36,7 @@ export class NewUserGuard implements CanActivate {
     | boolean
     | UrlTree {
     let newUser = true;
-    this.$newUser.subscribe((nu) => (newUser = nu)).unsubscribe();
+    this.subscription = this.$newUser.subscribe((nu) => (newUser = nu));
     if (newUser) {
       return this.router.parseUrl('/enterprise');
     }

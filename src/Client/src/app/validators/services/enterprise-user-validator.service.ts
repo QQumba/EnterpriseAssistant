@@ -38,6 +38,23 @@ export class EnterpriseUserValidatorService {
     };
   }
 
+  existingEmailValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return control.valueChanges.pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap((email) => this.isUserWithEmailExists(email)),
+        map((exists) => {
+          if (exists) {
+            return { error: 'User with provided email already invited' };
+          }
+          return null;
+        }),
+        first()
+      );
+    };
+  }
+
   private isUserExists(
     login: string,
     enterpriseId: string
@@ -45,6 +62,16 @@ export class EnterpriseUserValidatorService {
     const params = new HttpParams().append('login', login);
     return this.client.get<boolean>(
       `${API_URL}enterprise/${enterpriseId}/user/exists`,
+      {
+        params: params
+      }
+    );
+  }
+
+  private isUserWithEmailExists(email: string): Observable<boolean> {
+    const params = new HttpParams().append('email', email);
+    return this.client.get<boolean>(
+      `${API_URL}enterprise/user/exists/by-email`,
       {
         params: params
       }

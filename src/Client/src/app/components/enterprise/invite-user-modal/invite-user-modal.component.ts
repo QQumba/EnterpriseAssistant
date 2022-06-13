@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +8,7 @@ import { SubscriptionLog } from 'rxjs/internal/testing/SubscriptionLog';
 import { Enterprise } from 'src/app/models/enterprise.model';
 import { InviteCreate } from 'src/app/models/invite.model';
 import { API_URL } from 'src/app/util/urls';
+import { EnterpriseUserValidatorService } from 'src/app/validators/services/enterprise-user-validator.service';
 
 @Component({
   selector: 'app-invite-user-modal',
@@ -18,14 +19,22 @@ export class InviteUserModalComponent implements OnDestroy {
   warning = faCircleExclamation;
   private createInviteSubscription?: Subscription;
 
-  constructor(private cleint: HttpClient, public activeModal: NgbActiveModal) {}
+  constructor(
+    private cleint: HttpClient,
+    public activeModal: NgbActiveModal,
+    private validationService: EnterpriseUserValidatorService
+  ) {}
 
   ngOnDestroy(): void {
     this.createInviteSubscription?.unsubscribe();
   }
 
   inviteForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email])
+    email: new FormControl(
+      '',
+      [Validators.required, Validators.email],
+      [this.validationService.existingEmailValidator()]
+    )
   });
 
   submitted = false;

@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import {
   faAngleDown,
+  faAt,
+  faBell,
   faCaretDown,
   faCircleUser,
-  faUser
+  faGear,
+  faSignOut,
+  faUser,
+  faUserPlus
 } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { map } from 'rxjs';
+import { selectAppUser } from 'src/app/store/selectors/app-user.selector';
 
 @Component({
   selector: 'app-navbar',
@@ -13,15 +22,39 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  account = faCircleUser;
+  // menu
   arrowDown = faAngleDown;
 
+  // account
+  account = faCircleUser;
   caretDown = faCaretDown;
 
-  constructor(private translate: TranslateService) {}
+  // account dropdown
+  at = faAt;
+  gear = faGear;
+  invite = faUserPlus;
+  signout = faSignOut;
+
+  isMenuOpened = false;
+  $appUser = this.store.select(selectAppUser);
+  $isEnterpriseUser = this.$appUser.pipe(map((u) => !!u.enterpriseId));
+
+  constructor(
+    private translate: TranslateService,
+    private store: Store,
+    private authService: OidcSecurityService
+  ) {}
 
   switchLang(): void {
     if (this.translate.currentLang === 'en') this.translate.use('ua');
     else this.translate.use('en');
+  }
+
+  toggleMenu() {
+    this.isMenuOpened = !this.isMenuOpened;
+  }
+
+  logout() {
+    this.authService.logoff();
   }
 }

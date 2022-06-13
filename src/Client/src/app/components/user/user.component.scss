@@ -1,0 +1,11 @@
+small {
+  color: rgb(99, 99, 99);
+}
+
+.profile-img-wrapper {
+  padding: .2em;
+  .profile-img {
+    max-height: 8em;
+    aspect-ratio: 1 / 1;
+  }
+}

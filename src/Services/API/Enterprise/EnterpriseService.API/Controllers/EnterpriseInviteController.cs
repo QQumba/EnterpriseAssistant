@@ -48,6 +48,7 @@ public class EnterpriseInviteController : ControllerBase
 
         var inviteAlreadyExists = await _dbContext.Invites.AnyAsync(i =>
             i.UserEmail.Equals(inviteCreate.UserEmail) &&
+            i.EnterpriseId.Equals(enterpriseId) &&
             i.IsSoftDeleted == false &&
             i.Status == InviteStatus.Pending);
         if (inviteAlreadyExists)

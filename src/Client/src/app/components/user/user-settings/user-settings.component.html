@@ -1,0 +1,30 @@
+<div class="wrapper">
+  <div *ngIf="$user | async as user; else loading" class="card">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <div class="profile-img-wrapper" (click)="editPictrue()">
+          <div class="edit">Edit</div>
+          <img
+            src="../../../../assets/Portrait_Placeholder.png"
+            class="profile-img"
+            alt="Image"
+          />
+        </div>
+      </div>
+      <div class="col-md-4 card-body">
+        <h5 class="card-title">
+          {{ user.firstName }}
+          {{ user.lastName }}
+        </h5>
+        <small> aka </small> {{ user.login }}
+      </div>
+      <div class="col-md-4 card-body">
+        {{ user.email }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>

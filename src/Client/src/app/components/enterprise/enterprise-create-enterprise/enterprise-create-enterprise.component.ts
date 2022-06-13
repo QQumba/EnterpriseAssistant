@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -5,6 +6,11 @@ import {
   faCircleNotch,
   faFile
 } from '@fortawesome/free-solid-svg-icons';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { map, first } from 'rxjs';
+import { EnterpriseCreate } from 'src/app/models/enterprise-create.model';
+import { Enterprise } from 'src/app/models/enterprise.model';
+import { API_URL } from 'src/app/util/urls';
 import { EnterpriseIdValidator } from 'src/app/validators/enterprise-id.validator';
 
 @Component({
@@ -18,7 +24,11 @@ export class EnterpriseCreateEnterpriseComponent implements OnInit {
   warning = faCircleExclamation;
   spinner = faCircleNotch;
 
-  constructor(private idValidator: EnterpriseIdValidator) {}
+  constructor(
+    private idValidator: EnterpriseIdValidator,
+    private cleint: HttpClient,
+    private authService: OidcSecurityService
+  ) {}
 
   enterpriseFromGroup = new FormGroup({
     id: new FormControl(
@@ -26,37 +36,50 @@ export class EnterpriseCreateEnterpriseComponent implements OnInit {
       [Validators.required],
       [this.idValidator.validate.bind(this.idValidator)]
     ),
-    displayedName: new FormControl('', [Validators.required])
+    displayedName: new FormControl('', [Validators.required]),
+    userLogin: new FormControl('', [Validators.required])
   });
 
   departmentFormGroup = new FormGroup({
     name: new FormControl('', [Validators.required])
   });
 
-  userFormGroup = new FormGroup({
-    login: new FormControl('', [Validators.required]),
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl(''),
-    password: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', [Validators.required])
-  });
-
+  submitted = false;
   createEnterpriseForm = new FormGroup({
     enterprise: this.enterpriseFromGroup,
-    department: this.departmentFormGroup,
-    user: this.userFormGroup
+    department: this.departmentFormGroup
   });
 
   ngOnInit(): void {
     return;
   }
 
-  isValid(name: string): boolean | undefined {
-    const control = this.createEnterpriseForm.get(name);
-    if (!control) {
-      return false;
+  submit() {
+    this.submitted = true;
+    if (!this.createEnterpriseForm.valid) {
+      return;
     }
-    return control.untouched || control.valid;
+
+    const enterpriseCreate: EnterpriseCreate = {
+      id: this.enterpriseFromGroup.get('id')?.value,
+      displayedName: this.enterpriseFromGroup.get('displayedName')?.value,
+      userLogin: this.enterpriseFromGroup.get('userLogin')?.value,
+      departmentCreate: {
+        name: this.departmentFormGroup.get('name')?.value
+      }
+    };
+
+    this.cleint
+      .post<Enterprise>(`${API_URL}enterprise`, enterpriseCreate)
+      .pipe(
+        map((e) => !!e),
+        first()
+      )
+      .subscribe((success) => {
+        if (success) {
+          this.authService.authorize();
+        }
+      });
   }
 
   hasError(name: string): boolean {
@@ -65,7 +88,7 @@ export class EnterpriseCreateEnterpriseComponent implements OnInit {
       return false;
     }
     return (
-      (control.touched && control.invalid) || (control.dirty && control.invalid)
+      (control.touched || control.dirty || this.submitted) && control.invalid
     );
   }
 

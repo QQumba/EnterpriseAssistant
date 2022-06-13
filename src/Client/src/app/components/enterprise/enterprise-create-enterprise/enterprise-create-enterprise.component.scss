@@ -1,9 +1,17 @@
 @import '../../../../variables.scss';
 $helper-color: rgb(108, 108, 108);
 
-form {
-  padding: 2em;
+.wrapper {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  margin: 2em;
+  min-width: 60%;
+  max-width: fit-content;
 }
 
 label {
@@ -29,9 +37,9 @@ small {
 }
 
 .form-segment {
-  padding: 1em;
-  border-radius: 0.5em;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  // padding: 1em;
+  // border-radius: 0.5em;
+  // box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .inactive {

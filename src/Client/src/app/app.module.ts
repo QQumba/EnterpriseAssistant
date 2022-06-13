@@ -15,16 +15,34 @@ import { SidebarMenuActionComponent } from './components/sidebar/sidebar-menu-ac
 import { EnterpriseCreateEnterpriseComponent } from './components/enterprise/enterprise-create-enterprise/enterprise-create-enterprise.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from './components/utilities/loader/loader.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS
+} from '@angular/common/http';
 import { EnterpriseUsersComponent } from './components/enterprise/enterprise-users/enterprise-users.component';
 import { EnterpriseUsersCreateUserComponent } from './components/enterprise/enterprise-users/enterprise-users-create-user/enterprise-users-create-user.component';
 import { FormSegmentComponent } from './components/utilities/form-segment/form-segment.component';
 import { FormInputComponent } from './components/utilities/form-input/form-input.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
 import { AuthConfigModule } from './auth/auth-config.module';
+import { SidebarMenuComponent } from './layout/sidebar/sidebar-menu/sidebar-menu.component';
+import { StartComponent } from './components/start/start.component';
+import { StoreModule } from '@ngrx/store';
+import { appUserReducer } from './store/reducers/app-user.reducer';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { UserComponent } from './components/user/user.component';
+import { InviteComponent } from './components/user/invite/invite.component';
+import { InviteAcceptModalComponent } from './components/user/invite-accept-modal/invite-accept-modal.component';
+import { InviteUserModalComponent } from './components/enterprise/invite-user-modal/invite-user-modal.component';
+import { DepartmentComponent } from './components/department/department.component';
+import { DepartmentInfoComponent } from './components/department/department-info/department-info.component';
+import { DepartmentUsersComponent } from './components/department/department-users/department-users.component';
+import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -47,7 +65,17 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     EnterpriseUsersCreateUserComponent,
     FormSegmentComponent,
     FormInputComponent,
-    ToastContainerComponent
+    ToastContainerComponent,
+    SidebarMenuComponent,
+    StartComponent,
+    UserComponent,
+    InviteComponent,
+    InviteAcceptModalComponent,
+    InviteUserModalComponent,
+    DepartmentComponent,
+    DepartmentInfoComponent,
+    DepartmentUsersComponent,
+    UserSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,9 +91,20 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       }
     }),
     NgbToastModule,
-    AuthConfigModule
+    NgbDropdownModule,
+    AuthConfigModule,
+    StoreModule.forRoot({
+      appUser: appUserReducer
+    }),
+    ImageCropperModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

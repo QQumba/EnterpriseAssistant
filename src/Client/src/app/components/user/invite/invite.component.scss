@@ -1,0 +1,27 @@
+.wrapper {
+  padding: 2em;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.info {
+  padding: 1em;
+  text-align: center;
+  background-color: rgb(227, 227, 227);
+  font-weight: 500;
+}
+
+.invites {
+  min-width: 60%;
+  max-width: fit-content;
+
+  @media screen and (max-width: 900px) {
+    min-width: 100%;
+  }
+
+  .invite {
+    width: 100%;
+  }
+}

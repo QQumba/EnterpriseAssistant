@@ -13,8 +13,7 @@ import {
   Observable,
   switchMap
 } from 'rxjs';
-
-const URL = 'https://localhost:5002/api/enterprise/user/exists';
+import { API_URL } from '../util/urls';
 
 @Injectable({ providedIn: 'root' })
 export class EnterpriseUserLoginValidator implements AsyncValidator {
@@ -26,10 +25,10 @@ export class EnterpriseUserLoginValidator implements AsyncValidator {
       distinctUntilChanged(),
       switchMap((value) => this.isUserExists(value)),
       map((exists) => {
-        if (!exists) {
-          return null;
+        if (exists) {
+          return { userExists: 'User with provided login already exists' };
         }
-        return { userExists: 'User with provided login already exists' };
+        return null;
       }),
       first()
     );
@@ -37,6 +36,8 @@ export class EnterpriseUserLoginValidator implements AsyncValidator {
 
   private isUserExists(login: string): Observable<boolean> {
     const params = new HttpParams().append('login', login);
-    return this.client.get<boolean>(URL, { params: params });
+    return this.client.get<boolean>(`${API_URL}enterprise/${1}/user/exists`, {
+      params: params
+    });
   }
 }

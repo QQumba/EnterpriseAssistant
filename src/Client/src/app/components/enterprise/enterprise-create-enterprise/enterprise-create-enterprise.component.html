@@ -1,134 +1,78 @@
-<form action="post" [formGroup]="createEnterpriseForm">
-  <div formGroupName="enterprise" class="form-segment mb-4">
-    <div>Enterprise</div>
-    <div class="from-group mb-2">
-      <label class="required">Identifier</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': hasError('enterprise.id') }"
-        placeholder="Unique id of your enterprise"
-        formControlName="id"
-      />
-      <small *ngIf="hasError('enterprise.id')">
-        <div *ngIf="getValidationError('enterprise.id', 'error') as error">
+<div class="wrapper">
+  <form [formGroup]="createEnterpriseForm" #myform="ngForm" class="card">
+    <div class="card-header">Create new enterprise</div>
+    <div formGroupName="enterprise" class="card-body">
+      <h5>Enterprise</h5>
+      <div class="from-group mb-2">
+        <label class="required">Identifier</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': hasError('enterprise.id') }"
+          placeholder="Unique id of your enterprise"
+          formControlName="id"
+        />
+        <small *ngIf="hasError('enterprise.id')">
+          <div *ngIf="getValidationError('enterprise.id', 'error') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            {{ error }}
+          </div>
+          <div *ngIf="getValidationError('enterprise.id', 'required') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+        </small>
+      </div>
+      <div class="from-group mb-2">
+        <label class="required">Displayed name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': hasError('enterprise.displayedName') }"
+          placeholder="Displayed name"
+          formControlName="displayedName"
+        />
+        <small *ngIf="hasError('enterprise.displayedName')">
           <fa-icon [icon]="warning"></fa-icon>
           This field is required
-        </div>
-        <div *ngIf="getValidationError('enterprise.id', 'required') as error">
+        </small>
+      </div>
+      <div class="from-group">
+        <label class="required">Login</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': hasError('enterprise.userLogin') }"
+          placeholder="Login"
+          formControlName="userLogin"
+        />
+        <small *ngIf="hasError('enterprise.userLogin')">
           <fa-icon [icon]="warning"></fa-icon>
-          {{ error }}
-        </div>
-      </small>
+          This field is required
+        </small>
+      </div>
     </div>
-    <div class="from-group mb-2">
-      <label class="required">Displayed name</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': !isValid('enterprise.displayedName') }"
-        placeholder="Displayed name"
-        formControlName="displayedName"
-      />
-      <small *ngIf="!isValid('enterprise.displayedName')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
+    <div formGroupName="department" class="card-body">
+      <h5>Department</h5>
+      <div class="form-group">
+        <label class="required">Department name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': hasError('department.name') }"
+          placeholder="Name of root department"
+          formControlName="name"
+        />
+        <small *ngIf="hasError('department.name')">
+          <fa-icon [icon]="warning"></fa-icon>
+          This field is required
+        </small>
+      </div>
     </div>
-  </div>
-  <div formGroupName="department" class="form-segment mb-4">
-    <div>Department</div>
-    <div class="form-group mb-2">
-      <label class="required">Department name</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': !isValid('department.name') }"
-        placeholder="Name of root department"
-        formControlName="name"
-      />
-      <small [hidden]="isValid('department.name')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
+    <div class="card-body">
+      <button type="submit" class="btn btn-primary" (click)="submit()">
+        Create
+      </button>
     </div>
-  </div>
-  <div formGroupName="user" class="form-segment inactive">
-    <!-- <app-loader class="loader-wrapper"></app-loader> -->
-    <div>Enterprise admin account</div>
-    <div class="form-group">
-      <label class="required">Login</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': !isValid('user.login') }"
-        placeholder="Login"
-        formControlName="login"
-      />
-      <small [hidden]="isValid('user.login')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label class="required">First name</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': hasError('user.firstName') }"
-        placeholder="First name"
-        formControlName="firstName"
-      />
-      <small *ngIf="hasError('user.firstName')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label>Last name</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': hasError('user.lastName') }"
-        placeholder="Last name"
-        formControlName="lastName"
-      />
-      <small *ngIf="hasError('user.lastName')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label class="required">Password</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': hasError('user.password') }"
-        placeholder="Password"
-        formControlName="password"
-      />
-      <small *ngIf="hasError('user.password')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label class="required">Confirm password</label>
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [ngClass]="{ 'is-invalid': hasError('user.confirmPassword') }"
-        placeholder="Confirm password"
-        formControlName="confirmPassword"
-      />
-      <small *ngIf="hasError('user.confirmPassword')">
-        <fa-icon [icon]="warning"></fa-icon>
-        This field is required
-      </small>
-    </div>
-  </div>
-</form>
+  </form>
+</div>

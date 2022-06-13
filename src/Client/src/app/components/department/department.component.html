@@ -1,0 +1,22 @@
+<div class="wrapper">
+  <div class="d-flex mb-4">
+    <div class="spacer"></div>
+    <button class="btn btn-primary">Create new deparment</button>
+  </div>
+  <div *ngIf="$departments | async as departments; else loading">
+    <div *ngFor="let deparment of departments" class="card">
+      <div class="card-header">
+        <div>{{ deparment.name }}</div>
+      </div>
+      <div class="card-body">
+        <a [routerLink]="['/department', deparment.id]" class="btn btn-primary"
+          >View</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <app-loader></app-loader>
+  </ng-template>
+</div>

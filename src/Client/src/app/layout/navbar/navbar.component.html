@@ -1,17 +1,56 @@
 <nav id="navbar">
-  <div class="enterprise-name">Enterprise name</div>
-  <div class="navbar-menu">
-    Menu
-    <fa-icon [icon]="arrowDown" size="xs"></fa-icon>
+  <div class="enterprise-name">Enterprise Assistant</div>
+  <div ngbDropdown (openChange)="toggleMenu()">
+    <div class="navbar-menu" id="mainMenuDropdown" ngbDropdownToggle>
+      Menu
+      <fa-icon
+        [icon]="arrowDown"
+        size="xs"
+        [ngClass]="{ 'navbar-menu-opened': isMenuOpened }"
+      ></fa-icon>
+    </div>
+    <div
+      ngbDropdownMenu
+      aria-labelledby="mainMenuDropdown"
+      class="navbar-menu-links"
+    >
+      <a ngbDropdownItem [routerLink]="'enterprise'">Enterprise</a>
+    </div>
   </div>
   <div class="spacer"></div>
-  <div class="account-group" (click)="switchLang()">
-    <!-- <fa-icon [icon]="account"></fa-icon> -->
-    <span>Nick777</span>
-    <img
-    src="https://i.pinimg.com/474x/34/30/a0/3430a061b7435ef0c58b1eff94453556.jpg"
-    alt="onimel"
-    />
-    <fa-icon [icon]="caretDown"></fa-icon>
+  <div ngbDropdown>
+    <div class="account-group" id="userDropdown" ngbDropdownToggle>
+      <!-- <fa-icon [icon]="account"></fa-icon> -->
+      <span>{{ ($appUser | async)?.name }}</span>
+      <img
+        src="../../../assets/Portrait_Placeholder.png"
+        alt="onimel"
+      />
+      <fa-icon [icon]="caretDown"></fa-icon>
+    </div>
+    <div
+      ngbDropdownMenu
+      aria-labelledby="userDropdown"
+      class="navbar-menu-actions"
+    >
+      <div ngbDropdownItem class="user-email">
+        {{ ($appUser | async)?.email }}
+      </div>
+      <div class="dropdown-divider"></div>
+      <ng-container *ngIf="$isEnterpriseUser | async">
+        <a ngbDropdownItem [routerLink]="'/user/settings'">
+          <fa-icon [icon]="gear"></fa-icon>
+          Settings
+        </a>
+        <a ngbDropdownItem [routerLink]="'user/invite'">
+          <fa-icon [icon]="invite"></fa-icon>
+          Invites
+        </a>
+      </ng-container>
+      <button ngbDropdownItem (click)="logout()">
+        <fa-icon [icon]="signout"></fa-icon>
+        Logout
+      </button>
+    </div>
   </div>
 </nav>

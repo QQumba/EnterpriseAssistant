@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <div *ngIf="$invites | async as invites; else loading" class="invites">
+    <ng-container *ngIf="invites.length > 0; else noContent">
+      <div *ngFor="let invite of invites" class="card mb-4 invite">
+        <div class="card-header">
+          You are invited to enterprise:
+          <b>{{ invite.enterpriseDisplayedName }}</b>
+        </div>
+        <div class="card-body">
+          <p>Enterprise id: {{ invite.enterpriseId }}</p>
+          <button class="btn btn-primary" (click)="openAcceptModal(invite)">
+            Accept invite
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #noContent>
+  <div class="card info">
+    {{ 'user.invite.empty' | translate }}
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>

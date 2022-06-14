@@ -23,4 +23,8 @@ public class User : BaseEntity.WithId<long>
 
     [Column("salt")]
     public string Salt { get; set; } = null!;
+
+    public IEnumerable<EnterpriseUser>? EnterpriseUsers { get; set; }
+
+    public IEnumerable<DepartmentUser>? DepartmentUsers { get; set; }
 }

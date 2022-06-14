@@ -19,7 +19,7 @@ namespace UserService.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private EnterpriseAssistantDbContext _dbContext;
+    private readonly EnterpriseAssistantDbContext _dbContext;
 
     public UserController(IMediator mediator, EnterpriseAssistantDbContext dbContext)
     {
@@ -53,6 +53,15 @@ public class UserController : ControllerBase
     {
         var result = await _mediator.Send(new GetAllUsersCommand());
         return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("details")]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUserDetails()
+    {
+        var userId = User.GetUserId();
+        var user = await _dbContext.Users.FirstAsync(u => u.Id == userId);
+        return Ok(user.Adapt<UserDto>());
     }
 
     [HttpGet("enterprise-invites")]

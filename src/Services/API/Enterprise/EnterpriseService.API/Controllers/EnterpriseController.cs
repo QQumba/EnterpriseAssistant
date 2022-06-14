@@ -40,4 +40,18 @@ public class EnterpriseController : ControllerBase
         var result = await _mediator.Send(new IsEnterpriseExists(id));
         return Ok(result);
     }
+
+    [HttpGet("{enterpriseId}/user/exists")]
+    public async Task<ActionResult<bool>> IsUserExists([FromRoute, Required] string enterpriseId,
+        [Required, FromQuery] string login)
+    {
+        var userInvited = true;
+        if (userInvited == false)
+        {
+            return NotFound($"Enterprise with id {enterpriseId} not found");
+        }
+
+        var result = await _mediator.Send(new CheckIfEnterpriseUserExists(enterpriseId, login));
+        return Ok(result);
+    }
 }

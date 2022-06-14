@@ -14,7 +14,7 @@ import {
   switchMap
 } from 'rxjs';
 
-const URL = 'https://localhost:5002/api/enterprise/isIdAvailable';
+const URL = 'api/enterprise/exists';
 
 @Injectable({ providedIn: 'root' })
 export class EnterpriseIdValidator implements AsyncValidator {
@@ -25,11 +25,11 @@ export class EnterpriseIdValidator implements AsyncValidator {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((value) => this.isIdAvailable(value)),
-      map((isAvailable) => {
-        if (isAvailable) {
-          return null;
+      map((exists) => {
+        if (exists) {
+          return { error: 'Id is already taken' };
         }
-        return { error: 'Id is already taken' };
+        return null;
       }),
       first()
     );

@@ -31,8 +31,8 @@ public static class SwaggerAuthenticationExtensions
         
         options.AddSecurityDefinition("Enterprise", new OpenApiSecurityScheme
         {
-            In = ParameterLocation.Query,
-            Name = "auth_enterprise_id",
+            In = ParameterLocation.Header,
+            Name = "auth-enterprise",
             Type = SecuritySchemeType.ApiKey,
         });
     }

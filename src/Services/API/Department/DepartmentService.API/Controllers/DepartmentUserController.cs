@@ -3,6 +3,7 @@ using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.DataAccess.Entities;
 using EnterpriseAssistant.DataAccess.Entities.Enums;
+using EnterpriseService.Contract.DataTransfer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,16 +68,25 @@ public class DepartmentUserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(
+    [SwaggerOperation(Summary = "Read all enterprise users")]
+    public async Task<ActionResult<IEnumerable<EnterpriseUserDto>>> GetUsers(
         [Range(1, long.MaxValue), FromRoute] long departmentId)
     {
         var readonlyContext = _factory.CreateReadOnlyContext(User.GetAuthContext());
+        var authContext = User.GetAuthContext();
 
-        var users = await readonlyContext.DepartmentUsers
-            .Where(du => du.DepartmentId == departmentId)
-            .Include(du => du.User)
-            .Select(du => du.User)
-            .ToListAsync();
+        var users = await (from user in readonlyContext.Users
+                join enterpriseUser in readonlyContext.EnterpriseUsers on user.Id equals enterpriseUser.UserId
+                join departmentUser in readonlyContext.DepartmentUsers on user.Id equals departmentUser.UserId
+                where departmentUser.DepartmentId == departmentId && enterpriseUser.EnterpriseId == authContext.EnterpriseId
+                select new EnterpriseUserDto
+                {
+                    UserId = user.Id,
+                    Login = enterpriseUser.Login,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName
+                }).ToListAsync();
 
         return Ok(users);
     }

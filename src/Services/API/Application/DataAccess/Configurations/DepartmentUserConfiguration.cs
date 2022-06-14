@@ -14,7 +14,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations
                 .IsUnique();
 
             builder.HasOne(du => du.User)
-                .WithMany()
+                .WithMany(u => u.DepartmentUsers)
                 .HasForeignKey(du => du.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);

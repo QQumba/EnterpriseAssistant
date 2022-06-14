@@ -8,6 +8,7 @@ public class EnterpriseAssistantDbContext : DbContext
 {
     public EnterpriseAssistantDbContext(DbContextOptions options) : base(options)
     {
+
     }
 
     public DbSet<User> Users { get; set; }
@@ -17,6 +18,8 @@ public class EnterpriseAssistantDbContext : DbContext
     public DbSet<Department> Departments { get; set; }
 
     public DbSet<DepartmentUser> DepartmentUsers { get; set; }
+
+    public DbSet<Project> Projects { get; set; }
 
     public DbSet<EnterpriseUser> EnterpriseUsers { get; set; }
     

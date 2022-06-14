@@ -24,4 +24,8 @@ public class Department : BaseEntity.WithId<long>
     public string EnterpriseId { get; set; } = null!;
 
     public Enterprise? Enterprise { get; set; }
+
+    [Column("project_id")]
+    public long? ProjectId { get; set; }
+    public Project? Project { get; set; } 
 }

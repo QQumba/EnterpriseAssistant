@@ -51,7 +51,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "src\Services\Id
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.DataAccess", "src\Services\Identity\Identity.DataAccess\Identity.DataAccess.csproj", "{E4DD376B-BFDF-4310-A1D1-BDC18F7A30D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "src\Services\API\Application\DataAccess\DataAccess.csproj", "{BD48A08F-63E7-4E18-B389-41A8F6166B2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "src\Services\API\Application\DataAccess\DataAccess.csproj", "{5279C334-DBA3-4C84-98C2-703F2FD74D15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,10 +115,10 @@ Global
 		{E4DD376B-BFDF-4310-A1D1-BDC18F7A30D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4DD376B-BFDF-4310-A1D1-BDC18F7A30D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4DD376B-BFDF-4310-A1D1-BDC18F7A30D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD48A08F-63E7-4E18-B389-41A8F6166B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD48A08F-63E7-4E18-B389-41A8F6166B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD48A08F-63E7-4E18-B389-41A8F6166B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD48A08F-63E7-4E18-B389-41A8F6166B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5279C334-DBA3-4C84-98C2-703F2FD74D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5279C334-DBA3-4C84-98C2-703F2FD74D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5279C334-DBA3-4C84-98C2-703F2FD74D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5279C334-DBA3-4C84-98C2-703F2FD74D15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

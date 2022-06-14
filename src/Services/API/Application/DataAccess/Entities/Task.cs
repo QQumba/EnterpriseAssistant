@@ -14,7 +14,7 @@ public class Task : BaseEntity.WithId<long>
     public string? Description { get; set; }
 
     [Column("user_id")]
-    public long UserId { get; set; }
+    public long? UserId { get; set; }
 
     public User? User { get; set; }
 

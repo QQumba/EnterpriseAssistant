@@ -14,7 +14,4 @@ public static class ProjectServiceIServiceCollectionExtensions
                 fv.RegisterValidatorsFromAssemblyContaining(typeof(ProjectServiceIServiceCollectionExtensions)));
         services.AddMediatR(typeof(ProjectServiceIServiceCollectionExtensions));
     }
-
-
-
 }

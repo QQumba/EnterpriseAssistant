@@ -25,6 +25,8 @@ public class EnterpriseAssistantDbContext : DbContext
     
     public DbSet<Invite> Invites { get; set; }
 
+    public DbSet<Entities.Task> Tasks { get; set; }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker

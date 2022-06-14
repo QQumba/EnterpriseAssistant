@@ -1,15 +1,17 @@
-﻿using TaskTrackingService.Contract.DataTransfer;
+﻿using EnterpriseAssistant.Application.Shared;
+using TaskTrackingService.Contract.DataTransfer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using EnterpriseAssistant.DataAccess;
-using Microsoft.EntityFrameworkCore;
 using EnterpriseAssistant.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 using Mapster;
+using TaskEntity = EnterpriseAssistant.DataAccess.Entities.Task;
 
 namespace TaskTrackingService.API.Controllers;
 
-[Authorize]
+[Authorize(Policy = "EnterpriseUser")]
 [ApiController]
 [Route("api/task")]
 public class TaskController : ControllerBase
@@ -21,51 +23,61 @@ public class TaskController : ControllerBase
         _context = context;
     }
 
-    [HttpPost] //need to add project IsSoftDelete check
+    // need to add project IsSoftDelete check
+    [HttpPost] 
     [SwaggerOperation(Summary = "Create task", Description = "create task")]
-    public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> PostTask(TaskCreateDto request)
+    public async Task<ActionResult<TaskDto>> PostTask(TaskCreateDto taskCreate)
     {
-        var task = request.Adapt<EnterpriseAssistant.DataAccess.Entities.Task>();
+        var project = await GetUserProjectAsync(taskCreate.ProjectId);
+
+        if (project is null)
+        {
+            return NotFound($"Project with id {taskCreate.ProjectId} not found");
+        }
+        
+        var task = taskCreate.Adapt<TaskEntity>();
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(PostTask), new {id = task.Id}, task);
+        return CreatedAtAction(nameof(PostTask), new {id = task.Id}, task.Adapt<TaskDto>());
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Read all task", Description = "read all task")]
-    public async Task<ActionResult<IEnumerable<EnterpriseAssistant.DataAccess.Entities.Task>>> GetTasks()
+    [SwaggerOperation(Summary = "Read all user tasks", Description = "Read all user tasks")]
+    public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks()
     {
-        if (_context == null)
-        {
-            return NotFound();
-        }
+        var authContext = User.GetAuthContext();
+        var tasks = await _context.Tasks
+            .Where(t => t.IsSoftDeleted == false &&
+                        t.UserId == authContext.UserId &&
+                        t.EnterpriseId == authContext.EnterpriseId)
+            .ToListAsync();
 
-        return await _context.Tasks.ToListAsync();
-    }
-
-    [HttpGet("user/{id}")] //later
-    [SwaggerOperation(Summary = "Read all user task", Description = "User task")]
-    public async Task<ActionResult<IEnumerable<EnterpriseAssistant.DataAccess.Entities.Task>>> GetUserTasks(long id)
-    {
-        return NotFound();
+        return Ok(tasks.Adapt<IEnumerable<TaskDto>>());
     }
 
     [HttpPut]
-    [SwaggerOperation(Summary = "Update task", Description = "update task")]
-    public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> UpdateTask(long id, TaskCreateDto task)
+    [SwaggerOperation(Summary = "Update task", Description = "Update task")]
+    public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> UpdateTask(long id, TaskCreateDto taskToUpdate)
     {
-        var _update = _context.Tasks.FirstOrDefault(task => task.Id == id); 
-        if (_update == null)
+        var project = await GetUserProjectAsync(taskToUpdate.ProjectId);
+
+        if (project is null)
+        {
+            return NotFound($"Project with id {taskToUpdate.ProjectId} not found");
+        }
+        
+        var task = _context.Tasks.FirstOrDefault(task => task.Id == id); 
+        if (task == null)
         {
             return NotFound();
         }
-        _update = task.Adapt(_update);
-        _context.SaveChanges();
-        return Ok(_update);
+        task = taskToUpdate.Adapt(task);
+        await _context.SaveChangesAsync();
+        return Ok(task);
     }
 
     [HttpDelete("{id}")]
-    [SwaggerOperation(Summary = "Delete task", Description = "delete task")]
+    [SwaggerOperation(Summary = "Delete task", Description = "Delete task")]
     public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> TaskDelete(long id)
     {
         var task = await _context.Tasks.FindAsync(id);
@@ -80,16 +92,37 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [SwaggerOperation(Summary = "task by id", Description = "Read task by id")]
-    public async Task<ActionResult<EnterpriseAssistant.DataAccess.Entities.Task>> GetTaskDetail(long id)
+    [SwaggerOperation(Summary = "Read task by id", Description = "Read task by id")]
+    public async Task<ActionResult<TaskDto>> GetTaskDetail(long id)
     {
         var task = await _context.Tasks.FindAsync(id);
-
         if (task == null)
         {
-            return NotFound();
+            return NotFound($"Task with id {id} not found");
+        }
+        
+        var project = await GetUserProjectAsync(task.ProjectId);
+        if (project is null)
+        {
+            return NotFound($"Task with id {id} not found");
         }
 
-        return task;
+        return task.Adapt<TaskDto>();
+    }
+
+    private Task<Project?> GetUserProjectAsync(long projectId)
+    {
+        var authContext = User.GetAuthContext();
+        var project = _context.DepartmentUsers
+            .Include(du => du.Department)
+            .ThenInclude(d => d.Project)
+            .Where(du => du.UserId == authContext.UserId &&
+                         du.EnterpriseId.Equals(authContext.EnterpriseId) &&
+                         du.Department.ProjectId == projectId
+            )
+            .Select(du => du.Department.Project)
+            .FirstOrDefaultAsync();
+
+        return project;
     }
 }

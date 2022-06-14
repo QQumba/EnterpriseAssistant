@@ -5,13 +5,30 @@ import { DepartmentUsersComponent } from './components/department/department-use
 import { DepartmentComponent } from './components/department/department.component';
 import { EnterpriseCreateEnterpriseComponent } from './components/enterprise/enterprise-create-enterprise/enterprise-create-enterprise.component';
 import { EnterpriseUsersComponent } from './components/enterprise/enterprise-users/enterprise-users.component';
+import { ProjectUsersComponent } from './components/project/project-users/project-users.component';
+import { ProjectComponent } from './components/project/project.component';
 import { StartComponent } from './components/start/start.component';
+import { TaskComponent } from './components/task/task.component';
 import { InviteComponent } from './components/user/invite/invite.component';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 import { EnterpriseUserGuard } from './guards/enterprise-user.guard';
 import { NewUserGuard } from './guards/new-user.guard';
 
 const routes: Routes = [
+  {
+    path: 'project/:id/users',
+    component: ProjectUsersComponent,
+    canActivate: [EnterpriseUserGuard]
+  },
+  {
+    path: 'project/:id/tasks',
+    component: TaskComponent,
+    canActivate: [EnterpriseUserGuard]
+  },
+  {
+    path: 'project/:id',
+    redirectTo: 'project/:id/tasks'
+  },
   {
     path: 'user/settings',
     component: UserSettingsComponent,
@@ -40,6 +57,11 @@ const routes: Routes = [
   {
     path: 'enterprise/users',
     component: EnterpriseUsersComponent,
+    canActivate: [EnterpriseUserGuard]
+  },
+  {
+    path: 'enterprise/projects',
+    component: ProjectComponent,
     canActivate: [EnterpriseUserGuard]
   },
   {

@@ -13,7 +13,7 @@ import { EnterpriseSidebarMenuComponent } from './components/enterprise/enterpri
 import { DepartmentSidebarMenuComponent } from './components/department/department-sidebar/department-sidebar-menu.component';
 import { SidebarMenuActionComponent } from './components/sidebar/sidebar-menu-action/sidebar-menu-action.component';
 import { EnterpriseCreateEnterpriseComponent } from './components/enterprise/enterprise-create-enterprise/enterprise-create-enterprise.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from './components/utilities/loader/loader.component';
 import {
   HttpClient,
@@ -43,6 +43,11 @@ import { DepartmentInfoComponent } from './components/department/department-info
 import { DepartmentUsersComponent } from './components/department/department-users/department-users.component';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { ProjectComponent } from './components/project/project.component';
+import { TaskComponent } from './components/task/task.component';
+import { TaskAssignModalComponent } from './components/task/task-assign-modal/task-assign-modal.component';
+import { ProjectUsersComponent } from './components/project/project-users/project-users.component';
+import { TaskDetailsModalComponent } from './components/task/task-details-modal/task-details-modal.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -75,13 +80,19 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DepartmentComponent,
     DepartmentInfoComponent,
     DepartmentUsersComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
+    ProjectComponent,
+    TaskComponent,
+    TaskAssignModalComponent,
+    ProjectUsersComponent,
+    TaskDetailsModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

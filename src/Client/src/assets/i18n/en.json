@@ -13,6 +13,9 @@
       "enterprise-picker": {
         "add-enterprise": "Create enterprise"
       }
+    },
+    "project": {
+      "empty": "You have no projects"
     }
   },
   "department": {
@@ -32,6 +35,13 @@
   "user": {
     "invite": {
       "empty": "You have no invites"
+    }
+  },
+  "project": {
+    "sidebar": {
+      "title": "Project",
+      "users": "Users",
+      "tasks": "Tasks"
     }
   }
 }

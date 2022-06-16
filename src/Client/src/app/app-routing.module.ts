@@ -4,6 +4,7 @@ import { DepartmentInfoComponent } from './components/department/department-info
 import { DepartmentUsersComponent } from './components/department/department-users/department-users.component';
 import { DepartmentComponent } from './components/department/department.component';
 import { EnterpriseCreateEnterpriseComponent } from './components/enterprise/enterprise-create-enterprise/enterprise-create-enterprise.component';
+import { EnterpriseInvitesComponent } from './components/enterprise/enterprise-invites/enterprise-invites.component';
 import { EnterpriseUsersComponent } from './components/enterprise/enterprise-users/enterprise-users.component';
 import { ProjectUsersComponent } from './components/project/project-users/project-users.component';
 import { ProjectComponent } from './components/project/project.component';
@@ -62,6 +63,11 @@ const routes: Routes = [
   {
     path: 'enterprise/projects',
     component: ProjectComponent,
+    canActivate: [EnterpriseUserGuard]
+  },
+  {
+    path: 'enterprise/invites',
+    component: EnterpriseInvitesComponent,
     canActivate: [EnterpriseUserGuard]
   },
   {

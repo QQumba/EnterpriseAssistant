@@ -16,10 +16,7 @@ import { selectEnterpriseId } from '../store/selectors/app-user.selector';
 export class NewUserGuard implements CanActivate, OnDestroy {
   private subscription?: Subscription;
 
-  $newUser = this.store.select(selectEnterpriseId).pipe(
-    take(1),
-    map((id) => !!id)
-  );
+  $newUser = this.store.select(selectEnterpriseId).pipe(map((id) => !!id));
 
   constructor(private store: Store, private router: Router) {}
 

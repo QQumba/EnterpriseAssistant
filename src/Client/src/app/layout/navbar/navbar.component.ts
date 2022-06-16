@@ -14,6 +14,7 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { map } from 'rxjs';
+import { AvatarService } from 'src/app/services/avatar.service';
 import { selectAppUser } from 'src/app/store/selectors/app-user.selector';
 
 @Component({
@@ -42,7 +43,8 @@ export class NavbarComponent {
   constructor(
     private translate: TranslateService,
     private store: Store,
-    private authService: OidcSecurityService
+    private authService: OidcSecurityService,
+    public avatarService: AvatarService
   ) {}
 
   switchLang(): void {

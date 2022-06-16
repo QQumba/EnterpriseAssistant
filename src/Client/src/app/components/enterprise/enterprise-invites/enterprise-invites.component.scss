@@ -1,5 +1,5 @@
-small {
-  color: rgb(99, 99, 99);
+.wrapper{
+  padding: 2em;
 }
 
 .profile-img {
@@ -12,4 +12,9 @@ small {
   display: flex;
   align-items: center;
   border-radius: 0.5em;
+}
+
+.action{
+  display: flex;
+  justify-content: end;
 }

@@ -26,7 +26,12 @@ import { FormSegmentComponent } from './components/utilities/form-segment/form-s
 import { FormInputComponent } from './components/utilities/form-input/form-input.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbToastModule,
+  NgbTooltip,
+  NgbTooltipModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 import { SidebarMenuComponent } from './layout/sidebar/sidebar-menu/sidebar-menu.component';
@@ -48,6 +53,9 @@ import { TaskComponent } from './components/task/task.component';
 import { TaskAssignModalComponent } from './components/task/task-assign-modal/task-assign-modal.component';
 import { ProjectUsersComponent } from './components/project/project-users/project-users.component';
 import { TaskDetailsModalComponent } from './components/task/task-details-modal/task-details-modal.component';
+import { MembersComponent } from './components/utilities/members/members.component';
+import { AvatarPipe } from './pipes/avatar.pipe';
+import { EnterpriseInvitesComponent } from './components/enterprise/enterprise-invites/enterprise-invites.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -85,7 +93,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     TaskComponent,
     TaskAssignModalComponent,
     ProjectUsersComponent,
-    TaskDetailsModalComponent
+    TaskDetailsModalComponent,
+    MembersComponent,
+    AvatarPipe,
+    EnterpriseInvitesComponent
   ],
   imports: [
     BrowserModule,
@@ -103,6 +114,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     }),
     NgbToastModule,
     NgbDropdownModule,
+    NgbTooltipModule,
     AuthConfigModule,
     StoreModule.forRoot({
       appUser: appUserReducer

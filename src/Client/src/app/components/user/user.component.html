@@ -1,21 +1,24 @@
-<div *ngFor="let user of $users | async" class="card mb-2">
-  <div class="row no-gutters profile-img-wrapper">
-    <div class="col-md-4">
-      <img
-        src="../../../../assets/Portrait_Placeholder.png"
-        class="profile-img"
-        alt="Image"
-      />
-    </div>
-    <div class="col-md-4 card-body">
-      <h5 class="card-title">
-        {{ user.firstName }}
-        {{ user.lastName }}
-      </h5>
-      <small> aka </small> {{ user.login }}
-    </div>
-    <div class="col-md-4 card-body">
-      {{ user.email }}
-    </div>
+<div class="row gx-0 border border-2 bg-light p-2 mb-2 user-row">
+  <div class="col text-muted">Photo</div>
+  <div class="col text-muted">Name</div>
+  <div class="col text-muted">Login</div>
+  <div class="col text-muted">Email</div>
+</div>
+<div
+  *ngFor="let user of $users | async"
+  class="row gx-0 border border-2 border-success bg-light user-row p-2 mb-2"
+>
+  <div class="col">
+    <img src="{{ user | avatar }}" class="profile-img" alt="Image" />
+  </div>
+  <div class="col">
+    {{ user.firstName }}
+    {{ user.lastName }}
+  </div>
+  <div class="col">
+    {{ user.login }}
+  </div>
+  <div class="col">
+    {{ user.email }}
   </div>
 </div>

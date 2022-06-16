@@ -2,13 +2,9 @@
   padding: 2em;
 }
 
-small {
-  color: rgb(99, 99, 99);
-}
-
 .profile-img-wrapper {
   padding: 0.2em;
-  max-height: 8em;
+  max-height: 6em;
   aspect-ratio: 1 / 1;
   position: relative;
 
@@ -17,7 +13,6 @@ small {
     top: 0;
     left: 0;
     height: 100%;
-    width: 100%;
 
     &:hover {
       cursor: pointer;
@@ -35,4 +30,10 @@ small {
     justify-content: center;
     align-items: center;
   }
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  border-radius: 0.5em;
 }

@@ -6,16 +6,22 @@ import {
 } from '../actions/appState.actions';
 
 const appUserInitialState: AppUser = {
-  userId: -1,
-  name: '',
-  email: ''
+  enterpriseIds: [],
+  enterpriseId: undefined,
+  userDetails: {
+    id: -1,
+    email: '',
+    login: undefined,
+    firstName: '',
+    lastName: undefined
+  }
 };
 
 export const appUserReducer = createReducer(
   appUserInitialState,
   on(userAuthenticated, (_, user) => user),
   on(enterpriseIdChanged, (state, action: { enterpriseId: string }) => {
-    let a = state.enterpriseIds?.indexOf(action.enterpriseId);
+    const a = state.enterpriseIds?.indexOf(action.enterpriseId);
     if (
       state.enterpriseIds &&
       state.enterpriseIds.indexOf(action.enterpriseId) >= 0

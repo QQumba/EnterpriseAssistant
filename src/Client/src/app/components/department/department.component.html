@@ -8,10 +8,11 @@
       <div class="card-header">
         <div>{{ deparment.name }}</div>
       </div>
-      <div class="card-body">
+      <div class="card-body flex-container">
         <a [routerLink]="['/department', deparment.id]" class="btn btn-primary"
           >View</a
         >
+        <app-members [departmentId]="deparment.id"></app-members>
       </div>
     </div>
   </div>

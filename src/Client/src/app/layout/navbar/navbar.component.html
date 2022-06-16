@@ -9,21 +9,17 @@
         [ngClass]="{ 'navbar-menu-opened': isMenuOpened }"
       ></fa-icon>
     </div>
-    <div
-      ngbDropdownMenu
-      aria-labelledby="mainMenuDropdown"
-      class="navbar-menu-links"
-    >
+    <div ngbDropdownMenu aria-labelledby="mainMenuDropdown">
       <a ngbDropdownItem [routerLink]="'enterprise'">Enterprise</a>
     </div>
   </div>
   <div class="spacer"></div>
-  <div ngbDropdown>
+  <div ngbDropdown *ngIf="$appUser | async as appUser">
     <div class="account-group" id="userDropdown" ngbDropdownToggle>
       <!-- <fa-icon [icon]="account"></fa-icon> -->
-      <span>{{ ($appUser | async)?.name }}</span>
+      <span>{{ appUser.userDetails.firstName }}</span>
       <img
-        src="../../../assets/Portrait_Placeholder.png"
+        src="{{ appUser.userDetails | avatar }}"
         alt="onimel"
       />
       <fa-icon [icon]="caretDown"></fa-icon>
@@ -34,7 +30,7 @@
       class="navbar-menu-actions"
     >
       <div ngbDropdownItem class="user-email">
-        {{ ($appUser | async)?.email }}
+        {{ appUser.userDetails.email }}
       </div>
       <div class="dropdown-divider"></div>
       <ng-container *ngIf="$isEnterpriseUser | async">

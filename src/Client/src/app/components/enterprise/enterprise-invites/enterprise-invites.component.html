@@ -1,0 +1,30 @@
+<div class="wrapper">
+  <div *ngIf="$invites | async as invites; else loading" class="invites">
+    <ng-container *ngIf="invites.length > 0; else noContent">
+      <div class="row gx-0 border border-2 bg-light p-2 mb-2 user-row">
+        <div class="col-4 text-muted">User email</div>
+        <div class="col-4 text-muted">Status</div>
+      </div>
+      <div
+        *ngFor="let invite of invites"
+        class="row gx-0 border border-2 bg-light p-2 mb-2 user-row"
+      >
+        <div class="col">{{ invite.userEmail }}</div>
+        <div class="col">{{ invite.status }}</div>
+        <div class="col action">
+          <button class="btn btn-primary">Cancel</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #noContent>
+  <div class="card info">
+    {{ 'user.invite.empty' | translate }}
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>

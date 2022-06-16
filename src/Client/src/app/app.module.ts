@@ -13,7 +13,7 @@ import { EnterpriseSidebarMenuComponent } from './components/enterprise/enterpri
 import { DepartmentSidebarMenuComponent } from './components/department/department-sidebar/department-sidebar-menu.component';
 import { SidebarMenuActionComponent } from './components/sidebar/sidebar-menu-action/sidebar-menu-action.component';
 import { EnterpriseCreateEnterpriseComponent } from './components/enterprise/enterprise-create-enterprise/enterprise-create-enterprise.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from './components/utilities/loader/loader.component';
 import {
   HttpClient,
@@ -26,7 +26,12 @@ import { FormSegmentComponent } from './components/utilities/form-segment/form-s
 import { FormInputComponent } from './components/utilities/form-input/form-input.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDropdownModule,
+  NgbToastModule,
+  NgbTooltip,
+  NgbTooltipModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 import { SidebarMenuComponent } from './layout/sidebar/sidebar-menu/sidebar-menu.component';
@@ -43,6 +48,14 @@ import { DepartmentInfoComponent } from './components/department/department-info
 import { DepartmentUsersComponent } from './components/department/department-users/department-users.component';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { ProjectComponent } from './components/project/project.component';
+import { TaskComponent } from './components/task/task.component';
+import { TaskAssignModalComponent } from './components/task/task-assign-modal/task-assign-modal.component';
+import { ProjectUsersComponent } from './components/project/project-users/project-users.component';
+import { TaskDetailsModalComponent } from './components/task/task-details-modal/task-details-modal.component';
+import { MembersComponent } from './components/utilities/members/members.component';
+import { AvatarPipe } from './pipes/avatar.pipe';
+import { EnterpriseInvitesComponent } from './components/enterprise/enterprise-invites/enterprise-invites.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -75,13 +88,22 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DepartmentComponent,
     DepartmentInfoComponent,
     DepartmentUsersComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
+    ProjectComponent,
+    TaskComponent,
+    TaskAssignModalComponent,
+    ProjectUsersComponent,
+    TaskDetailsModalComponent,
+    MembersComponent,
+    AvatarPipe,
+    EnterpriseInvitesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -92,6 +114,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     }),
     NgbToastModule,
     NgbDropdownModule,
+    NgbTooltipModule,
     AuthConfigModule,
     StoreModule.forRoot({
       appUser: appUserReducer

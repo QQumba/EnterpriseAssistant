@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
     [DbContext(typeof(EnterpriseAssistantDbContext))]
-    [Migration("20220606154006_add_invites")]
-    partial class add_invites
+    [Migration("20220614091004_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,6 +59,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("parent_department_id");
 
+                    b.Property<long?>("ProjectId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("project_id");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -69,6 +73,9 @@ namespace EnterpriseAssistant.DataAccess.Migrations
 
                     b.HasIndex("ParentDepartmentId");
 
+                    b.HasIndex("ProjectId")
+                        .IsUnique();
+
                     b.HasIndex("Name", "EnterpriseId", "IsSoftDeleted")
                         .IsUnique();
 
@@ -78,12 +85,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            CreatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             DepartmentType = 0,
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
                             Name = "Test department",
-                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296)
+                            UpdatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077)
                         });
                 });
 
@@ -140,12 +147,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            CreatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             DepartmentId = 1L,
                             DepartmentUserRole = 0,
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            UpdatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             UserId = 1L
                         });
                 });
@@ -184,10 +191,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = "test",
-                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            CreatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             DisplayedName = "test",
                             IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296)
+                            UpdatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077)
                         });
                 });
 
@@ -243,12 +250,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            CreatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             EnterpriseId = "test",
                             IsSoftDeleted = false,
                             Login = "test",
                             Role = 0,
-                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            UpdatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             UserId = 1L
                         });
                 });
@@ -283,7 +290,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.Property<long>("UserId")
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_email");
+
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
@@ -294,7 +306,108 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("UserId", "EnterpriseId")
                         .IsUnique();
 
-                    b.ToTable("Invites");
+                    b.ToTable("invite");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("department_id");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("EnterpriseId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("enterprise_id");
+
+                    b.Property<bool>("IsSoftDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_soft_deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnterpriseId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("project");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Task", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("EnterpriseId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("enterprise_id");
+
+                    b.Property<bool>("IsSoftDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_soft_deleted");
+
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("project_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnterpriseId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("task");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
@@ -353,14 +466,14 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296),
+                            CreatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077),
                             Email = "test@mail.com",
                             FirstName = "Test",
                             IsSoftDeleted = false,
                             LastName = "User",
                             Password = "qwe",
                             Salt = "test_salt",
-                            UpdatedAt = new DateTime(2022, 6, 6, 15, 40, 5, 261, DateTimeKind.Utc).AddTicks(1296)
+                            UpdatedAt = new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077)
                         });
                 });
 
@@ -377,9 +490,16 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasForeignKey("ParentDepartmentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Project", "Project")
+                        .WithOne("Department")
+                        .HasForeignKey("EnterpriseAssistant.DataAccess.Entities.Department", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Enterprise");
 
                     b.Navigation("ParentDepartment");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.DepartmentUser", b =>
@@ -397,7 +517,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("DepartmentUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -416,7 +536,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("EnterpriseUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -437,10 +557,45 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Enterprise");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
+                        .WithMany()
+                        .HasForeignKey("EnterpriseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Enterprise");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Task", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
+                        .WithMany()
+                        .HasForeignKey("EnterpriseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Enterprise");
+
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -453,6 +608,18 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
                 {
                     b.Navigation("Departments");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
+                {
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
+                {
+                    b.Navigation("DepartmentUsers");
+
+                    b.Navigation("EnterpriseUsers");
                 });
 #pragma warning restore 612, 618
         }

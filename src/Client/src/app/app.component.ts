@@ -42,9 +42,13 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           this.authenticated = isAuthenticated;
           const appUser: AppUser = {
-            userId: userData.user_id,
-            name: userData.name,
-            email: userData.email
+            userDetails: {
+              id: userData.user_id,
+              email: userData.email,
+              login: userData.login,
+              firstName: userData.first_name,
+              lastName: userData.last_name
+            }
           };
           console.log(appUser);
 

@@ -1,0 +1,20 @@
+.wrapper{
+  padding: 2em;
+}
+
+.profile-img {
+  max-height: 3em;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  border-radius: 0.5em;
+}
+
+.action{
+  display: flex;
+  justify-content: end;
+}

@@ -25,7 +25,8 @@ namespace EnterpriseAssistant.Identity.Services
 
 			context.IssuedClaims.Add(new Claim("user_id", user.Id.ToString()));
 			context.IssuedClaims.Add(new Claim("email", user.Email));
-			context.IssuedClaims.Add(new Claim("name", user.FirstName));
+			context.IssuedClaims.Add(new Claim("first_name", user.FirstName));
+			context.IssuedClaims.Add(new Claim("last_name", user.LastName));
 
 			if (user.EnterpriseIds is not null)
 			{

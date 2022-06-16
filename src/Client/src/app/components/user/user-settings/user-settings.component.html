@@ -1,26 +1,25 @@
 <div class="wrapper">
-  <div *ngIf="$user | async as user; else loading" class="card">
-    <div class="row no-gutters">
-      <div class="col-md-4">
-        <div class="profile-img-wrapper" (click)="editPictrue()">
-          <div class="edit">Edit</div>
-          <img
-            src="../../../../assets/Portrait_Placeholder.png"
-            class="profile-img"
-            alt="Image"
-          />
-        </div>
+  <div class="row gx-0 border border-2 bg-light p-2 mb-2 user-row">
+    <div class="col text-muted">Photo</div>
+    <div class="col text-muted">Name</div>
+    <div class="col text-muted">Email</div>
+  </div>
+  <div
+    *ngIf="$user | async as user; else loading"
+    class="row gx-0 border border-2 p-2 mb-2 user-row"
+  >
+    <div class="col">
+      <div class="profile-img-wrapper">
+        <div class="edit">Edit</div>
+        <img src="{{ user | avatar }}" class="profile-img" alt="Image" />
       </div>
-      <div class="col-md-4 card-body">
-        <h5 class="card-title">
-          {{ user.firstName }}
-          {{ user.lastName }}
-        </h5>
-        <small> aka </small> {{ user.login }}
-      </div>
-      <div class="col-md-4 card-body">
-        {{ user.email }}
-      </div>
+    </div>
+    <div class="col">
+      {{ user.firstName }}
+      {{ user.lastName }}
+    </div>
+    <div class="col">
+      {{ user.email }}
     </div>
   </div>
 </div>

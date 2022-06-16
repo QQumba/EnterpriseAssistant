@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
-    public partial class @new : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -102,6 +102,37 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "invite",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    user_id = table.Column<long>(type: "bigint", nullable: true),
+                    user_email = table.Column<string>(type: "text", nullable: false),
+                    enterprise_id = table.Column<string>(type: "text", nullable: false),
+                    invite_status = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_invite", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_invite_enterprise_enterprise_id",
+                        column: x => x.enterprise_id,
+                        principalTable: "enterprise",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_invite_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "department",
                 columns: table => new
                 {
@@ -137,6 +168,43 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         principalTable: "project",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "task",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    title = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    user_id = table.Column<long>(type: "bigint", nullable: true),
+                    enterprise_id = table.Column<string>(type: "text", nullable: false),
+                    project_id = table.Column<long>(type: "bigint", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_task", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_task_enterprise_enterprise_id",
+                        column: x => x.enterprise_id,
+                        principalTable: "enterprise",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_task_project_project_id",
+                        column: x => x.project_id,
+                        principalTable: "project",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_task_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "user",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -179,32 +247,38 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "enterprise",
                 columns: new[] { "id", "created_at", "displayed_name", "is_soft_deleted", "updated_at" },
-                values: new object[] { "test", new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), "test", false, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714) });
+                values: new object[] { "test", new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), "test", false, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077) });
 
             migrationBuilder.InsertData(
                 table: "user",
                 columns: new[] { "id", "created_at", "email", "first_name", "is_soft_deleted", "last_name", "password", "salt", "updated_at" },
-                values: new object[] { 1L, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), "test@mail.com", "Test", false, "User", "qwe", "test_salt", new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714) });
+                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), "test@mail.com", "Test", false, "User", "qwe", "test_salt", new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077) });
 
             migrationBuilder.InsertData(
                 table: "department",
                 columns: new[] { "id", "created_at", "department_type", "enterprise_id", "is_soft_deleted", "name", "parent_department_id", "project_id", "updated_at" },
-                values: new object[] { 1L, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), 0, "test", false, "Test department", null, null, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714) });
+                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 0, "test", false, "Test department", null, null, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077) });
 
             migrationBuilder.InsertData(
                 table: "enterprise_user",
                 columns: new[] { "id", "created_at", "enterprise_id", "is_soft_deleted", "login", "role", "updated_at", "user_id" },
-                values: new object[] { 1L, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), "test", false, "test", 0, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), 1L });
+                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), "test", false, "test", 0, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 1L });
 
             migrationBuilder.InsertData(
                 table: "department_user",
                 columns: new[] { "id", "created_at", "department_id", "department_user_role", "enterprise_id", "is_soft_deleted", "updated_at", "user_id" },
-                values: new object[] { 1L, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), 1L, 0, "test", false, new DateTime(2022, 6, 4, 20, 28, 24, 340, DateTimeKind.Utc).AddTicks(7714), 1L });
+                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 1L, 0, "test", false, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 1L });
 
             migrationBuilder.CreateIndex(
                 name: "IX_department_enterprise_id",
                 table: "department",
                 column: "enterprise_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_department_name_enterprise_id_is_soft_deleted",
+                table: "department",
+                columns: new[] { "name", "enterprise_id", "is_soft_deleted" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_department_parent_department_id",
@@ -251,10 +325,36 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_invite_enterprise_id",
+                table: "invite",
+                column: "enterprise_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_invite_user_id_enterprise_id",
+                table: "invite",
+                columns: new[] { "user_id", "enterprise_id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_project_enterprise_id_name",
                 table: "project",
                 columns: new[] { "enterprise_id", "name" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_task_enterprise_id",
+                table: "task",
+                column: "enterprise_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_task_project_id",
+                table: "task",
+                column: "project_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_task_user_id",
+                table: "task",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_email",
@@ -270,6 +370,12 @@ namespace EnterpriseAssistant.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "enterprise_user");
+
+            migrationBuilder.DropTable(
+                name: "invite");
+
+            migrationBuilder.DropTable(
+                name: "task");
 
             migrationBuilder.DropTable(
                 name: "department");

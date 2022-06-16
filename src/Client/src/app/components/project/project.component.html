@@ -1,0 +1,51 @@
+<div class="wrapper">
+  <div *ngIf="$projects | async as projects; else loading">
+    <div class="d-flex mb-4">
+      <div class="spacer"></div>
+      <button class="btn btn-primary" (click)="openCreateProjectModal()">
+        Create new project
+      </button>
+    </div>
+    <div *ngIf="projects.length > 0; else noContent">
+      <div *ngFor="let project of projects" class="card mb-4">
+        <div class="card-header">
+          {{ project.name }}
+        </div>
+        <div class="card-body">
+          {{ project.description }}
+        </div>
+        <div class="card-body project-footer">
+          <a [routerLink]="['/project', project.id]" class="btn btn-primary"
+            >Open</a
+          >
+          <div
+            *ngIf="$projectMembers | async as members"
+            class="project-footer members-wrapper"
+          >
+            <ng-container *ngFor="let member of members">
+              <div ngbTooltip="{{ getUserName(member) }}" class="ps-1">
+                <img
+                  src="{{ avatarService.getAvatarUrl(member) }}"
+                  alt="{{ member.firstName }}"
+                />
+              </div>
+            </ng-container>
+            <div ngbTooltip="4 more" class="ps-1">
+              <div class="extra-members text-muted">+4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noContent>
+  <div class="card info">
+    {{ 'enterprise.project.empty' | translate }}
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>

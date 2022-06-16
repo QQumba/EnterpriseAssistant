@@ -66,6 +66,22 @@ const depatmentMenu: SidebarMenu = {
   ]
 };
 
+const projectMenu: SidebarMenu = {
+  title: 'project.sidebar.title',
+  actions: [
+    {
+      route: '/project/:id/users',
+      text: 'project.sidebar.users',
+      icon: faUser
+    },
+    {
+      route: '/project/:id/tasks',
+      text: 'project.sidebar.tasks',
+      icon: faList
+    }
+  ]
+};
+
 @Component({
   selector: 'app-sidebar-menu',
   templateUrl: './sidebar-menu.component.html',
@@ -90,6 +106,10 @@ export class SidebarMenuComponent implements OnInit, OnDestroy {
           const departmentId = e.url.split('/')[2];
           this.setDepartmentMenu(departmentId);
         }
+        if (e.url.startsWith('/project')) {
+          const projectId = e.url.split('/')[2];
+          this.setProjecttMenu(projectId);
+        }
       }
     });
   }
@@ -104,5 +124,13 @@ export class SidebarMenuComponent implements OnInit, OnDestroy {
       return { ...a, route: newRoute };
     });
     this.menu = { ...depatmentMenu, actions };
+  }
+
+  setProjecttMenu(projectId: string): void {
+    const actions = projectMenu.actions.map((a) => {
+      const newRoute = a.route.replace(':id', projectId);
+      return { ...a, route: newRoute };
+    });
+    this.menu = { ...projectMenu, actions };
   }
 }

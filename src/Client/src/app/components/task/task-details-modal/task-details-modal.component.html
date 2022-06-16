@@ -1,0 +1,43 @@
+<form>
+  <div class="modal-header">
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="task-title"
+        name="task-title"
+        [ngModel]="task.title"
+      />
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="activeModal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <label for="task-description" class="col-form-label">Description:</label>
+      <textarea
+        rows="10"
+        class="form-control"
+        id="task-description"
+        name="task-description"
+        [ngModel]="task.description"
+      ></textarea>
+    </div>
+    <div>
+      <label for="task-status" class="col-form-label">Status:</label>
+      <select class="form-select" id="task-status" aria-label="Default select example">
+        <option selected>Todo</option>
+        <option value="1">Commited</option>
+        <option value="2">In progess</option>
+        <option value="3">Done</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" (click)="save()">Save</button>
+  </div>
+</form>

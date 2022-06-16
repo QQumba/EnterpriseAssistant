@@ -1,0 +1,14 @@
+<ng-container *ngIf="$members | async as members; else loading">
+  <div *ngFor="let member of members" class="ps-1">
+    <div ngbTooltip="{{ getUserName(member) }}">
+      <img
+        src="{{ avatarService.getAvatarUrl(member) }}"
+        alt="{{ member.firstName }}"
+      />
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>

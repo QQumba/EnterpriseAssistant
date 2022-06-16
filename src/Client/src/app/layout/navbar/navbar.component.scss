@@ -13,10 +13,10 @@ $nav-hover: #b5b5b5;
   font-weight: lighter;
 
   div {
-    margin-left: 1em;
+    margin-left: 2em;
 
     &:last-child {
-      margin-right: 1em;
+      margin-right: 2em;
     }
 
     &:first-child {
@@ -53,15 +53,12 @@ $nav-hover: #b5b5b5;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       margin-right: 0.4em;
-      border: 1px solid #606a7b;
     }
   }
 
   .navbar-menu {
     display: flex;
     align-items: center;
-    padding: 0 0.6em;
-    border-radius: 0.2em;
 
     fa-icon {
       color: inherit;

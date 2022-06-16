@@ -1,0 +1,15 @@
+.wrapper {
+  padding: 2em;
+  max-width: 80%;
+  margin: auto;
+
+  @media screen and (max-width: 1500px) {
+    max-width: 100%;
+  }
+}
+
+.col-header {
+  padding: 0.5em;
+  border-radius: 0.2em;
+  background-color: rgb(227, 227, 227);
+}

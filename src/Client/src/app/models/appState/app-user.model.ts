@@ -1,7 +1,7 @@
+import { User } from '../user.model';
+
 export interface AppUser {
-  userId: number;
-  name: string;
-  email: string;
   enterpriseIds?: string[];
   enterpriseId?: string;
+  userDetails: User;
 }

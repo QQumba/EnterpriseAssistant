@@ -1,0 +1,40 @@
+.wrapper {
+  padding: 2em;
+}
+
+.info {
+  padding: 1em;
+  text-align: center;
+  background-color: rgb(227, 227, 227);
+  font-weight: 500;
+}
+
+.project-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+img {
+  height: 2rem;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.members-wrapper{
+  width: fit-content;
+}
+
+.extra-members{
+  height: 2rem;
+  min-width: 2rem;
+  padding: .2em;
+  border-radius: 999px;
+  background-color: rgb(207, 207, 207);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .8em;
+  font-weight: 500;
+}

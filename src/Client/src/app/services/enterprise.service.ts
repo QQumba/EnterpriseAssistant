@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Invite } from '../models/invite.model';
 import { UserCreate } from '../models/user-create.model';
 import { User } from '../models/user.model';
 import { API_URL } from '../util/urls';
@@ -27,5 +28,9 @@ export class EnterpriseService {
 
   getEneterpriseUsers(): Observable<User[]> {
     return this.client.get<User[]>(URL + 'user');
+  }
+
+  getInivtes(): Observable<Invite[]> {
+    return this.client.get<Invite[]>(URL + 'invite');
   }
 }

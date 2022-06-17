@@ -3,6 +3,5 @@
 public enum DepartmentUserRole
 {
     User,
-    Chief,
     Admin
 }

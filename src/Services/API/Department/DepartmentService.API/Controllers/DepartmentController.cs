@@ -49,15 +49,7 @@ public class DepartmentController : ControllerBase
         var result = await _mediator.Send(new GetEnterpriseDepartments(authContext));
         return Ok(result);
     }
-
-
-    [HttpGet("{departmentId:long}/child")]
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetChildDepartments(
-        [Range(1, long.MaxValue), FromRoute] long departmentId)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     [HttpPost]
     [SwaggerOperation(Summary = "Create department", Description = "Create department")]
     public async Task<ActionResult<DepartmentDto>> CreateDepartment([FromBody] DepartmentCreateDto model)
@@ -73,6 +65,14 @@ public class DepartmentController : ControllerBase
         return result.Match<ActionResult>(
             d => CreatedAtAction(nameof(CreateDepartment), d),
             e => BadRequest(e.Message));
+    }
+
+    [HttpGet]
+    [SwaggerOperation(Summary = "Check if department name already taken")]
+    public async Task<ActionResult<bool>> CheckIfDepartmentExists([Required, FromQuery] string name)
+    {
+        var exists = await _mediator.Send(new CheckIfDepartmentExists(name, User.GetAuthContext()));
+        return Ok(exists);
     }
 
     [HttpDelete("{departmentId:long}")]

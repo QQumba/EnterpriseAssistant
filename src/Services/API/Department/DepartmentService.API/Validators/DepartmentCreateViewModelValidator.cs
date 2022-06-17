@@ -8,5 +8,12 @@ public class DepartmentCreateViewModelValidator : AbstractValidator<DepartmentCr
     public DepartmentCreateViewModelValidator()
     {
         RuleFor(d => d.Name).NotEmpty().WithMessage($"Department {nameof(DepartmentCreateDto.Name)} cannot be empty");
+
+        When(d => d.DoNotJoin, () =>
+        {
+            RuleFor(d => d.JoinAsMember)
+                .Must(j => !j)
+                .WithMessage("Join as member is unavailable when do not join selected");
+        });
     }
 }

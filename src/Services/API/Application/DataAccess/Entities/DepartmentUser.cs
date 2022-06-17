@@ -21,4 +21,7 @@ public class DepartmentUser : BaseEntity.WithId<long>
 
     [Column("enterprise_id")]
     public string EnterpriseId { get; set; }
+    
+    [Column("display_as_member")]
+    public bool DisplayAsMember { get; set; }
 }

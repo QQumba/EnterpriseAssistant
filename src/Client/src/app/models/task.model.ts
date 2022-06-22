@@ -1,9 +1,11 @@
+import { User } from './user.model';
+
 export interface Task {
   id: number;
   title: string;
   description: string;
   projectId: number;
-  assignedUsers: string[];
+  assignedUsers?: User[];
   status: TaskStatus;
 }
 

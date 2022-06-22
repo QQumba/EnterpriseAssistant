@@ -1,15 +1,57 @@
 .wrapper {
   padding: 2em;
-  max-width: 80%;
-  margin: auto;
-
-  @media screen and (max-width: 1500px) {
-    max-width: 100%;
-  }
 }
 
 .col-header {
   padding: 0.5em;
   border-radius: 0.2em;
   background-color: rgb(227, 227, 227);
+}
+
+small {
+  color: rgb(99, 99, 99);
+}
+
+.profile-img {
+  max-height: 3em;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  border-radius: 0.5em;
+}
+
+// .assigned-users {
+//   display: flex;
+//   justify-content: end;
+// }
+
+.assign-user-btn {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.info {
+  padding: 1em;
+  text-align: center;
+  background-color: rgb(227, 227, 227);
+  font-weight: 500;
+}
+
+.invites {
+  min-width: 60%;
+  max-width: fit-content;
+
+  @media screen and (max-width: 900px) {
+    min-width: 100%;
+  }
+
+  .invite {
+    width: 100%;
+  }
 }

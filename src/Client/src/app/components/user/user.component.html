@@ -1,4 +1,4 @@
-<div class="row gx-0 border border-2 bg-light p-2 mb-2 user-row">
+<div class="row gx-0 border border-2 bg-light p-2 mb-1 user-row">
   <div class="col text-muted">Photo</div>
   <div class="col text-muted">Name</div>
   <div class="col text-muted">Login</div>
@@ -6,7 +6,7 @@
 </div>
 <div
   *ngFor="let user of $users | async"
-  class="row gx-0 border border-2 border-success bg-light user-row p-2 mb-2"
+  class="row gx-0 border border-2 bg-light user-row p-2 mb-1"
 >
   <div class="col">
     <img src="{{ user | avatar }}" class="profile-img" alt="Image" />

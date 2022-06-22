@@ -2,9 +2,9 @@ namespace EnterpriseService.Contract.DataTransfer;
 
 public class EnterpriseUserDto
 {
-    public long UserId { get; set; }
+    public long Id { get; set; }
     
-    public string Login { get; set; } = null!;
+    public string? Login { get; set; }
     
     public string Email { get; set; } = null!;
 

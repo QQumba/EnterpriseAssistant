@@ -20,29 +20,41 @@ namespace ProjectService.API.Controllers;
 [Route("api/project")]
 public class ProjectController : ControllerBase
 {
+    private readonly DbContextFactory _factory;
     private readonly IMediator _mediator;
     private readonly EnterpriseAssistantDbContext _context;
 
-    public ProjectController(EnterpriseAssistantDbContext context, IMediator mediator)
+    public ProjectController(DbContextFactory factory, IMediator mediator)
     {
-        _context = context;
+        _context = factory.Create();
+        _factory = factory;
         _mediator = mediator;
     }
+
+    private AuthContext AuthContext => User.GetAuthContext();
 
     [HttpPost]
     [SwaggerOperation(Summary = "Add project", Description = "add project")]
     public async Task<ActionResult<ProjectDto>> CreateProject(ProjectCreateDto request)
     {
-        var response = await _mediator.Send(new CreateDepartment(request.DepartmentCreate, User.GetAuthContext()));
+        var response = await _mediator.Send(new CreateDepartment(request.DepartmentCreate, AuthContext));
         if (response.IsT1)
         {
             return BadRequest(response.AsT1.Message);
         }
 
+        var department = response.AsT0;
+
         var project = request.Adapt<Project>();
-        _context.Projects.Add(project);
+        project.EnterpriseId = AuthContext.EnterpriseId!;
+        project.DepartmentId = department.Id;
+
+        var createdProject = _context.Projects.Add(project).Entity;
+        var projectDto = createdProject.Adapt<ProjectDto>();
+        projectDto.DepartmentCode = department.Code;
+
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(CreateProject), new { id = project.Id }, project.Adapt<ProjectDto>());
+        return CreatedAtAction(nameof(CreateProject), new { id = createdProject.Id }, projectDto);
     }
 
     [HttpDelete("{id}")]
@@ -59,7 +71,7 @@ public class ProjectController : ControllerBase
                          du.Department.ProjectId == id)
             .Select(du => du.Department.Project)
             .FirstOrDefaultAsync();
-        
+
         if (project == null)
         {
             return NotFound();
@@ -73,13 +85,26 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    [SwaggerOperation(Summary = "Get all projects", Description = "Get all projects by enterprise")]
+    [SwaggerOperation(Summary = "Get user projects")]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
     {
-        var enterpriseId = User.GetEnterpriseId();
-        var projects = await _context.Projects.Where(p => p.EnterpriseId.Equals(enterpriseId)).ToListAsync();
+        var readOnlyContext = _factory.CreateReadOnlyContext(AuthContext);
 
-        return Ok(projects.Adapt<IEnumerable<ProjectDto>>());
+        var tuples = await
+            (from du in readOnlyContext.DepartmentUsers
+                join d in readOnlyContext.Departments on du.DepartmentId equals d.Id
+                join p in readOnlyContext.Projects on d.Id equals p.DepartmentId
+                where du.UserId == AuthContext.UserId && du.EnterpriseId == AuthContext.EnterpriseId
+                select new { p, d })
+            .ToListAsync();
+        var projects = tuples.Select(x =>
+        {
+            var project = x.p.Adapt<ProjectDto>();
+            project.DepartmentCode = x.d.Code;
+            return project;
+        });
+
+        return Ok(projects);
     }
 
     [HttpGet("{id}")]

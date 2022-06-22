@@ -94,7 +94,8 @@ public class CreateEnterpriseHandler
             Department = department,
             User = user,
             DepartmentUserRole = DepartmentUserRole.Admin,
-            EnterpriseId = enterprise.Id
+            EnterpriseId = enterprise.Id,
+            DisplayAsMember = true,
         };
         _db.DepartmentUsers.Add(departmentUser);
     }

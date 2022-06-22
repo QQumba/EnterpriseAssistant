@@ -1,25 +1,29 @@
 ﻿using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using Task = EnterpriseAssistant.DataAccess.Entities.Task;
 
 namespace EnterpriseAssistant.DataAccess;
 
-    public class DbContextFactory
+public class DbContextFactory
+{
+    private readonly EnterpriseAssistantDbContext _context;
+
+    public DbContextFactory(EnterpriseAssistantDbContext context)
     {
-        private readonly EnterpriseAssistantDbContext _context;
-        public DbContextFactory(EnterpriseAssistantDbContext context)
-        {
-            _context = context;
-        }
-        public AuthenticatedDbContext CreateReadOnlyContext(AuthContext authContext, bool readDeleted = false)
-        {
-            return new AuthenticatedDbContext(_context, authContext, readDeleted);
-        }
-        public EnterpriseAssistantDbContext Create()
-        {
-            return _context;
-        }
+        _context = context;
     }
+
+    public AuthenticatedDbContext CreateReadOnlyContext(AuthContext authContext, bool readDeleted = false)
+    {
+        return new AuthenticatedDbContext(_context, authContext, readDeleted);
+    }
+
+    public EnterpriseAssistantDbContext Create()
+    {
+        return _context;
+    }
+}
 
 public class AuthenticatedDbContext
 {
@@ -54,4 +58,15 @@ public class AuthenticatedDbContext
         _context.EnterpriseUsers.Include(eu => eu.User)
             .Where(eu => eu.EnterpriseId.Equals(_authContext.EnterpriseId) && eu.IsSoftDeleted == _readDeleted)
             .Select(eu => eu.User);
+
+    public IQueryable<Project> Projects =>
+        _context.Projects.Where(
+            p => p.EnterpriseId.Equals(_authContext.EnterpriseId) && p.IsSoftDeleted == _readDeleted);
+
+    public IQueryable<Task> Tasks =>
+        _context.Tasks.Where(t => t.EnterpriseId.Equals(_authContext.EnterpriseId) && t.IsSoftDeleted == _readDeleted);
+
+    public IQueryable<TaskUser> TaskUsers =>
+        _context.TaskUsers.Where(tu =>
+            tu.EnterpriseId.Equals(_authContext.EnterpriseId) && tu.IsSoftDeleted == _readDeleted);
 }

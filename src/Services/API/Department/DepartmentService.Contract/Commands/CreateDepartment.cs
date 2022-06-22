@@ -8,13 +8,13 @@ namespace DepartmentService.Contract.Commands;
 
 public class CreateDepartment : IRequest<OneOf<DepartmentDto, IBadRequestError>>
 {
-    public CreateDepartment(DepartmentCreateDto model, AuthContext authContext)
+    public CreateDepartment(DepartmentCreateDto departmentCreate, AuthContext authContext)
     {
-        Model = model;
+        DepartmentCreate = departmentCreate;
         AuthContext = authContext;
     }
 
-    public DepartmentCreateDto Model { get; }
+    public DepartmentCreateDto DepartmentCreate { get; }
 
     public AuthContext AuthContext { get; }
 }

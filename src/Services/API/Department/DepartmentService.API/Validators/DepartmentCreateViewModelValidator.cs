@@ -11,7 +11,7 @@ public class DepartmentCreateViewModelValidator : AbstractValidator<DepartmentCr
 
         When(d => d.DoNotJoin, () =>
         {
-            RuleFor(d => d.JoinAsMember)
+            RuleFor(d => d.DisplayAsMember)
                 .Must(j => !j)
                 .WithMessage("Join as member is unavailable when do not join selected");
         });

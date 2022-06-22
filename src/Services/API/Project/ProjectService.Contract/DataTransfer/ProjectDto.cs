@@ -1,6 +1,4 @@
-﻿using EnterpriseService.Contract.DataTransfer;
-
-namespace ProjectService.Contract.DataTransfer;
+﻿namespace ProjectService.Contract.DataTransfer;
 
 public class ProjectDto
 {
@@ -10,5 +8,7 @@ public class ProjectDto
 
     public string? Description { get; set; }
 
-    public long? EnterpriseId { get; set; }
+    public long DepartmentId { get; set; }
+
+    public string DepartmentCode { get; set; } = null!;
 }

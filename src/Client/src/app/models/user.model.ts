@@ -5,3 +5,7 @@ export interface User {
   firstName: string;
   lastName?: string;
 }
+
+export interface Assignee {
+  login: string;
+}

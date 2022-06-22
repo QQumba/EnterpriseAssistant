@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Invite } from '../models/invite.model';
 import { UserCreate } from '../models/user-create.model';
 import { User } from '../models/user.model';
@@ -28,6 +28,16 @@ export class EnterpriseService {
 
   getEneterpriseUsers(): Observable<User[]> {
     return this.client.get<User[]>(URL + 'user');
+  }
+
+  searchEnterpriseUsers(query: string): Observable<User[]> {
+    if (!query) {
+      return of([]);
+    }
+    const params = new HttpParams().append('query', query);
+    return this.client.get<User[]>(URL + 'user/search', {
+      params: params
+    });
   }
 
   getInivtes(): Observable<Invite[]> {

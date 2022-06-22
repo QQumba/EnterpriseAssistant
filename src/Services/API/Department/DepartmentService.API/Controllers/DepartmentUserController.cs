@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
+using TaskTrackingService.API.Controllers;
 using UserService.Contract.DataTransfer;
 using Task = System.Threading.Tasks.Task;
 
@@ -34,7 +35,7 @@ public class DepartmentUserController : ControllerBase
     [SwaggerResponse(404, "Department or user not found")]
     [SwaggerOperation(Summary = "Add user to department")]
     public async Task<ActionResult> AddUser([Range(1, long.MaxValue), FromRoute] long departmentId,
-        [FromBody] DepartmentUserCreateDto user)
+        [FromBody] AssigneeDto user)
     {
         var authContext = User.GetAuthContext();
         var readonlyContext = _factory.CreateReadOnlyContext(authContext);
@@ -46,24 +47,26 @@ public class DepartmentUserController : ControllerBase
             return NotFound($"Department with id {departmentId} not found");
         }
 
-        var isUserExists = await readonlyContext.EnterpriseUsers
-            .AnyAsync(eu => eu.Id == user.UserId &&
-                            eu.EnterpriseId.Equals(authContext.EnterpriseId));
-        if (isUserExists == false)
+        var foundUser = await readonlyContext.EnterpriseUsers
+            .Include(x => x.User)
+            .FirstOrDefaultAsync(x => x.Login == user.Login);
+
+        if (foundUser is null)
         {
-            return NotFound($"User with id {user.UserId} not found");
+            return NotFound($"User with login {user.Login} not found");
         }
 
-        var isUserMember = await readonlyContext.DepartmentUsers
-            .AnyAsync(du => du.UserId == user.UserId &&
-                            du.DepartmentId == departmentId);
+        // var isUserMember = await readonlyContext.DepartmentUsers
+        //     .AnyAsync(du => du.UserId == foundUser.Id &&
+        //                     du.DepartmentId == departmentId);
 
         var departmentUser = new DepartmentUser
         {
             DepartmentId = departmentId,
-            UserId = user.UserId,
-            DepartmentUserRole = DepartmentUserRole.User,
-            EnterpriseId = authContext.EnterpriseId!
+            UserId = foundUser.Id,
+            DepartmentUserRole = DepartmentUserRole.Admin,
+            EnterpriseId = authContext.EnterpriseId!,
+            DisplayAsMember = true
         };
         _db.DepartmentUsers.Add(departmentUser);
         await _db.SaveChangesAsync();
@@ -77,16 +80,17 @@ public class DepartmentUserController : ControllerBase
     {
         var readonlyContext = _factory.CreateReadOnlyContext(User.GetAuthContext());
         var authContext = User.GetAuthContext();
+        var canViewHiddenUsers = await _db.IsUserDepartmentAdmin(authContext, departmentId);
 
         var users = await (from user in readonlyContext.Users
             join enterpriseUser in readonlyContext.EnterpriseUsers on user.Id equals enterpriseUser.UserId
             join departmentUser in readonlyContext.DepartmentUsers on user.Id equals departmentUser.UserId
             where departmentUser.DepartmentId == departmentId &&
                   enterpriseUser.EnterpriseId == authContext.EnterpriseId &&
-                  departmentUser.DisplayAsMember
+                  (departmentUser.DisplayAsMember || canViewHiddenUsers)
             select new EnterpriseUserDto
             {
-                UserId = user.Id,
+                Id = user.Id,
                 Login = enterpriseUser.Login,
                 Email = user.Email,
                 FirstName = user.FirstName,
@@ -96,7 +100,7 @@ public class DepartmentUserController : ControllerBase
         return Ok(users);
     }
 
-    [HttpPut("exclude")]
+    [HttpDelete]
     [SwaggerOperation(Summary = "Exclude user from department")]
     public async Task<ActionResult> ExcludeUser([FromRoute] long departmentId, [FromBody] long userId)
     {
@@ -131,7 +135,7 @@ public class DepartmentUserController : ControllerBase
         return NoContent();
     }
 
-    [HttpPut]
+    [HttpPut("role")]
     [SwaggerOperation(Summary = "Update department user role")]
     public async Task<ActionResult> UpdateRole([FromRoute] long departmentId, DepartmentUserUpdateDto departmentUser)
     {
@@ -162,5 +166,30 @@ public class DepartmentUserController : ControllerBase
         await _db.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<EnterpriseUserDto>>> SearchUsers([FromRoute] long departmentId,
+        [Required, FromQuery] string query)
+    {
+        var authContext = User.GetAuthContext();
+        var readOnlyContext = _factory.CreateReadOnlyContext(authContext);
+
+        var users = await readOnlyContext.DepartmentUsers
+            .Include(x => x.User)
+            .Where(x => x.User.IsSoftDeleted == false &&
+                        x.DepartmentId == departmentId &&
+                        x.User.FirstName.ToLower().StartsWith(query) ||
+                        (x.User.LastName != null && x.User.LastName.ToLower().StartsWith(query)))
+            .Select(eu => new EnterpriseUserDto
+            {
+                Id = eu.UserId,
+                Email = eu.User.Email,
+                FirstName = eu.User.FirstName,
+                LastName = eu.User.LastName
+            })
+            .ToListAsync();
+
+        return users;
     }
 }

@@ -4,12 +4,14 @@ export interface Project {
   id: number;
   name: string;
   description: string;
+  departmentId: number;
+  departmentCode: string;
 }
 
 export interface ProjectCreate {
   name: string;
   description: string;
-  departmentCreate: DepartmentCreate;
+  departmentCreate?: DepartmentCreate;
 }
 
 export interface ProjectUpdate {

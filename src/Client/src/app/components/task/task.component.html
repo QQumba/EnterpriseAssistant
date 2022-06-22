@@ -1,132 +1,64 @@
 <div class="wrapper">
-  <div class="row">
-    <div class="col-3">
-      <div class="col-header mb-4">
-        <button class="btn btn-primary btn-sm">
-          <fa-icon [icon]="plus"></fa-icon>
-        </button>
-        To Do
+  <ng-container *ngIf="tasks$ | async as tasks; else loading">
+    <div class="d-flex mb-4">
+      <div class="spacer"></div>
+      <button class="btn btn-primary" (click)="openTaskCreateModal()">
+        Add new task
+      </button>
+    </div>
+    <ng-container *ngIf="tasks.length > 0; else noContent">
+      <div class="row gx-0 border border-2 bg-light p-2 mb-1 user-row">
+        <div class="col-4 text-muted">Title</div>
+        <div class="col text-muted">Status</div>
+        <div class="col text-muted">Progress</div>
+        <div class="col text-muted">Assigned users</div>
+        <div class="col-2 text-muted">Actions</div>
       </div>
       <div
-        class="card mb-2"
-        *ngFor="let task of $tasksByStatus('Todo') | async"
+        *ngFor="let task of tasks"
+        class="row gx-0 border border-2 user-row p-2 mb-1"
       >
-        <div class="card-body">
-          <p class="card-text">
-            {{ task.title }}
-          </p>
-          <p class="card-text">
-            <small class="text-muted" *ngFor="let user of task.assignedUsers">
-              {{ user }}
-            </small>
-          </p>
+        <div class="col-4">
+          {{ task.title }}
         </div>
-        <div class="card-footer">
+        <div class="col">
+          In progress
+        </div>
+        <div class="col">
+          <span ngbTooltip="0 of 2"> 0% </span>
+        </div>
+        <div class="col assigned-users">
+          <app-task-members [taskId]="task.id"></app-task-members>
           <button
-            class="btn btn-primary btn-sm me-2"
-            (click)="openDetailsModal(task)"
+            class="btn btn-outline-primary assign-user-btn ms-1"
+            (click)="openTaskAssignModal(task.id)"
           >
-            Details
+            <fa-icon [icon]="plus"></fa-icon>
           </button>
-          <button class="btn btn-primary btn-sm">Assign</button>
         </div>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="col-header mb-4">
-        <button class="btn btn-primary btn-sm">
-          <fa-icon [icon]="plus"></fa-icon>
-        </button>
-        Commited
-      </div>
-      <div
-        class="card mb-2"
-        *ngFor="let task of $tasksByStatus('Commited') | async"
-      >
-        <div class="card-body">
-          <p class="card-text">
-            {{ task.title }}
-          </p>
-          <p class="card-text">
-            <small class="text-muted" *ngFor="let user of task.assignedUsers">
-              {{ user }}
-            </small>
-          </p>
-        </div>
-        <div class="card-footer">
+        <div class="col-2 assigned-users">
           <button
-            class="btn btn-primary btn-sm me-2"
-            (click)="openDetailsModal(task)"
+            class="btn btn-outline-primary"
+            (click)="openTaskDetailsModal(task)"
           >
-            Details
+            <fa-icon [icon]="pencil"></fa-icon>
           </button>
-          <button class="btn btn-primary btn-sm">Assign</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="col-header mb-4">
-        <button class="btn btn-primary btn-sm">
-          <fa-icon [icon]="plus"></fa-icon>
-        </button>
-        In progress
-      </div>
-      <div
-        class="card mb-2"
-        *ngFor="let task of $tasksByStatus('InProgress') | async"
-      >
-        <div class="card-body">
-          <p class="card-text">
-            {{ task.title }}
-          </p>
-          <p class="card-text">
-            <small class="text-muted" *ngFor="let user of task.assignedUsers">
-              {{ user }}
-            </small>
-          </p>
-        </div>
-        <div class="card-footer">
           <button
-            class="btn btn-primary btn-sm me-2"
-            (click)="openDetailsModal(task)"
+            class="btn btn-outline-primary ms-1"
+            (click)="openTaskTrackModal(task.id)"
           >
-            Details
+            <fa-icon [icon]="clock"></fa-icon>
           </button>
-          <button class="btn btn-primary btn-sm">Assign</button>
         </div>
       </div>
-    </div>
-    <div class="col-3">
-      <div class="col-header mb-4">
-        <button class="btn btn-primary btn-sm">
-          <fa-icon [icon]="plus"></fa-icon>
-        </button>
-        Done
-      </div>
-      <div
-        class="card mb-2"
-        *ngFor="let task of $tasksByStatus('Done') | async"
-      >
-        <div class="card-body">
-          <p class="card-text">
-            {{ task.title }}
-          </p>
-          <p class="card-text">
-            <small class="text-muted" *ngFor="let user of task.assignedUsers">
-              {{ user }}
-            </small>
-          </p>
-        </div>
-        <div class="card-footer">
-          <button
-            class="btn btn-primary btn-sm me-2"
-            (click)="openDetailsModal(task)"
-          >
-            Details
-          </button>
-          <button class="btn btn-primary btn-sm">Assign</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    </ng-container>
+  </ng-container>
 </div>
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>
+
+<ng-template #noContent>
+  <div class="card info">There are no tasks in this project yet.</div>
+</ng-template>

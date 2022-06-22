@@ -1,1 +1,37 @@
-<p>task-assign-modal works!</p>
+<form [formGroup]="assigneeForm">
+  <div class="modal-header">
+    <div class="mb-3">Assign new user</div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="activeModal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-2">
+      <label class="required">Assignee login</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Login"
+        formControlName="login"
+      />
+      <small *ngIf="helper.hasError('login')">
+        <div
+          *ngIf="
+            helper.getValidationError('login', 'required') as error
+          "
+        >
+          <fa-icon [icon]="warning"></fa-icon>
+          This field is required
+        </div>
+      </small>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="submit()">
+      Assign
+    </button>
+  </div>
+</form>

@@ -1,0 +1,284 @@
+<div class="wrapper">
+  <form [formGroup]="createProjectForm" class="card">
+    <div class="card-header">Create new project</div>
+    <div class="card-body">
+      <h5>Project info</h5>
+      <div class="mb-2">
+        <label class="required">Name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': helper.hasError('name') }"
+          placeholder="Name"
+          formControlName="name"
+        />
+        <small *ngIf="helper.hasError('name')">
+          <div *ngIf="helper.getValidationError('name', 'error') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            {{ error }}
+          </div>
+          <div *ngIf="helper.getValidationError('name', 'required') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+        </small>
+      </div>
+      <div class="mb-2">
+        <label>Description</label>
+        <textarea
+        type="text"
+        class="form-control form-control-sm"
+        [ngClass]="{ 'is-invalid': helper.hasError('description') }"
+        placeholder="Description"
+        formControlName="description"
+        >
+        </textarea>
+      </div>
+      <div class="form-check mb-2">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [ngClass]="{ 'is-invalid': helper.hasError('createNewDepartment') }"
+          formControlName="createNewDepartment"
+        />
+        <label class="form-check-label">Create new department</label>
+      </div>
+    </div>
+
+    <div
+      formGroupName="attacheeDepartment"
+      *ngIf="!createNewDepartment"
+      class="card-body"
+    >
+      <h5>Project department info</h5>
+      <label>Parent department</label>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text" id="basic-addon1">
+          <fa-icon [icon]="glass"></fa-icon>
+        </span>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="Parent deparment"
+          formControlName="search"
+        />
+        <small *ngIf="helper.hasError('attacheeDepartment.search')">
+          <div
+            *ngIf="
+              helper.getValidationError(
+                'attacheeDepartment.search',
+                'required'
+              ) as error
+            "
+          >
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+        </small>
+      </div>
+    </div>
+    <div
+      formGroupName="department"
+      *ngIf="createNewDepartment"
+      class="card-body"
+    >
+      <h5>Project department info</h5>
+      <div class="mb-2">
+        <label class="required">Name</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': helper.hasError('department.name') }"
+          placeholder="Name"
+          formControlName="name"
+        />
+        <small *ngIf="helper.hasError('department.name')">
+          <div *ngIf="helper.getValidationError('department.name', 'error') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            {{ error }}
+          </div>
+          <div *ngIf="helper.getValidationError('department.name', 'required') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+        </small>
+      </div>
+      <div class="mb-2">
+        <label class="required">Code</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': helper.hasError('department.code') }"
+          placeholder="Code"
+          formControlName="code"
+        />
+        <small *ngIf="helper.hasError('department.code')">
+          <div *ngIf="helper.getValidationError('department.code', 'error') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            {{ error }}
+          </div>
+          <div *ngIf="helper.getValidationError('department.code', 'required') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+          <div *ngIf="helper.getValidationError('department.code', 'minlength') as error">
+            <fa-icon [icon]="warning"></fa-icon>
+            Min length is 2 characters
+          </div>
+        </small>
+      </div>
+      <div class="mb-2">
+        <label>Parent department</label>
+        <div class="input-group input-group-sm">
+          <span class="input-group-text" id="basic-addon1">
+            <fa-icon [icon]="glass"></fa-icon>
+          </span>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Parent deparment"
+            formControlName="parentDepartment"
+          />
+          <small *ngIf="helper.hasError('parentDepartment')">
+            <div
+              *ngIf="
+                helper.getValidationError(
+                  'parentDepartment',
+                  'required'
+                ) as error
+              "
+            >
+              <fa-icon [icon]="warning"></fa-icon>
+              This field is required
+            </div>
+          </small>
+        </div>
+      </div>
+      <div class="form-check mb-2">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [ngClass]="{ 'is-invalid': helper.hasError('doNotJoin') }"
+          formControlName="doNotJoin"
+        />
+        <label class="form-check-label">Do not join</label>
+        <small *ngIf="helper.hasError('doNotJoin')">
+          <div
+            *ngIf="helper.getValidationError('doNotJoin', 'required') as error"
+          >
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+        </small>
+      </div>
+      <div class="form-check mb-2">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [ngClass]="{ 'is-invalid': helper.hasError('displayAsMember') }"
+          formControlName="displayAsMember"
+        />
+        <label class="form-check-label">Display as member</label>
+        <small *ngIf="helper.hasError('displayAsMember')">
+          <div
+            *ngIf="
+              helper.getValidationError('displayAsMember', 'required') as error
+            "
+          >
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </div>
+        </small>
+      </div>
+      <h5>Department administrators</h5>
+      <ng-container formGroupName="admins">
+        <div class="mb-2">
+          <label>Department administrator</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text" id="basic-addon1">
+              <fa-icon [icon]="glass"></fa-icon>
+            </span>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Department administrator"
+              formControlName="search"
+              [ngbTypeahead]="searchUsers"
+              [inputFormatter]="formatter"
+              [resultFormatter]="formatter"
+              [editable]="false"
+              (selectItem)="selectAdmin($event)"
+            />
+            <small *ngIf="helper.hasError('admins.search')">
+              <div
+                *ngIf="
+                  helper.getValidationError(
+                    'admins.search',
+                    'required'
+                  ) as error
+                "
+              >
+                <fa-icon [icon]="warning"></fa-icon>
+                This field is required
+              </div>
+            </small>
+            <button class="btn btn-outline-primary btn-sm" (click)="addAdmin()">
+              <fa-icon [icon]="plus"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <ng-container formArrayName="admins">
+          <div *ngFor="let _ of admins.controls; let i = index" class="mb-2">
+            <ng-container [formGroupName]="i">
+              <div class="input-group input-group-sm">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Administrator"
+                  formControlName="name"
+                  readonly
+                />
+                <small *ngIf="helper.hasError('admins.admins.name')">
+                  <div
+                    *ngIf="
+                      helper.getValidationError(
+                        'admins.admins',
+                        'required'
+                      ) as error
+                    "
+                  >
+                    <fa-icon [icon]="warning"></fa-icon>
+                    This field is required
+                  </div>
+                </small>
+                <div class="input-group-text">
+                  <div>
+                    <input
+                      class="form-check-input me-1"
+                      type="checkbox"
+                      value=""
+                      aria-label="Checkbox for following text input"
+                      formControlName="displayAsMember"
+                    />
+                    <label class="form-check-label">Display as member</label>
+                  </div>
+                </div>
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="deleteAdmin(i)"
+                >
+                  <fa-icon [icon]="trash"></fa-icon>
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="card-body">
+      <button type="submit" class="btn btn-primary" (click)="submit()">
+        Create
+      </button>
+    </div>
+  </form>
+</div>

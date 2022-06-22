@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import {
   faBuilding,
   faList,
@@ -97,7 +97,7 @@ export class SidebarMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.routerSubscription = this.router.events.subscribe((e) => {
-      if (e instanceof NavigationStart) {
+      if (e instanceof NavigationEnd) {
         console.log(e);
         if (e.url.startsWith('/enterprise')) {
           this.menu = enterpriseMenu;

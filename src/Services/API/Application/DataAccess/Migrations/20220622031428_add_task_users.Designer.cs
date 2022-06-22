@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
     [DbContext(typeof(EnterpriseAssistantDbContext))]
-    [Migration("20220616232242_add_display_as_member_to_department_user")]
-    partial class add_display_as_member_to_department_user
+    [Migration("20220622031428_add_task_users")]
+    partial class add_task_users
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,11 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -76,22 +81,10 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("ProjectId")
                         .IsUnique();
 
-                    b.HasIndex("Name", "EnterpriseId", "IsSoftDeleted")
+                    b.HasIndex("Code", "EnterpriseId")
                         .IsUnique();
 
                     b.ToTable("department");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            DepartmentType = 0,
-                            EnterpriseId = "test",
-                            IsSoftDeleted = false,
-                            Name = "Test department",
-                            UpdatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265)
-                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.DepartmentUser", b =>
@@ -146,20 +139,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("department_user");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            DepartmentId = 1L,
-                            DepartmentUserRole = 0,
-                            DisplayAsMember = false,
-                            EnterpriseId = "test",
-                            IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            UserId = 1L
-                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Enterprise", b =>
@@ -191,16 +170,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("enterprise");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "test",
-                            CreatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            DisplayedName = "test",
-                            IsSoftDeleted = false,
-                            UpdatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265)
-                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.EnterpriseUser", b =>
@@ -250,19 +219,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("enterprise_user");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            EnterpriseId = "test",
-                            IsSoftDeleted = false,
-                            Login = "test",
-                            Role = 0,
-                            UpdatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            UserId = 1L
-                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Invite", b =>
@@ -415,6 +371,54 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.ToTable("task");
                 });
 
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.TaskUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("EnterpriseId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("enterprise_id");
+
+                    b.Property<double?>("HoursSpent")
+                        .HasColumnType("double precision")
+                        .HasColumnName("hours_spent");
+
+                    b.Property<bool>("IsSoftDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_soft_deleted");
+
+                    b.Property<long>("TaskId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("task_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("UserId", "TaskId")
+                        .IsUnique();
+
+                    b.ToTable("task_user");
+                });
+
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -466,20 +470,6 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("user");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265),
-                            Email = "test@mail.com",
-                            FirstName = "Test",
-                            IsSoftDeleted = false,
-                            LastName = "User",
-                            Password = "qwe",
-                            Salt = "test_salt",
-                            UpdatedAt = new DateTime(2022, 6, 16, 23, 22, 42, 401, DateTimeKind.Utc).AddTicks(3265)
-                        });
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
@@ -601,6 +591,25 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.Navigation("Enterprise");
 
                     b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.TaskUser", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Task", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
 
                     b.Navigation("User");
                 });

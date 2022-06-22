@@ -37,11 +37,20 @@ export class EnterpriseCreateEnterpriseComponent implements OnInit {
       [this.idValidator.validate.bind(this.idValidator)]
     ),
     displayedName: new FormControl('', [Validators.required]),
-    userLogin: new FormControl('', [Validators.required])
+    userLogin: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(50)
+    ])
   });
 
   departmentFormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required])
+    name: new FormControl('', [Validators.required]),
+    code: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50)
+    ])
   });
 
   submitted = false;
@@ -65,7 +74,10 @@ export class EnterpriseCreateEnterpriseComponent implements OnInit {
       displayedName: this.enterpriseFromGroup.get('displayedName')?.value,
       userLogin: this.enterpriseFromGroup.get('userLogin')?.value,
       departmentCreate: {
-        name: this.departmentFormGroup.get('name')?.value
+        name: this.departmentFormGroup.get('name')?.value,
+        code: this.departmentFormGroup.get('code')?.value,
+        doNotJoin: false,
+        displayAsMember: true
       }
     };
 
@@ -90,6 +102,14 @@ export class EnterpriseCreateEnterpriseComponent implements OnInit {
     return (
       (control.touched || control.dirty || this.submitted) && control.invalid
     );
+  }
+
+  hasErrorByName(name: string, error: string): boolean {
+    if (!this.hasError(name)) {
+      return false;
+    }
+    const control = this.createEnterpriseForm.get(name);
+    return control?.errors?.[error] as boolean;
   }
 
   getValidationError(controlName: string, errorType: string): string | null {

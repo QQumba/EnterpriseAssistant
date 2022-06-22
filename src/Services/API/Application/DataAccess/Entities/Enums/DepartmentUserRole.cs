@@ -2,6 +2,6 @@
 
 public enum DepartmentUserRole
 {
-    User,
+    User = 0,
     Admin
 }

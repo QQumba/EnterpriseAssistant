@@ -1,10 +1,10 @@
 <div class="wrapper">
   <div class="d-flex mb-4">
     <div class="spacer"></div>
-    <button class="btn btn-primary">Create new deparment</button>
+    <a class="btn btn-primary" [routerLink]="'create'">Create new deparment</a>
   </div>
   <div *ngIf="$departments | async as departments; else loading">
-    <div *ngFor="let deparment of departments" class="card">
+    <div *ngFor="let deparment of departments" class="card mb-2">
       <div class="card-header">
         <div>{{ deparment.name }}</div>
       </div>
@@ -12,7 +12,7 @@
         <a [routerLink]="['/department', deparment.id]" class="btn btn-primary"
           >View</a
         >
-        <app-members [departmentId]="deparment.id"></app-members>
+        <app-department-members [departmentId]="deparment.id"></app-department-members>
       </div>
     </div>
   </div>

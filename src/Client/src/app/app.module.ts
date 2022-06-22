@@ -30,7 +30,9 @@ import {
   NgbDropdownModule,
   NgbToastModule,
   NgbTooltip,
-  NgbTooltipModule
+  NgbTooltipModule,
+  NgbTypeahead,
+  NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { ToastContainerComponent } from './components/utilities/toast-container/toast-container.component';
 import { AuthConfigModule } from './auth/auth-config.module';
@@ -56,6 +58,17 @@ import { TaskDetailsModalComponent } from './components/task/task-details-modal/
 import { MembersComponent } from './components/utilities/members/members.component';
 import { AvatarPipe } from './pipes/avatar.pipe';
 import { EnterpriseInvitesComponent } from './components/enterprise/enterprise-invites/enterprise-invites.component';
+import { DepartmentCreateComponent } from './components/department/department-create/department-create.component';
+import { ProjectCreateComponent } from './components/project/project-create/project-create.component';
+import { DepartmentMembersComponent } from './components/utilities/department-members/department-members.component';
+import { EffectsModule } from '@ngrx/effects';
+import { TaskEffects } from './store/effects/task.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { taskReducer } from './store/reducers/task.reducer';
+import { TaskCreateModalComponent } from './components/task/task-create-modal/task-create-modal.component';
+import { TaskTrackModalComponent } from './components/task/task-track-modal/task-track-modal.component';
+import { TaskMembersComponent } from './components/task/task-members/task-members.component';
+import { AddUserModalComponent } from './components/department/add-user-modal/add-user-modal.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -96,7 +109,14 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     TaskDetailsModalComponent,
     MembersComponent,
     AvatarPipe,
-    EnterpriseInvitesComponent
+    EnterpriseInvitesComponent,
+    DepartmentCreateComponent,
+    ProjectCreateComponent,
+    DepartmentMembersComponent,
+    TaskCreateModalComponent,
+    TaskTrackModalComponent,
+    TaskMembersComponent,
+    AddUserModalComponent
   ],
   imports: [
     BrowserModule,
@@ -117,9 +137,15 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NgbTooltipModule,
     AuthConfigModule,
     StoreModule.forRoot({
-      appUser: appUserReducer
+      appUser: appUserReducer,
+      tasks: taskReducer
     }),
-    ImageCropperModule
+    ImageCropperModule,
+    NgbTypeaheadModule,
+    EffectsModule.forRoot([TaskEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
+    })
   ],
   providers: [
     {

@@ -47,14 +47,24 @@
           formControlName="userLogin"
         />
         <small *ngIf="hasError('enterprise.userLogin')">
-          <fa-icon [icon]="warning"></fa-icon>
-          This field is required
+          <ng-container
+            *ngIf="hasErrorByName('enterprise.userLogin', 'required')"
+          >
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </ng-container>
+          <ng-container
+            *ngIf="hasErrorByName('enterprise.userLogin', 'minlength')"
+          >
+            <fa-icon [icon]="warning"></fa-icon>
+            Min length is 3 characters
+          </ng-container>
         </small>
       </div>
     </div>
     <div formGroupName="department" class="card-body">
       <h5>Department</h5>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label class="required">Department name</label>
         <input
           type="text"
@@ -64,8 +74,30 @@
           formControlName="name"
         />
         <small *ngIf="hasError('department.name')">
-          <fa-icon [icon]="warning"></fa-icon>
-          This field is required
+          <ng-container *ngIf="hasErrorByName('department.name', 'required')">
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </ng-container>
+        </small>
+      </div>
+      <div class="form-group">
+        <label class="required">Department code</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': hasError('department.code') }"
+          placeholder="Code of root department"
+          formControlName="code"
+        />
+        <small *ngIf="hasError('department.code')">
+          <ng-container *ngIf="hasErrorByName('department.code', 'required')">
+            <fa-icon [icon]="warning"></fa-icon>
+            This field is required
+          </ng-container>
+          <ng-container *ngIf="hasErrorByName('department.code', 'minlength')">
+            <fa-icon [icon]="warning"></fa-icon>
+            Min length is 2 characters
+          </ng-container>
         </small>
       </div>
     </div>

@@ -8,7 +8,6 @@ public class EnterpriseAssistantDbContext : DbContext
 {
     public EnterpriseAssistantDbContext(DbContextOptions options) : base(options)
     {
-
     }
 
     public DbSet<User> Users { get; set; }
@@ -22,10 +21,12 @@ public class EnterpriseAssistantDbContext : DbContext
     public DbSet<Project> Projects { get; set; }
 
     public DbSet<EnterpriseUser> EnterpriseUsers { get; set; }
-    
+
     public DbSet<Invite> Invites { get; set; }
 
     public DbSet<Entities.Task> Tasks { get; set; }
+
+    public DbSet<TaskUser> TaskUsers { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -55,66 +56,5 @@ public class EnterpriseAssistantDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EnterpriseAssistantDbContext).Assembly);
-        SeedData(modelBuilder);
-    }
-
-    private void SeedData(ModelBuilder modelBuilder)
-    {
-        var now = DateTime.UtcNow;
-        
-        var user = new User
-        {
-            CreatedAt = now,
-            UpdatedAt = now,
-            Id = 1,
-            Email = "test@mail.com",
-            FirstName = "Test",
-            LastName = "User",
-            Password = "qwe",
-            Salt = "test_salt"
-        };
-        
-        var enterprise = new Enterprise
-        {
-            CreatedAt = now,
-            UpdatedAt = now,
-            Id = "test",
-            DisplayedName = "test"
-        };
-
-        var enterpriseUser = new EnterpriseUser
-        {
-            CreatedAt = now,
-            UpdatedAt = now,
-            Id = 1,
-            UserId = 1,
-            EnterpriseId = "test",
-            Login = "test"
-        };
-
-        var department = new Department
-        {
-            CreatedAt = now,
-            UpdatedAt = now,
-            Id = 1,
-            Name = "Test department",
-            EnterpriseId = "test"
-        };
-        
-        var departmentUser = new DepartmentUser
-        {
-            CreatedAt = now,
-            UpdatedAt = now,
-            Id = 1,
-            UserId = 1,
-            DepartmentId = 1,
-            EnterpriseId = "test"
-        };
-
-        modelBuilder.Entity<User>().HasData(user);
-        modelBuilder.Entity<Enterprise>().HasData(enterprise);
-        modelBuilder.Entity<EnterpriseUser>().HasData(enterpriseUser);
-        modelBuilder.Entity<Department>().HasData(department);
-        modelBuilder.Entity<DepartmentUser>().HasData(departmentUser);
     }
 }

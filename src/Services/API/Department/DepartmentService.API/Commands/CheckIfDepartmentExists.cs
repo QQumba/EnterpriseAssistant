@@ -7,13 +7,13 @@ namespace DepartmentService.API.Commands;
 
 public class CheckIfDepartmentExists : IRequest<bool>
 {
-    public CheckIfDepartmentExists(string name, AuthContext authContext)
+    public CheckIfDepartmentExists(string code, AuthContext authContext)
     {
-        Name = name;
+        Code = code;
         AuthContext = authContext;
     }
 
-    public string Name { get; }
+    public string Code { get; }
 
     public AuthContext AuthContext { get; }
 }
@@ -30,6 +30,6 @@ public class CheckIfDepartmentExistsHandler : IRequestHandler<CheckIfDepartmentE
     public async Task<bool> Handle(CheckIfDepartmentExists request, CancellationToken cancellationToken)
     {
         var context = _factory.CreateReadOnlyContext(request.AuthContext);
-        return await context.Departments.AnyAsync(d => d.Name.Equals(request.Name), cancellationToken);
+        return await context.Departments.AnyAsync(d => d.Code.Equals(request.Code), cancellationToken);
     }
 }

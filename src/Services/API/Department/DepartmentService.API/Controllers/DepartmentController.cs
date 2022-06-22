@@ -67,11 +67,11 @@ public class DepartmentController : ControllerBase
             e => BadRequest(e.Message));
     }
 
-    [HttpGet]
+    [HttpGet("exists")]
     [SwaggerOperation(Summary = "Check if department name already taken")]
-    public async Task<ActionResult<bool>> CheckIfDepartmentExists([Required, FromQuery] string name)
+    public async Task<ActionResult<bool>> CheckIfDepartmentExists([Required, FromQuery] string code)
     {
-        var exists = await _mediator.Send(new CheckIfDepartmentExists(name, User.GetAuthContext()));
+        var exists = await _mediator.Send(new CheckIfDepartmentExists(code, User.GetAuthContext()));
         return Ok(exists);
     }
 

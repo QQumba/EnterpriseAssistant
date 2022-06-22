@@ -9,19 +9,13 @@ import { DepartmentService } from 'src/app/services/department.service';
   templateUrl: './members.component.html',
   styleUrls: ['./members.component.scss']
 })
-export class MembersComponent implements OnInit {
-  @Input() departmentId!: number;
-
-  $members?: Observable<User[]>;
+export class MembersComponent {
+  @Input() members?: User[];
 
   constructor(
     public service: DepartmentService,
     public avatarService: AvatarService
   ) {}
-
-  ngOnInit(): void {
-    this.$members = this.service.getDepartmentUsers(this.departmentId);
-  }
 
   getUserName(user: User): string {
     let name = user.firstName;

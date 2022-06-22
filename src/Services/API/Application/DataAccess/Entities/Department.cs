@@ -8,6 +8,9 @@ public class Department : BaseEntity.WithId<long>
 {
     [Column("name")]
     public string Name { get; set; } = null!;
+    
+    [Column("code")]
+    public string Code { get; set; } = null!;
 
     [Column("parent_department_id")]
     public long? ParentDepartmentId { get; set; }

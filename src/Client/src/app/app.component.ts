@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private authService: OidcSecurityService,
     private store: Store,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private router: Router
   ) {
     translate.setDefaultLang(DefaultLang);
     translate.use(DefaultLang);

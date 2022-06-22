@@ -139,6 +139,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
+                    code = table.Column<string>(type: "text", nullable: false),
                     parent_department_id = table.Column<long>(type: "bigint", nullable: true),
                     department_type = table.Column<int>(type: "integer", nullable: false),
                     enterprise_id = table.Column<string>(type: "text", nullable: false),
@@ -217,6 +218,7 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     user_id = table.Column<long>(type: "bigint", nullable: false),
                     department_user_role = table.Column<int>(type: "integer", nullable: false),
                     enterprise_id = table.Column<string>(type: "text", nullable: false),
+                    display_as_member = table.Column<bool>(type: "boolean", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     is_soft_deleted = table.Column<bool>(type: "boolean", nullable: false)
@@ -244,41 +246,16 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "enterprise",
-                columns: new[] { "id", "created_at", "displayed_name", "is_soft_deleted", "updated_at" },
-                values: new object[] { "test", new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), "test", false, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077) });
-
-            migrationBuilder.InsertData(
-                table: "user",
-                columns: new[] { "id", "created_at", "email", "first_name", "is_soft_deleted", "last_name", "password", "salt", "updated_at" },
-                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), "test@mail.com", "Test", false, "User", "qwe", "test_salt", new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077) });
-
-            migrationBuilder.InsertData(
+            migrationBuilder.CreateIndex(
+                name: "IX_department_code_enterprise_id",
                 table: "department",
-                columns: new[] { "id", "created_at", "department_type", "enterprise_id", "is_soft_deleted", "name", "parent_department_id", "project_id", "updated_at" },
-                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 0, "test", false, "Test department", null, null, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077) });
-
-            migrationBuilder.InsertData(
-                table: "enterprise_user",
-                columns: new[] { "id", "created_at", "enterprise_id", "is_soft_deleted", "login", "role", "updated_at", "user_id" },
-                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), "test", false, "test", 0, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 1L });
-
-            migrationBuilder.InsertData(
-                table: "department_user",
-                columns: new[] { "id", "created_at", "department_id", "department_user_role", "enterprise_id", "is_soft_deleted", "updated_at", "user_id" },
-                values: new object[] { 1L, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 1L, 0, "test", false, new DateTime(2022, 6, 14, 9, 10, 4, 133, DateTimeKind.Utc).AddTicks(3077), 1L });
+                columns: new[] { "code", "enterprise_id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_department_enterprise_id",
                 table: "department",
                 column: "enterprise_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_department_name_enterprise_id_is_soft_deleted",
-                table: "department",
-                columns: new[] { "name", "enterprise_id", "is_soft_deleted" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_department_parent_department_id",

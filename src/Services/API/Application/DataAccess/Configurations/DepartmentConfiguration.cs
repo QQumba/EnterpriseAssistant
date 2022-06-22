@@ -10,7 +10,7 @@ namespace EnterpriseAssistant.DataAccess.Configurations;
         {
             builder.ConfigureGeneratedId();
 
-            builder.HasIndex(d => new {d.Name, d.EnterpriseId, d.IsSoftDeleted}).IsUnique();
+            builder.HasIndex(d => new {d.Code, d.EnterpriseId}).IsUnique();
             
             builder.HasMany(d => d.ChildDepartments)
                 .WithOne(d => d.ParentDepartment)

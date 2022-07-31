@@ -1,0 +1,20 @@
+.lead {
+  font-weight: 500;
+}
+
+.add-task { 
+  border-radius: 0.25rem;
+  box-shadow: 0px 0px 2px rgb(148, 148, 148);
+  height: 3rem;
+
+  cursor: pointer;
+  transition: background-color .1s ease-in-out;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.plus-icon{
+  margin-left: -.2rem;
+}

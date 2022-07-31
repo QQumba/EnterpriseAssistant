@@ -1,0 +1,20 @@
+<div class="display-4 ms-4">Tasks</div>
+
+<div *ngIf="tasks$ | async as tasks" class="m-4">
+  <div class="row p-2">
+    <div class="col-1"></div>
+    <!-- <div class="col lead">id</div> -->
+    <div class="col-4 lead">Title</div>
+    <!-- <div class="col lead">description</div> -->
+    <div class="col-2 lead">Status</div>
+    <div class="col-2 lead">Effort hours</div>
+    <div class="col lead">Assigned users</div>
+  </div>
+  <div class="add-task row p-2 mb-1 align-items-center">
+    <div class="col-1">
+      <fa-icon class="plus-icon text-secondary" [icon]="plus"></fa-icon>
+    </div>
+    <div class="col">Add new task</div>
+  </div>
+  <app-task *ngFor="let task of tasks" [task]="task"></app-task>
+</div>

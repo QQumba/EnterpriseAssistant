@@ -2,6 +2,7 @@
 using EnterpriseAssistant.DataAccess.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Task = EnterpriseAssistant.DataAccess.Entities.Tasks.Task;
 
 namespace EnterpriseAssistant.DataAccess.Entities;
 

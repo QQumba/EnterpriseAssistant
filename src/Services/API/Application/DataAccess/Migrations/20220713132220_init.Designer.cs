@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EnterpriseAssistant.DataAccess.Migrations
 {
     [DbContext(typeof(EnterpriseAssistantDbContext))]
-    [Migration("20220620170447_init")]
+    [Migration("20220713132220_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,7 +317,92 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.ToTable("project");
                 });
 
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Task", b =>
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Tasks.Tag", b =>
+                {
+                    b.Property<long>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("TagId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("TaskId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TagId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("tag");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", b =>
+                {
+                    b.Property<long>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("task_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("TaskId"));
+
+                    b.Property<long?>("ClosedByUserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("closed_by_user_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<long>("CreatedByUserId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("created_by_user_id");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<double?>("EffortHours")
+                        .HasColumnType("double precision")
+                        .HasColumnName("effort_hours");
+
+                    b.Property<double?>("EstimatedHours")
+                        .HasColumnType("double precision")
+                        .HasColumnName("estimated_hours");
+
+                    b.Property<bool>("IsTaskGroup")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_task_group");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<long?>("TaskGroupId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("task_group_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("ClosedByUserId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("task");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.TaskUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,45 +415,39 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
                     b.Property<string>("EnterpriseId")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("enterprise_id");
 
+                    b.Property<double?>("HoursSpent")
+                        .HasColumnType("double precision")
+                        .HasColumnName("hours_spent");
+
                     b.Property<bool>("IsSoftDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("is_soft_deleted");
 
-                    b.Property<long>("ProjectId")
+                    b.Property<long>("TaskId")
                         .HasColumnType("bigint")
-                        .HasColumnName("project_id");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("title");
+                        .HasColumnName("task_id");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.Property<long?>("UserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnterpriseId");
+                    b.HasIndex("TaskId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("UserId", "TaskId")
+                        .IsUnique();
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("task");
+                    b.ToTable("task_user");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
@@ -412,6 +491,9 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                         .HasColumnType("text")
                         .HasColumnName("salt");
 
+                    b.Property<long?>("TaskId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -421,7 +503,24 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("TaskId");
+
                     b.ToTable("user");
+                });
+
+            modelBuilder.Entity("TaskTask", b =>
+                {
+                    b.Property<long>("DownstreamTasksTaskId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UpstreamTasksTaskId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("DownstreamTasksTaskId", "UpstreamTasksTaskId");
+
+                    b.HasIndex("UpstreamTasksTaskId");
+
+                    b.ToTable("TaskTask");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
@@ -522,29 +621,69 @@ namespace EnterpriseAssistant.DataAccess.Migrations
                     b.Navigation("Enterprise");
                 });
 
-            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Task", b =>
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Tasks.Tag", b =>
                 {
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Enterprise", "Enterprise")
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("TaskId");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "ClosedByUser")
                         .WithMany()
-                        .HasForeignKey("EnterpriseId")
+                        .HasForeignKey("ClosedByUserId");
+
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Project", "Project")
+                    b.Navigation("ClosedByUser");
+
+                    b.Navigation("CreatedByUser");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.TaskUser", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", "Task")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EnterpriseAssistant.DataAccess.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Enterprise");
-
-                    b.Navigation("Project");
+                    b.Navigation("Task");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", null)
+                        .WithMany("AssignedUsers")
+                        .HasForeignKey("TaskId");
+                });
+
+            modelBuilder.Entity("TaskTask", b =>
+                {
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", null)
+                        .WithMany()
+                        .HasForeignKey("DownstreamTasksTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", null)
+                        .WithMany()
+                        .HasForeignKey("UpstreamTasksTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Department", b =>
@@ -560,6 +699,13 @@ namespace EnterpriseAssistant.DataAccess.Migrations
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Project", b =>
                 {
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.Tasks.Task", b =>
+                {
+                    b.Navigation("AssignedUsers");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("EnterpriseAssistant.DataAccess.Entities.User", b =>

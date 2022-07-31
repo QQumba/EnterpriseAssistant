@@ -1,25 +1,15 @@
-using System.Text;
 using System.Text.Json.Serialization;
-using DepartmentService.API;
 using EnterpriseAssistant.Application;
 using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess;
 using EnterpriseAssistant.Web;
+using EnterpriseAssistant.Web.Features.Tasks.Repositories;
+using EnterpriseAssistant.Web.Features.Tasks.Services;
 using EnterpriseAssistant.Web.Filters;
-using EnterpriseAssistant.Web.Helpers;
+using EnterpriseAssistant.Web.Helpers.Security;
 using EnterpriseAssistant.Web.Middleware;
-using EnterpriseService.API;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using ProjectService.API;
 using Serilog;
-using TaskTrackingService.API;
-using UserService.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,11 +75,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddDataAccess(configuration);
     services.AddApplication();
 
-    services.AddDepartmentService();
-    services.AddEnterpriseService();
-    services.AddProjectService();
-    services.AddTaskTrackingService();
-    services.AddUserService();
+    services.AddScoped<ITaskRepository, TaskRepository>();
+    services.AddScoped<ITaskService, TaskService>();
 }
 
 void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment env)

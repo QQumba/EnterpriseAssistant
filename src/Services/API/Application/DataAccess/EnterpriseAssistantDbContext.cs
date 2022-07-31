@@ -1,6 +1,8 @@
 ﻿using EnterpriseAssistant.Application.Shared;
 using EnterpriseAssistant.DataAccess.Entities;
+using EnterpriseAssistant.DataAccess.Entities.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Task = EnterpriseAssistant.DataAccess.Entities.Tasks.Task;
 
 namespace EnterpriseAssistant.DataAccess;
 
@@ -12,19 +14,21 @@ public class EnterpriseAssistantDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
 
-    public DbSet<Enterprise> Enterprises { get; set; }
+    // public DbSet<Enterprise> Enterprises { get; set; }
 
-    public DbSet<Department> Departments { get; set; }
+    // public DbSet<Department> Departments { get; set; }
 
-    public DbSet<DepartmentUser> DepartmentUsers { get; set; }
+    // public DbSet<DepartmentUser> DepartmentUsers { get; set; }
 
-    public DbSet<Project> Projects { get; set; }
+    // public DbSet<Project> Projects { get; set; }
 
-    public DbSet<EnterpriseUser> EnterpriseUsers { get; set; }
+    // public DbSet<EnterpriseUser> EnterpriseUsers { get; set; }
 
-    public DbSet<Invite> Invites { get; set; }
+    // public DbSet<Invite> Invites { get; set; }
 
-    public DbSet<Entities.Task> Tasks { get; set; }
+    public DbSet<Task> Tasks { get; set; }
+    
+    public DbSet<Tag> Tags { get; set; }
 
     public DbSet<TaskUser> TaskUsers { get; set; }
 

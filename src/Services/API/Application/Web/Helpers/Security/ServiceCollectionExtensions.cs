@@ -1,12 +1,7 @@
-﻿using System.Text;
-using EnterpriseAssistant.Application.Shared;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace EnterpriseAssistant.Web.Helpers;
+namespace EnterpriseAssistant.Web.Helpers.Security;
 
 public static class ServiceCollectionExtensions
 {

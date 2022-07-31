@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace EnterpriseAssistant.Web.Helpers;
+namespace EnterpriseAssistant.Web.Helpers.Security;
 
 public static class SwaggerAuthenticationExtensions
 {

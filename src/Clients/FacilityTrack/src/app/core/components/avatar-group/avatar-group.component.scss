@@ -1,0 +1,19 @@
+.avatar-group{
+  user-select: none;
+}
+
+.avatar {
+  margin-left: -0.3rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.more {
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  background-color: rgb(208, 208, 208);
+  height: 2rem;
+  outline: 2px solid white;
+}

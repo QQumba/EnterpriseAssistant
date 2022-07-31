@@ -1,0 +1,56 @@
+.task {
+  border-radius: 0.25rem;
+  box-shadow: 0px 0px 2px rgb(148, 148, 148);
+  height: 3rem;
+
+  cursor: pointer;
+}
+
+.task-marker {
+  font-size: 0.8em;
+}
+
+.action {
+  width: 2rem;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  &:first-child {
+    margin-right: -0.8rem;
+  }
+
+  &:last-child {
+    margin-left: -0.8rem;
+  }
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-menu {
+  font-size: 0.8em;
+
+  button {
+    &:active {
+      color: inherit;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<div class="task row p-2 mb-1 align-items-center" (click)="onTaskClick()">
+  <!-- <div class="col">
+    {{ task.taskId }}
+  </div> -->
+  <div class="col-1">
+    <button class="action btn" (click)="onActionClick($event)">
+      <fa-icon class="text-secondary" [icon]="arrow"></fa-icon>
+    </button>
+  </div>
+  <div class="col-4">
+    {{ task.title }}
+  </div>
+  <!-- <div class="col">
+    {{ task.description }}
+  </div> -->
+  <div class="col-2 d-flex align-items-center">
+    <ng-container *ngIf="transformStatus(task.status) as status">
+      <fa-icon class="task-marker me-2" [ngStyle]="{'color': status.color}" [icon]="circle"></fa-icon>
+      <div>
+        {{ status.text }}
+      </div>
+    </ng-container>
+  </div>
+  <div class="col-2">
+    {{ task.effortHours }}
+  </div>
+  <div class="col d-flex justify-content-between align-items-center">
+    <div>
+      <app-avatar-group [users]="users"></app-avatar-group>
+    </div>
+    <div ngbDropdown (click)="onActionClick($event)">
+      <button ngbDropdownToggle class="action btn">
+        <fa-icon [icon]="moreDots"></fa-icon>
+      </button>
+      <div ngbDropdownMenu class="dropdown-menu">
+        <button ngbDropdownItem>Assign users</button>
+        <button ngbDropdownItem>Track</button>
+        <button
+          class="text-danger d-flex justify-content-between"
+          ngbDropdownItem
+        >
+          <div>Delete</div>
+          <fa-icon [icon]="trash"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

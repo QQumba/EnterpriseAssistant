@@ -10,13 +10,14 @@ namespace EnterpriseAssistant.DataAccess.Entities
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        [Column("is_soft_deleted")]
-        public bool IsSoftDeleted { get; set; }
 
         public abstract class WithId<T> : BaseEntity
         {
             [Column("id")]
             public T Id { get; set; }
+            
+            [Column("is_soft_deleted")]
+            public bool IsSoftDeleted { get; set; }
         }
     }
 }

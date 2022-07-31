@@ -29,5 +29,5 @@
       <ProjectReference Include="..\..\User\UserService.API\UserService.API.csproj" />
       <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
-
+        
 </Project>

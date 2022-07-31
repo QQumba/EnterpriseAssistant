@@ -9,6 +9,8 @@ public class Enterprise : BaseEntity.WithId<string>
     [Column("displayed_name")]
     public string DisplayedName { get; set; } = null!;
 
+    public string Code { get; set; }
+
     public ICollection<Department>? Departments { get; set; }
 
     [NotMapped]
